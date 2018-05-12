@@ -1,10 +1,3 @@
 * { font-family: "Arial", sans-serif; }
 
 main { padding: 30px 60px; }
-
-div.bordered {
-    width: 100%;
-    height: 10px;
-
-    border: 1px solid;
-}
