@@ -16,19 +16,34 @@ function Temme(query, container = document.body) {
             __elements_str = query.split('+'),
             __index = 0;
 
-
         while(__elements_str[__index] !== undefined) {
             container.appendChild(__createElement(__elements_str[__index++]));
         }
 
+        console.log('\n----------');
         console.log(container);
 
         function __createElement(__element_str) {
+            console.log(__element_str);
             let __element_obj = document.createElement(__getElementInStr(__element_str));
 
             if(__getIdInStr(__element_str) !== '') __element_obj.id = __getIdInStr(__element_str);
             __setElementClasses(__element_obj, __getClassesInStr(__element_str));
             
+            if(__hasChild(__element_str)) {
+                let
+                    __element_children_str = __getChildren(__element_str),
+                    __element_children_arr = [__createElement(__element_children_str[0].substring(1))],
+                    __cur_child = 0;
+
+                while(__element_children_str[++__cur_child] !== undefined) {
+                    __element_children_arr.push(__createElement(__element_children_str[__cur_child].substring(1)));
+                    __element_children_arr[__cur_child - 1].appendChild(__element_children_arr[__cur_child]);
+                }
+
+                __element_obj.appendChild(__element_children_arr[0]);
+            }
+
             return __element_obj;
         }
 
@@ -41,5 +56,8 @@ function Temme(query, container = document.body) {
             while(__classes_arr !== null && __classes_arr[__cur_class] !== undefined)
                 __target_element.classList.add(__classes_arr[__cur_class++].substring(1));
         }
+
+        function __hasChild(__ele_str) { return __ele_str.match(/>[\w-_]+/) !== null; }
+        function __getChildren(__ele_str) { return  __ele_str.match(/>[\w-_]+/g); }
     }
 }

@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
     const target = document.getElementById("target");
 
-    Temme("div.fold.dark#opt.text-center.text-orange", target);
+    Temme("main#container>section.border>div.text-center.lead-1>h1.text-overline#heading-1+h2", target);
 });
