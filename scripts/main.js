@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
     const target = document.getElementById("target");
 
-    Temme("ul li*3", target);
+    Temme("div.fold.dark#opt.text-center.text-orange", target);
 });

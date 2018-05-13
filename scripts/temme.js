@@ -13,92 +13,33 @@ function Temme(query, container = document.body) {
         console.error("Cannot append to undefined");
     else {
         let
-            elements_str = query.split(' '),
-            elements_obj = [createElement(elements_str[0])],
-            dom = elements_obj[0],
-            index = 0;
+            __elements_str = query.split('+'),
+            __index = 0;
 
 
-        while(elements_str[++index] !== undefined) {
-            elements_obj.push(createElement(elements_str[index]));
-            
-            if(elements_obj[index].length !== undefined) {
-                for(let __i = 0, __j = elements_obj[index].length; __i<__j; __i++) {
-                    elements_obj[index - 1].appendChild(elements_obj[index][__i]);
-                }
-
-            } else
-                elements_obj[index - 1].appendChild(elements_obj[index]);                
+        while(__elements_str[__index] !== undefined) {
+            container.appendChild(__createElement(__elements_str[__index++]));
         }
 
-        console.log(dom);
-        container.appendChild(dom);
+        console.log(container);
 
-        function createElement(ele_str) {
-            let __rep_str = ele_str.match(/\*\d+/g);
+        function __createElement(__element_str) {
+            let __element_obj = document.createElement(__getElementInStr(__element_str));
+
+            if(__getIdInStr(__element_str) !== '') __element_obj.id = __getIdInStr(__element_str);
+            __setElementClasses(__element_obj, __getClassesInStr(__element_str));
             
-            if(__rep_str) {
-                let __elements = [],
-                    __id = ele_str.match(/#[a-zA-Z-_]*/),
-                    __classes = ele_str.match(/\.[a-zA-Z-_]*/g),
+            return __element_obj;
+        }
 
-                __rep = parseInt(__rep_str[0].substring(1));
-                ele_str = ele_str.replace(/\*\d+/, '');
+        function __getElementInStr(__ele_str) { return __ele_str.match(/[a-zA-Z0-9-_]+/); }
+        function __getIdInStr(__ele_str) { return __ele_str.match(/#[\w_-]+/) !== null ? __ele_str.match(/#[\w_-]+/)[0].substring(1) : ''; }
+        function __getClassesInStr(__ele_str) { return __ele_str.match(/\.[\w_-]+/g); }
+        function __setElementClasses(__target_element, __classes_arr) {
+            let __cur_class = 0;
 
-                while(__rep-- !== 0) {
-                    let
-                        __element = null,
-                        __index = 0;
-        
-                    if(__id)
-                        ele_str = ele_str.replace(/#[a-zA-Z-_]*/g, '');
-        
-                    if(__classes) {
-                        ele_str = ele_str.replace(/\.[a-zA-Z-_]*/g, '');
-                        __classes = Array.from(__classes);
-                    }
-        
-                    __element = document.createElement(ele_str);
-        
-                    if(__classes) {
-                        while(__classes[__index] !== undefined)
-                            __element.classList.add(__classes[__index++].substring(1));
-                    }
-        
-                    if(__id)
-                        __element.id = __id[0].substring(1);
-                    
-                    __elements.push(__element);
-                }
-
-                return __elements;
-            } else {
-                let
-                    __element = null,
-                    __id = ele_str.match(/#[a-zA-Z-_]*/),
-                    __classes = ele_str.match(/\.[a-zA-Z-_]*/g),
-                    __index = 0;
-    
-                if(__id)
-                    ele_str = ele_str.replace(/#[a-zA-Z-_]*/g, '');
-    
-                if(__classes) {
-                    ele_str = ele_str.replace(/\.[a-zA-Z-_]*/g, '');
-                    __classes = Array.from(__classes);
-                }
-    
-                __element = document.createElement(ele_str);
-    
-                if(__classes) {
-                    while(__classes[__index] !== undefined)
-                        __element.classList.add(__classes[__index++].substring(1));
-                }
-    
-                if(__id)
-                    __element.id = __id[0].substring(1);
-    
-                return __element;
-            }
+            while(__classes_arr !== null && __classes_arr[__cur_class] !== undefined)
+                __target_element.classList.add(__classes_arr[__cur_class++].substring(1));
         }
     }
 }
