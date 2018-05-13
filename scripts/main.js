@@ -1,5 +1,5 @@
 window.addEventListener('load', () => {
     const target = document.getElementById("target");
 
-    Temme("main#container>section.border>div.text-center.lead-1>h1.text-overline#heading-1+h2", target);
+    Temme("div#container>h1.lead-3+div#footer>div.flex.flex-gap-3>p.indent", target);
 });
