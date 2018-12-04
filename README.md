@@ -73,7 +73,7 @@ Given the following code snippet:
 Simply that, giving Temme a target element and a skeleton object, it will render the following.
 
 ```html
-<div id="target" class="btn-red card card-dark">
+<div id="target" class="card card-dark">
     <div class="card-header">
         <h2 class="title txt-gray txt-bold" contenteditable="true">Card header</h2>
     </div>
