@@ -17,13 +17,15 @@ gulp.task('copy', () => {
 
 // Translating to es, minifying and copying the temme.js file to the dist folder.
 gulp.task('minify', () => {
-    return gulp.src(['src/*.js'])
+    gulp.src('src/*.js')
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(uglify())
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('docs/assets/js/lib'));
 });
+
 
 gulp.task('build', ['copy', 'minify']);
