@@ -1,0 +1,18 @@
+/**
+*
+* @name:       temmejs
+* @version:    0.1.0
+* @author:     EOussama
+* @license     MIT
+* @source:     https://github.com/EOussama/temmejs
+* 
+* The main stylesheet of the app.
+*/
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+    padding: 50px 80px;
+}
