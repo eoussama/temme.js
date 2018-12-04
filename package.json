@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/EOussama/temmejs/issues"
   },
-  "homepage": "https://github.com/EOussama/temmejs#readme"
+  "homepage": "https://github.com/EOussama/temmejs#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
 }
