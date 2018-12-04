@@ -7,8 +7,13 @@
 * @source:     https://github.com/EOussama/temmejs
 * 
 * The main javascript file of the app.
+*
 */
 
+"use strict";
+
 window.addEventListener('load', () => {
-    console.log('Hello, world!');
+    const target = document.getElementById('target');
+
+    Temme(['ff'], target);
 });
