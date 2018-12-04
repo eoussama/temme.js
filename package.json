@@ -1,0 +1,28 @@
+{
+  "name": "temmejs",
+  "version": "0.1.0",
+  "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
+  "main": "src/temme.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EOussama/temmejs.git"
+  },
+  "keywords": [
+    "javascript",
+    "javascript-library",
+    "dom",
+    "emmet"
+  ],
+  "author": "EOussama",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EOussama/temmejs/issues"
+  },
+  "homepage": "https://github.com/EOussama/temmejs#readme"
+}
