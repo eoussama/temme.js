@@ -16,23 +16,38 @@ window.addEventListener('load', () => {
     const target = document.getElementById('target');
 
     Temme({
+        classes: ['card', 'card-dark'],
         children: [
             {
-                name: 'h1',
-                text: 'Heading',
-                classes: ['heading-1', 'bold']
-            },
-            {
-                name: 'h3',
-                text: 'Subsssssss to pewdddddds'
+                name: 'div',
+                classes: ['card-header'],
+                children: [
+                    {
+                        name: 'h2',
+                        text: 'Card header',
+                        classes: ['title', 'txt-gray', 'txt-bold'],
+                        attributes: [
+                            { contenteditable: true }
+                        ]
+                    }
+                ]
             },
             {
                 name: 'div',
+                classes: ['card-body', 'container'],
+                data: {
+                    source: 'www.somelink.com',
+                    id: 536
+                },
                 children: [
                     {
                         name: 'p',
-                        'text': 'lorem ipsum'
-                    }
+                        text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores aspernatur deserunt assumenda in officiis dolore, perspiciatis nam soluta iste odit?'
+                    },
+                    {
+                        name: 'p',
+                        html: 'Lorem ipsum <b>dolor sit amet consectetur <u>adipisicing</u></b> elit. Dolores aspernatur <span class="link">deserunt</span> assumenda in officiis dolore, <mark>perspiciatis</mark> nam soluta iste odit?'
+                    },
                 ]
             }
         ]

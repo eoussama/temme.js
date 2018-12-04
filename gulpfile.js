@@ -2,6 +2,7 @@ const
     gulp = require('gulp'),
     babel = require('gulp-babel'),
     rename = require('gulp-rename'),
+    beautify = require('gulp-beautify'),
     uglify = require('gulp-uglify');
 
 // Translating to es5 and copying the temme.js file to the dist folder.
@@ -9,7 +10,8 @@ gulp.task('copy', () => {
     gulp.src('src/*.js')
         .pipe(babel({
             presets: ['@babel/env']
-        }))        
+        }))
+        .pipe(beautify())
         .pipe(gulp.dest('dist'));
 });
 

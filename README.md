@@ -2,6 +2,87 @@
 
 Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's time for Javascript too.
 
+# Build
+
+Building Temme JS is fairly easy, simply run `npm install` to install all the development dependencies, and then run `npm run build` to get the production files under the `dist` folder.
+
+# Usage
+
+As we've come to know, Emmet converts a select of instructions that are plain text to its logical dom skeleton, Temme does that differently, by working with javascript objects instead of plain text, and seeing how this is a javascript library it kind of makes sense.
+In order for Temme to do its magic, it requires a hierarchy blueprint as a javascript object and an HTML element to append the skeleton to.
+
+# Syntax
+```js
+Temme(hierarchy: object, target: HTMLElement);
+```
+
+# Example
+
+Given the following code snippet:
+```html
+<!-- The element we're going to append the HTML skeleton to. -->
+<div id="target"></div>
+
+<!-- Including Temme JS. -->
+<script src="temme.js"></script>
+
+<!-- Putting Temme to do its thing. -->
+<script>
+    const target = document.getElementById('target');
+
+    Temme({
+        classes: ['card', 'card-dark'],
+        children: [
+            {
+                name: 'div',
+                classes: ['card-header'],
+                children: [
+                    {
+                        name: 'h2',
+                        text: 'Card header',
+                        classes: ['title', 'txt-gray', 'txt-bold'],
+                        attributes: [
+                            { contenteditable: true }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: 'div',
+                classes: ['card-body', 'container'],
+                data: {
+                    source: 'www.somelink.com',
+                    id: 536
+                },
+                children: [
+                    {
+                        name: 'p',
+                        text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores aspernatur deserunt assumenda in officiis dolore, perspiciatis nam soluta iste odit?'
+                    },
+                    {
+                        name: 'p',
+                        html: 'Lorem ipsum <b>dolor sit amet consectetur <u>adipisicing</u></b> elit. Dolores aspernatur <span class="link">deserunt</span> assumenda in officiis dolore, <mark>perspiciatis</mark> nam soluta iste odit?'
+                    },
+                ]
+            }
+        ]
+    }, target);
+</script>
+```
+
+Simply that, giving Temme a target element and a skeleton object, it will render the following.
+
+```html
+<div id="target" class="btn-red card card-dark">
+    <div class="card-header">
+        <h2 class="title txt-gray txt-bold" contenteditable="true">Card header</h2>
+    </div>
+    <div class="card-body container" data-source="www.somelink.com" data-id="536">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores aspernatur deserunt assumenda in officiis dolore, perspiciatis nam soluta iste odit?</p>
+        <p>Lorem ipsum <b>dolor sit amet consectetur <u>adipisicing</u></b> elit. Dolores aspernatur <span class="link">deserunt</span> assumenda in officiis dolore, <mark>perspiciatis</mark> nam soluta iste odit?</p>
+    </div>
+</div>
+```
 
 # Credits
 
