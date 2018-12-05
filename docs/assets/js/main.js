@@ -206,7 +206,32 @@ window.addEventListener('load', async () => {
                                 ]
                             }
                         ]
-                    }
+                    },
+                    {
+                        name: 'section',
+                        children: [
+                            {
+                                name: 'h3',
+                                text: 'Advantages'
+                            },
+                            {
+                                name: 'p',
+                                text: "You might have be wondering, yeah cool, but why thought?"
+                            },
+                            {
+                                name: 'p',
+                                text: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet blows Temme away in terms of swiftness, you just hit up short instructions in plain text, and then boom."
+                            },
+                            {
+                                name: 'p',
+                                text: "Temme focuses on the data structure more, it's much better than manually working with <code>createElement</code> and prettier than direct HTML embed <code>innerHTML</code>."
+                            },
+                            {
+                                name: 'p',
+                                text: "One other strong point that Temme has going on is it being javascript-object oriented, meaning, it can easily be parsed into JSON and vice versa."
+                            }
+                        ]
+                    },
                 ]
             }
         ]
