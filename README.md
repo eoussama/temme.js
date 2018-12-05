@@ -84,6 +84,8 @@ Simply that, giving Temme a target element and a skeleton object, it will render
 </div>
 ```
 
+More on how to use Temme can be found [here](https://eoussama.github.io/temmejs/).
+
 # Credits
 
 Icon made by [Freepik](https://www.freepik.com/) from [Flaticon](https://www.flaticon.com) and licensed by [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0/).
