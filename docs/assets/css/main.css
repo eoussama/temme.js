@@ -10,10 +10,49 @@
 *
 */
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
+:root {
+    /* Default colors. */
+    --color-dark: #22222c;
+    --color-dark-light: #39393f;
+    --color-gray: #808080;
+    --color-light: #e4e4e4;
+
+    /* Initial resets. */
+    color: var(--color-dark);
 }
 
-main {
-    padding: 50px 80px;
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 }
+
+.row-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* #region Header */
+header {
+    background: linear-gradient(to bottom right, var(--color-dark), var(--color-dark-light));
+    padding: 100px;
+}
+
+header img.logo {
+    width: 120px;
+}
+
+header .title {
+    color: var(--color-light);
+    margin: 20px 0 0 0;
+}
+
+header .subtitle {
+    color: var(--color-gray);
+    font-weight: 500;
+    margin: 5px 0;
+}
+
+/* #endregion */

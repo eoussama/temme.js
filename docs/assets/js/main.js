@@ -16,40 +16,35 @@ window.addEventListener('load', () => {
     const target = document.getElementById('target');
 
     Temme({
-        classes: ['card', 'card-dark'],
         children: [
             {
-                name: 'div',
-                classes: ['card-header'],
+                name: 'header',
+                classes: ['row-container'],
                 children: [
                     {
-                        name: 'h2',
-                        text: 'Card header',
-                        classes: ['title', 'txt-gray', 'txt-bold'],
+                        name: 'img',
+                        classes: ['logo'],
                         attributes: [
-                            { contenteditable: true }
+                            { src: 'assets/img/logo.svg' }
                         ]
+                    },
+                    {
+                        name: 'h1',
+                        text: 'Temme JS',
+                        classes: ['title']
+                    },
+                    {
+                        name: 'h4',
+                        text: 'From JSON to skeleton',
+                        classes: ['subtitle']
                     }
                 ]
             },
             {
-                name: 'div',
-                classes: ['card-body', 'container'],
-                data: {
-                    source: 'www.somelink.com',
-                    id: 536
-                },
-                children: [
-                    {
-                        name: 'p',
-                        text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores aspernatur deserunt assumenda in officiis dolore, perspiciatis nam soluta iste odit?'
-                    },
-                    {
-                        name: 'p',
-                        html: 'Lorem ipsum <b>dolor sit amet consectetur <u>adipisicing</u></b> elit. Dolores aspernatur <span class="link">deserunt</span> assumenda in officiis dolore, <mark>perspiciatis</mark> nam soluta iste odit?'
-                    },
-                ]
+                name: 'main'
             }
         ]
     }, target);
+
+    console.log(target);
 });
