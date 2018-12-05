@@ -6,15 +6,23 @@
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
 * 
-* The main javascript file of the app.
+* The main javascript file of the docs.
 *
 */
 
 "use strict";
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     const target = document.getElementById('target');
+    
+    let syntaxString;
 
+    // Getting the syntax snippet.
+    await fetch('assets/js/snippets/syntax.txt')
+        .then(response => response.text())
+        .then(response => syntaxString = response);
+        
+    // Creating the DOM tree.
     Temme({
         children: [
             {
@@ -72,11 +80,39 @@ window.addEventListener('load', () => {
                                 text: "With javascript objects as the blueprint and you as the engineer, you can produce skyscrapers even, you only need to provide a concise hierarchy for your HTML wonder and let Temme take care of the rest. In fact, this whole web page is completely generated using Temme."
                             }
                         ]
+                    },
+                    {
+                        name: 'section',
+                        children: [
+                            {
+                                name: 'h3',
+                                text: 'Syntax'
+                            },
+                            {
+                                name: 'pre',
+                                children: [
+                                    {
+                                        name: 'code',
+                                        classes: ['javascript'],
+                                        text: syntaxString
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'p',
+                                html: "Where <code>hierarchy</code> is a valid javascript object that represents your HTML skeleton, and <code>target</code> is a valid HTML element that will host the skeleton as its parent."
+                            }
+                        ]
                     }
                 ]
             }
         ]
     }, target);
+
+    // Highlighting the code snippets.
+    document.querySelectorAll('pre > code').forEach(block => {
+        hljs.highlightBlock(block);
+    });
 
     console.log(target);
 });

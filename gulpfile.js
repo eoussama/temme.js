@@ -27,5 +27,4 @@ gulp.task('minify', () => {
         .pipe(gulp.dest('docs/assets/js/lib'));
 });
 
-
 gulp.task('build', ['copy', 'minify']);
