@@ -7,7 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "npx gulp build"
+    "build": "npx gulp build",
+    "test": "clear && npx jest"
   },
   "repository": {
     "type": "git",

@@ -14,9 +14,9 @@
 
 "use strict";
 
- function Temme(hierarchy = {}, target = document.body) {
+function Temme(hierarchy = {}, target = document.body) {
     try {
-        if (hierarchy == null) throw 'The hierarchy must be a valid object.';
+        if (hierarchy == null || typeof hierarchy !== 'object' || Array.isArray(hierarchy)) throw `The hierarchy must be a valid object.`;
         if (target == null || !(target instanceof HTMLElement)) throw 'The target must be a valid HTML element.';
 
         /**
@@ -91,7 +91,8 @@
         })(hierarchy, target);
     }
     catch (e) {
-        console.error(`[Temme JS]: ${ e }`);
+        throw `[Temme JS]: ${ e }`;
     }
  }
  
+module.exports = Temme;
