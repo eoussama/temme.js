@@ -1,0 +1,6 @@
+<h1 class="heading-1 bold">Interesting title.</h1>
+<hr>
+<div class="container">
+    <p>Some random text</p>
+</div>
+<hr>

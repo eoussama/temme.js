@@ -1,0 +1,2 @@
+<!-- The element we want to append the skeleton to. -->
+<div id="target"></div>

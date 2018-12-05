@@ -1,0 +1,33 @@
+const
+    // The element that's going to host the skeleton.
+    target = document.getElementById('target'),
+
+    // The javascript object describing the skeleton.
+    hierarchy = {
+        children: [
+            {
+                name: 'h1',
+                classes: ['heading-1', 'bold'],
+                text: 'Interesting title.'
+            },
+            {
+                name: 'hr'
+            },
+            {
+                name: 'div',
+                classes: ['container'],
+                children: [
+                    {
+                        name: 'p',
+                        text: 'Some random text'
+                    }
+                ]
+            },
+            {
+                name: 'hr'
+            }
+        ]
+    };
+
+// Temme, go for it.
+Temme(hierarchy, target);

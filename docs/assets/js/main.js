@@ -13,14 +13,22 @@
 "use strict";
 
 window.addEventListener('load', async () => {
-    const target = document.getElementById('target');
-    
-    let syntaxString;
+    const
+        // The host element.
+        target = document.getElementById('target'),
+        // The snippets object.
+        snippets = {
+            html: {},
+            js: {}
+        };
 
-    // Getting the syntax snippet.
-    await fetch('assets/js/snippets/syntax.txt')
-        .then(response => response.text())
-        .then(response => syntaxString = response);
+    // Loading all the snippets.
+    await fetch('assets/snippets/html/usage-1.txt').then(response => response.text()).then(snippet => snippets['html']['usage-1'] = snippet);
+    await fetch('assets/snippets/html/usage-2.txt').then(response => response.text()).then(snippet => snippets['html']['usage-2'] = snippet);
+    await fetch('assets/snippets/html/usage-3.txt').then(response => response.text()).then(snippet => snippets['html']['usage-3'] = snippet);
+    await fetch('assets/snippets/js/syntax-1.txt').then(response => response.text()).then(snippet => snippets['js']['syntax-1'] = snippet);
+    await fetch('assets/snippets/js/usage-1.txt').then(response => response.text()).then(snippet => snippets['js']['usage-1'] = snippet);
+    await fetch('assets/snippets/js/usage-2.txt').then(response => response.text()).then(snippet => snippets['js']['usage-2'] = snippet);
         
     // Creating the DOM tree.
     Temme({
@@ -43,7 +51,7 @@ window.addEventListener('load', async () => {
                     },
                     {
                         name: 'h4',
-                        text: 'From JSON to skeleton',
+                        text: 'From JSON to HTML',
                         classes: ['subtitle']
                     }
                 ]
@@ -94,13 +102,108 @@ window.addEventListener('load', async () => {
                                     {
                                         name: 'code',
                                         classes: ['javascript'],
-                                        text: syntaxString
+                                        text: snippets['js']['syntax-1']
                                     }
                                 ]
                             },
                             {
                                 name: 'p',
                                 html: "Where <code>hierarchy</code> is a valid javascript object that represents your HTML skeleton, and <code>target</code> is a valid HTML element that will host the skeleton as its parent."
+                            }
+                        ]
+                    },
+                    {
+                        name: 'section',
+                        children: [
+                            {
+                                name: 'h3',
+                                text: 'Usage'
+                            },
+                            {
+                                name: 'p',
+                                text: "Like any other library, Temme is just as shy and needs to be invited to your project first."
+                            },
+                            {
+                                name: 'p',
+                                html: "After adding the <code>temme.js</code> or <code>temme.min.js</code> to your source files, simply visualize an HTML skeleton in your head and describe it as a javascript object."
+                            },
+                            {
+                                name: 'h4',
+                                text: 'Example'
+                            },
+                            {
+                                name: 'p',
+                                text: "Let's take the following HTML snippet as a starting point:"
+                            },
+                            {
+                                name: 'pre',
+                                children: [
+                                    {
+                                        name: 'code',
+                                        classes: ['html'],
+                                        text: snippets['html']['usage-1']
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'p',
+                                html: "Say, we want to output the same as Emmet would if given the following instructions: <code>(h1.heading-1.bold>({Interesting title.}))+(hr)+(div.container>(p{Some random text}))+hr</code>"
+                            },
+                            {
+                                name: 'p',
+                                text: 'Theoretically, that should output the following HTML skeleton:'
+                            },
+                            {
+                                name: 'pre',
+                                children: [
+                                    {
+                                        name: 'code',
+                                        classes: ['html'],
+                                        text: snippets['html']['usage-2']
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'p',
+                                text: "Temme's equivalence of that would be:"
+                            },
+                            {
+                                name: 'pre',
+                                children: [
+                                    {
+                                        name: 'code',
+                                        classes: ['javascript'],
+                                        text: snippets['js']['usage-1']
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'p',
+                                text: "Now that you've managed to describe the skeleton as a javascript object, simple tell Temme to do its thing."
+                            },
+                            {
+                                name: 'pre',
+                                children: [
+                                    {
+                                        name: 'code',
+                                        classes: ['javascript'],
+                                        text: snippets['js']['usage-2']
+                                    }
+                                ]
+                            },
+                            {
+                                name: 'p',
+                                text: "And simply, just like that, the resulting HTML is the following:"
+                            },
+                            {
+                                name: 'pre',
+                                children: [
+                                    {
+                                        name: 'code',
+                                        classes: ['html'],
+                                        text: snippets['html']['usage-3']
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -113,6 +216,4 @@ window.addEventListener('load', async () => {
     document.querySelectorAll('pre > code').forEach(block => {
         hljs.highlightBlock(block);
     });
-
-    console.log(target);
 });
