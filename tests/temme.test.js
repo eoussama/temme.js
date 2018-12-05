@@ -76,7 +76,59 @@ describe('Passing invalid hierarchy', () => {
     });
 });
 
-describe('Passing invalid target', () => {
+describe('Passing invalid values in the hierarchy object.', () => {
+    function testValue(message, value) {
+        test(message, () => {
+            // Arrange.
+            const
+                target = document.createElement('div'),
+                hierarchy = value;
+    
+            let state = true;
+    
+            // Act.
+            try {
+                Temme(hierarchy, target);
+            }
+            catch (e) {
+                state = false;
+            }
+    
+            // Assert.
+            expect(state).toBe(false);
+        });
+    }
+    
+    testValue('Passing an invalid id (not a string) should raise an error.', {
+        id: 26
+    });
+
+    testValue('Passing invalid classes (not an array) should raise an error.', {
+        classes: 'not an array'
+    });
+
+    testValue('Passing invalid attributes (not an array with objects as values) should raise an error.', {
+        attributes: ["ss", 32, true, []]
+    });
+
+    testValue('Passing invalid data (not an object) should raise an error.', {
+        data: []
+    });
+
+    testValue('Passing invalid text (not a string) should raise an error.', {
+        text: {}
+    });
+
+    testValue('Passing invalid HTML (not a string) should raise an error.', {
+        html: true
+    });
+
+    testValue('Passing invalid children (not an array) should raise an error.', {
+        children: {}
+    });
+});
+
+describe('Passing invalid target.', () => {
     test('Passing invalid target (null) should raise a warning.', () => {
         // Arrange.
         const

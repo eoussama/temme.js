@@ -32,58 +32,90 @@
 
                         // Adding id to the element.
                         case 'id': {
-                            element.id = hierarchy[key];
+                            if (hierarchy[key] == null || typeof hierarchy[key] !== 'string') {
+                                throw "The element's id must be a string.";
+                            } else {
+                                element.id = hierarchy[key];
+                            }
 
                             break;
                         }
 
                         // Adding classes to the element.
                         case 'classes': {
-                            element.classList = [...element.classList, ...hierarchy[key]].join(' ');
-
+                            if (hierarchy[key] == null || !Array.isArray(hierarchy[key])) {
+                                throw "The element's classes must be an array.";
+                            } else {
+                                element.classList = [...element.classList, ...hierarchy[key]].join(' ');
+                            }
+                            
                             break;
                         }
 
                         // Adding attributes to the element.
                         case 'attributes': {
-                            hierarchy.attributes.forEach(attr => {
-                                const attributeName = Object.keys(attr)[0];
-
-                                element.setAttribute(attributeName, attr[attributeName]);
-                            });
+                            if (hierarchy[key] == null || !Array.isArray(hierarchy[key])) {
+                                throw "The element's attributes must be an array.";
+                            } else {
+                                hierarchy.attributes.forEach(attr => {
+                                    if (attr == null || Array.isArray(attr) || typeof attr !== 'object') {
+                                        throw 'Attributes must be of type object.';
+                                    } else {
+                                        const attributeName = Object.keys(attr)[0];
+        
+                                        element.setAttribute(attributeName, attr[attributeName]);
+                                    }
+                                });
+                            }
 
                             break;
                         }
 
                         // Adding data attributes to the element.
                         case 'data': {
-                            Object.assign(element.dataset, hierarchy.data);
+                            if (hierarchy[key] == null || Array.isArray(hierarchy[key]) || typeof hierarchy[key] !== 'object') {
+                                throw "The element's dataset must be an object.";
+                            } else {
+                                Object.assign(element.dataset, hierarchy.data);
+                            }
 
                             break;
                         }
 
                         // Adding text to the element.
                         case 'text': {
-                            element.textContent = hierarchy[key];
+                            if (hierarchy[key] == null || typeof hierarchy[key] !== 'string') {
+                                throw "The element's text must be a string.";
+                            } else {
+                                element.textContent = hierarchy[key];
+                            }
 
                             break;
                         }
 
                         // Adding HTML to the element.
                         case 'html': {
-                            element.innerHTML = hierarchy[key];
+                            if (hierarchy[key] == null || typeof hierarchy[key] !== 'string') {
+                                throw "The element's HTML must be a string.";
+                            } else {
+                                element.innerHTML = hierarchy[key];
+                            }
 
                             break;
                         }
 
                         // Adding children to the element.
                         case 'children': {
-                            hierarchy.children.forEach(child => {
-                                const childNode = document.createElement(child['name']);
-
-                                temmefy(child, childNode);
-                                element.appendChild(childNode);
-                            });
+                            if (hierarchy[key] == null || !Array.isArray(hierarchy.children)) {
+                                throw "The element's children must be an array.";
+                            } else {
+                                hierarchy.children.forEach(child => {
+                                    const childNode = document.createElement(child['name']);
+    
+                                    temmefy(child, childNode);
+                                    element.appendChild(childNode);
+                                });    
+                            }
 
                             break;
                         }
