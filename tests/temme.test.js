@@ -14,200 +14,107 @@
 
 const Temme = require('../src/temme');
 
+/**
+ * Tests against a passed heirarchy value.
+ * 
+ * @param {*} message The message of the test.
+ * @param {*} value The value of the hierarchy to test.
+ */
+function testHierarchy(message, value) {
+    test(message, () => {
+        // Arrange.
+        const
+            target = document.createElement('div'),
+            hierarchy = value;
+
+        let state = true;
+
+        // Act.
+        try {
+            Temme(hierarchy, target);
+        }
+        catch (e) {
+            state = false;
+        }
+
+        // Assert.
+        expect(state).toBe(false);
+    });
+}
+
+/**
+ * Tests against a passed target value.
+ * 
+ * @param {*} message The message of the test.
+ * @param {*} value The value the target to test.
+ */
+function testTarget(message, value) {
+    test(message, () => {
+        // Arrange.
+        const
+            target = value,
+            hierarchy = {};
+
+        let state = true;
+
+        // Act.
+        try {
+            Temme(hierarchy, target);
+        }
+        catch (e) {
+            state = false;
+        }
+
+        // Assert.
+        expect(state).toBe(false);
+    });
+}
+
 describe('Passing invalid hierarchy', () => {
-    test('Passing invalid hierarchy object (null) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = null;
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
-
-    test('Passing invalid hierarchy object (array) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = [];
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
-
-    test('Passing invalid hierarchy object (primitive) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = 'some string';
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
+    testHierarchy('Passing invalid hierarchy object (null) should raise a warning.', null);
+    testHierarchy('Passing invalid hierarchy object (array) should raise a warning.', []);
+    testHierarchy('Passing invalid hierarchy object (string) should raise a warning.', 'some string');
+    testHierarchy('Passing invalid hierarchy object (number) should raise a warning.', 26);
+    testHierarchy('Passing invalid hierarchy object (boolean) should raise a warning.', true);
 });
 
-describe('Passing invalid values in the hierarchy object.', () => {
-    function testValue(message, value) {
-        test(message, () => {
-            // Arrange.
-            const
-                target = document.createElement('div'),
-                hierarchy = value;
-    
-            let state = true;
-    
-            // Act.
-            try {
-                Temme(hierarchy, target);
-            }
-            catch (e) {
-                state = false;
-            }
-    
-            // Assert.
-            expect(state).toBe(false);
-        });
-    }
-    
-    testValue('Passing an invalid id (not a string) should raise an error.', {
+describe('Passing invalid values in the hierarchy object.', () => {   
+    testHierarchy('Passing an invalid id (not a string) should raise an error.', {
         id: 26
     });
 
-    testValue('Passing invalid classes (not an array) should raise an error.', {
+    testHierarchy('Passing invalid classes (not an array) should raise an error.', {
         classes: 'not an array'
     });
 
-    testValue('Passing invalid attributes (not an array with objects as values) should raise an error.', {
+    testHierarchy('Passing invalid attributes (not an array with objects as values) should raise an error.', {
         attributes: ["ss", 32, true, []]
     });
 
-    testValue('Passing invalid data (not an object) should raise an error.', {
+    testHierarchy('Passing invalid data (not an object) should raise an error.', {
         data: []
     });
 
-    testValue('Passing invalid text (not a string) should raise an error.', {
+    testHierarchy('Passing invalid text (not a string) should raise an error.', {
         text: {}
     });
 
-    testValue('Passing invalid HTML (not a string) should raise an error.', {
+    testHierarchy('Passing invalid HTML (not a string) should raise an error.', {
         html: true
     });
 
-    testValue('Passing invalid children (not an array) should raise an error.', {
+    testHierarchy('Passing invalid children (not an array) should raise an error.', {
         children: {}
     });
 });
 
 describe('Passing invalid target.', () => {
-    test('Passing invalid target (null) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = null,
-            hierarchy = {};
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
-
-    test('Passing invalid target (non HTMLElement object) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = {},
-            hierarchy = {};
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
-
-    test('Passing invalid target (array) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = [],
-            hierarchy = {};
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
-
-    test('Passing invalid target (primitive) should raise a warning.', () => {
-        // Arrange.
-        const
-            target = 'some string',
-            hierarchy = {};
-
-        let state = true;
-
-        // Act.
-        try {
-            Temme(hierarchy, target);
-        }
-        catch (e) {
-            state = false;
-        }
-
-        // Assert.
-        expect(state).toBe(false);
-    });
+    testTarget('Passing invalid target (null) should raise a warning.', null);
+    testTarget('Passing invalid target (non HTMLElement object) should raise a warning.', {});
+    testTarget('Passing invalid target (array) should raise a warning.', []);
+    testTarget('Passing invalid target (string) should raise a warning.', 'some string');
+    testTarget('Passing invalid target (number) should raise a warning.', 15);
+    testTarget('Passing invalid target (boolean) should raise a warning.', false);
 });
 
 describe('Passing valid arguments.', () => {
