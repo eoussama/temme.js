@@ -1,1 +1,13 @@
-node_modules/
+# Ignoring all.
+*
+
+# Including the dist folder.
+!dist/
+
+# Including the package's information files.
+!README.md
+!LICENSE
+
+# Including the package.json
+!package.json
+!package-lock.json
