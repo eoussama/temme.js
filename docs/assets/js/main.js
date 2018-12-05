@@ -224,7 +224,7 @@ window.addEventListener('load', async () => {
                             },
                             {
                                 name: 'p',
-                                text: "Temme focuses on the data structure more, it's much better than manually working with <code>createElement</code> and prettier than direct HTML embed <code>innerHTML</code>."
+                                html: "Temme focuses on the data structure more, it's much better than manually working with <code>createElement</code> and prettier than direct HTML embed <code>innerHTML</code>."
                             },
                             {
                                 name: 'p',
