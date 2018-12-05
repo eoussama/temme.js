@@ -53,6 +53,32 @@ window.addEventListener('load', async () => {
                         name: 'h4',
                         text: 'From JSON to HTML',
                         classes: ['subtitle']
+                    },
+                    {
+                        name: 'div',
+                        classes: ['column-container'],
+                        children: [
+                            {
+                                name: 'iframe',
+                                attributes: [
+                                    { frameborder: 0 },
+                                    { height: '30px' },
+                                    { scrolling: 0 },
+                                    { src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=star&size=large' },
+                                    { width: '80px' }
+                                ]
+                            },
+                            {
+                                name: 'iframe',
+                                attributes: [
+                                    { frameborder: 0 },
+                                    { height: '30px' },
+                                    { scrolling: 0 },
+                                    { src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=fork&size=large' },
+                                    { width: '80px' }
+                                ]
+                            }
+                        ]
                     }
                 ]
             },
