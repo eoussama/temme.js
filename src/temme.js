@@ -94,5 +94,5 @@ function Temme(hierarchy = {}, target = document.body) {
         throw `[Temme JS]: ${ e }`;
     }
  }
- 
-module.exports = Temme;
+
+ module.exports = Temme;
