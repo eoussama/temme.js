@@ -1,1 +1,1 @@
-Temme(hierarchy: object, target HTMLElement);
+Temme(hierarchy: object, target: HTMLElement);
