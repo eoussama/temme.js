@@ -1,6 +1,6 @@
 {
   "name": "temmejs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
   "main": "src/temme.js",
   "directories": {

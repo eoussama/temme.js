@@ -1,13 +1,15 @@
-# Ignoring all.
-*
+# Ignoring the dependencies' folder.
+node_modules/
 
-# Including the dist folder.
-!dist/
+# Ignoring the source files.
+src/
 
-# Including the package's information files.
-!README.md
-!LICENSE
+# Ignoring the tests.
+tests/
 
-# Including the package.json
-!package.json
-!package-lock.json
+# Ignoring the gulpfile.
+gulpfile.js
+
+# Ignoring git specific files.
+.gitignore
+.gitattributes
