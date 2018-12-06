@@ -1,7 +1,7 @@
 /**
 *
 * @name:       temmejs
-* @version:    0.2.3
+* @version:    0.2.4
 * @author:     EOussama
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
