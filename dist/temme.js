@@ -165,7 +165,7 @@ function _typeof(obj) {
                                             // indicating it's either a parent or a sibling so that no parent
                                             // can reference a child element.
                                             var reference = references.filter(function(ref) {
-                                                return ref.refElement.ref === _hierarchy['from']['ref'] && ref.depth <= depth;
+                                                return ref.refElement.ref === _hierarchy['from']['ref'] && ref.depth < depth;
                                             }).sort(function(refA, refB) {
                                                 return refB.depth - refA.depth;
                                             })[0];

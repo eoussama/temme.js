@@ -69,7 +69,7 @@
                     }
                 }
             })(hierarchy, 0);
-            
+
             /**
              *  Replaces all the references.
              * 
@@ -101,7 +101,7 @@
                                         // indicating it's either a parent or a sibling so that no parent
                                         // can reference a child element.
                                         const reference = references
-                                            .filter(ref => ref.refElement.ref === _hierarchy['from']['ref'] && ref.depth <= depth)
+                                            .filter(ref => ref.refElement.ref === _hierarchy['from']['ref'] && ref.depth < depth)
                                             .sort((refA, refB) => refB.depth - refA.depth)[0];
 
                                         if (typeof reference !== 'undefined') {
