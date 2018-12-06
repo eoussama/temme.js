@@ -134,14 +134,34 @@ function _typeof(obj) {
                                             switch (_hierarchy['mode']) {
                                                 case 'append':
                                                     {
-                                                        console.log('Append');
+                                                        var _loop2 = function _loop2(k) {
+                                                            if (!['from', 'mode', 'ref', 'name'].includes(k)) {
+                                                                if (Array.isArray(reference.ref[k])) {
+                                                                    if (k in _hierarchy) {
+                                                                        _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.ref[k].filter(function(el) {
+                                                                            return !_hierarchy[k].includes(el);
+                                                                        })));
+                                                                    } else {
+                                                                        _hierarchy[k] = reference.ref[k];
+                                                                    }
+                                                                } else if (_typeof(reference.ref[k]) === 'object') {
+                                                                    _hierarchy[k] = _hierarchy[k] || {};
+                                                                    Object.assign(_hierarchy[k] || {}, reference.ref[k]);
+                                                                } else {
+                                                                    _hierarchy[k] = reference.ref[k];
+                                                                }
+                                                            }
+                                                        };
+
+                                                        for (var k in reference.ref) {
+                                                            _loop2(k);
+                                                        }
+
                                                         break;
                                                     }
 
                                                 case 'override':
                                                     {
-                                                        console.log(reference.ref);
-
                                                         for (var k in reference.ref) {
                                                             if (!['from', 'mode', 'ref', 'name'].concat(_toConsumableArray(Object.keys(_hierarchy))).includes(k)) {
                                                                 _hierarchy[k] = reference.ref[k];
@@ -157,7 +177,28 @@ function _typeof(obj) {
                                                     }
                                             }
                                         } else {
-                                            console.log('Append');
+                                            var _loop3 = function _loop3(_k) {
+                                                if (!['from', 'mode', 'ref', 'name'].includes(_k)) {
+                                                    if (Array.isArray(reference.ref[_k])) {
+                                                        if (_k in _hierarchy) {
+                                                            _hierarchy[_k] = _toConsumableArray(_hierarchy[_k]).concat(_toConsumableArray(reference.ref[_k].filter(function(el) {
+                                                                return !_hierarchy[_k].includes(el);
+                                                            })));
+                                                        } else {
+                                                            _hierarchy[_k] = reference.ref[_k];
+                                                        }
+                                                    } else if (_typeof(reference.ref[_k]) === 'object') {
+                                                        _hierarchy[_k] = _hierarchy[_k] || {};
+                                                        Object.assign(_hierarchy[_k] || {}, reference.ref[_k]);
+                                                    } else {
+                                                        _hierarchy[_k] = reference.ref[_k];
+                                                    }
+                                                }
+                                            };
+
+                                            for (var _k in reference.ref) {
+                                                _loop3(_k);
+                                            }
                                         }
                                     }
                                 }
@@ -224,7 +265,7 @@ function _typeof(obj) {
                                     if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
                                         throw "The element's classes must be an array.";
                                     } else {
-                                        element.classList = _toConsumableArray(element.classList).concat(_toConsumableArray(_hierarchy[key])).join(' ');
+                                        element.classList = _toConsumableArray(element.classList).concat(_toConsumableArray(_hierarchy[key])).sort().join(' ');
                                     }
                                 }
 
