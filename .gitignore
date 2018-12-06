@@ -1,5 +1,2 @@
 # Ignoring Node modules.
 node_modules/
-
-# Ignoring the built scripts.
-dist/
