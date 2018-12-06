@@ -63,9 +63,60 @@
         <!-- Temme JS. -->
         <script src="../../dist/temme.min.js"></script>
 
+        <!-- 
+            <div>
+                <p class="bold red"></p>
+                <div>
+                    <p class="bold red"></p>
+                    <p class="bold red shadow title">content</p>
+                </div>
+                <p class="red italic title"></p>
+            </div>
+        -->
+
         <!-- The main javascript code. -->
         <script>
-           
+            // Getting the parent element.
+            const target = document.getElementById('target');
+
+            // Testing up the hierarchy object.
+            const hierarchy = {
+                children: [
+                    {
+                        ref: 'reusable-paragraph',
+                        name: 'p',
+                        classes: ['bold', 'red']
+                    },
+                    {
+                        name: 'div',
+                        children: [
+                            {
+                                from: 'reusable-paragraph'
+                            },
+                            {
+                                ref: 'ddd',
+                                from: 'reusable-paragraph',
+                                mode: 'append',
+                                id: 'some-id',
+                                classes: ['red', 'shadow', 'title'],
+                                text: 'content'
+                            }
+                        ]
+                    },
+                    {
+                        from: 'reusable-paragraph',
+                        mode: 'override',
+                        id: 'some-id',
+                        classes: ['red', 'italic', 'title']
+                    }
+                ]
+            }
+
+            // Telling Temme to do us the favor.
+            Temme(hierarchy, target);
+
+            // Outputting the results in the console.
+            console.info(target);
         </script>
     </body>
 </html>
