@@ -63,17 +63,6 @@
         <!-- Temme JS. -->
         <script src="../../dist/temme.min.js"></script>
 
-        <!-- 
-            <div id="target">
-                <p class="bold red"></p>
-                <div>
-                    <p class="bold red"></p>
-                    <p id='some-id' class="bold red shadow title">content</p>
-                </div>
-                <p id='some-id' class="red italic title"></p>
-            </div>
-        -->
-
         <!-- The main javascript code. -->
         <script>
             // Getting the parent element.
@@ -83,38 +72,24 @@
             const hierarchy = {
                 children: [
                     {
-                        ref: 'reusable-paragraph',
-                        name: 'p',
-                        classes: ['bold', 'red']
-                    },
-                    {
-                        name: 'div',
+                        ref: 'p1',
+                        classes: ['bold', 'red'],
+                        dataset: {
+                            id: 1
+                        },
                         children: [
                             {
-                                from: {
-                                    ref: 'reusable-paragraph'
-                                }
-                            },
-                            {
-                                from: {
-                                    ref: 'reusable-paragraph',
-                                    mode: 'append'
-                                },
-                                name: 'p',
-                                id: 'some-id',
-                                classes: ['red', 'shadow', 'title'],
-                                text: 'content'
+                                name: 'p'
                             }
                         ]
                     },
                     {
                         from: {
-                            ref: 'reusable-paragraph',
-                            mode: 'override'
+                            ref: 'p1',
                         },
-                        name: 'p',
-                        id: 'some-id',
-                        classes: ['red', 'italic', 'title']
+                        dataset: {
+                            id: 2
+                        }
                     }
                 ]
             };
