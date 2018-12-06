@@ -107,8 +107,22 @@ describe('Passing invalid values in the hierarchy object.', () => {
         children: {}
     });
 
+    testHierarchy('Passing invalid reference (not a string) should raise an error.', {
+        ref: 312
+    });
+
+    testHierarchy('Passing invalid referencing object (not an object) should raise an error.', {
+        from: 'not an object'
+    });
+
+    testHierarchy("Passing invalid referencing object (doesn't have a valid reference) should raise an error.", {
+        from: {
+            ref: false
+        }
+    });
+
     testHierarchy('Passing invalid options should raise an error.', {
-        invalidOption: 'some value'
+        invalidOption: false
     });
 });
 
@@ -192,6 +206,42 @@ describe('Passing valid arguments.', () => {
         result.appendChild(div);
         div.appendChild(h1);
         h1.innerHTML = 'Temme <span class="subtitle">JS</span>';
+
+        // Act.
+        try {
+            Temme(hierarchy, target);
+        }
+        catch (e) {
+
+        }
+
+        // Assert.
+        expect(target).toEqual(result);
+    });
+});
+
+describe('References.', () => {
+    test('Referencing a direct parent.', () => {
+        // Arrange.
+        const
+            result = document.createElement('div'),
+            div = document.createElement('div'),
+            target = document.createElement('div'),
+            hierarchy = {
+                ref: 'ref-1',
+                classes: ['red', 'blue'],
+                children: [
+                    {
+                        from: {
+                            ref: 'ref-1'
+                        }
+                    }
+                ]
+            };
+
+        result.classList.add('blue', 'red');
+        div.classList.add('blue', 'red');
+        result.appendChild(div);
 
         // Act.
         try {

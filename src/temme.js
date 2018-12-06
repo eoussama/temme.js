@@ -81,6 +81,13 @@
                 // Looping through all keys of the hierarchy object.
                 for (let key in _hierarchy) {
                     switch (key) {
+
+                        case 'ref': {
+                            if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
+                                throw "The reference option must be a string.";
+                            }
+                        }
+
                         case 'from': {
 
                             // If the hierarchy object has a `from` key.
