@@ -161,7 +161,7 @@ function _typeof(obj) {
                                 // If the hierarchy object has a `from` key.
                                 if ('from' in _hierarchy) {
                                     // Check if the key is valie.
-                                    if (_hierarchy[key] == null || Array.isArray(_hierarchy[key]) || _typeof(_hierarchy[key]) !== 'object') {
+                                    if (_hierarchy['from'] == null || Array.isArray(_hierarchy['from']) || _typeof(_hierarchy['from']) !== 'object') {
                                         throw "The referencing option must be an object.";
                                     } else {
                                         // Checking if the `ref` option is valid.
@@ -196,10 +196,15 @@ function _typeof(obj) {
                                                                                     // option, if yes, appending the value of that option from
                                                                                     // the referenced element with removing any duplicates.
                                                                                     if (k in _hierarchy) {
-                                                                                        _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.refElement[k].filter(function(el) {
-                                                                                            return !_hierarchy[k].includes(el);
-                                                                                        }))); // If the referencing object doesn't have the said option,
+                                                                                        if (k === 'attributes') {
+                                                                                            _hierarchy[k] = reference.refElement[k];
+                                                                                        } else {
+                                                                                            _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.refElement[k].filter(function(el) {
+                                                                                                return !_hierarchy[k].includes(el);
+                                                                                            })));
+                                                                                        } // If the referencing object doesn't have the said option,
                                                                                         // assigning it from its counterpart.
+
                                                                                     } else {
                                                                                         _hierarchy[k] = reference.refElement[k];
                                                                                     }
@@ -220,7 +225,13 @@ function _typeof(obj) {
 
                                                                         } else if (_typeof(reference.refElement[k]) === 'object') {
                                                                             _hierarchy[k] = _hierarchy[k] || {};
-                                                                            Object.assign(_hierarchy[k] || {}, reference.refElement[k]); // Checking if the option is anything but an Array or Object (primitive).
+
+                                                                            for (var objK in reference.refElement[k]) {
+                                                                                if (!(objK in _hierarchy[k])) {
+                                                                                    _hierarchy[k][objK] = reference.refElement[k][objK];
+                                                                                }
+                                                                            } // Checking if the option is anything but an Array or Object (primitive).
+
                                                                         } else {
                                                                             _hierarchy[k] = reference.refElement[k];
                                                                         }
@@ -401,16 +412,11 @@ function _typeof(obj) {
                         case 'attributes':
                             {
                                 if ('attributes' in _hierarchy) {
-                                    if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
-                                        throw "The attributes option must be an array.";
+                                    if (_hierarchy[key] == null || Array.isArray(_hierarchy[key]) || _typeof(_hierarchy[key]) !== 'object') {
+                                        throw "The attributes option must be a object.";
                                     } else {
-                                        _hierarchy.attributes.forEach(function(attr) {
-                                            if (attr == null || Array.isArray(attr) || _typeof(attr) !== 'object') {
-                                                throw 'Attributes must be of type object.';
-                                            } else {
-                                                var attributeName = Object.keys(attr)[0];
-                                                element.setAttribute(attributeName, attr[attributeName]);
-                                            }
+                                        Object.keys(_hierarchy.attributes).forEach(function(attr) {
+                                            element.setAttribute(attr, _hierarchy.attributes[attr]);
                                         });
                                     }
                                 }

@@ -87,8 +87,8 @@ describe('Passing invalid values in the hierarchy object.', () => {
         classes: 'not an array'
     });
 
-    testHierarchy('Passing invalid attributes (not an array with objects as values) should raise an error.', {
-        attributes: ["ss", 32, true, []]
+    testHierarchy('Passing invalid attributes (not an objects as values) should raise an error.', {
+        attributes: []
     });
 
     testHierarchy('Passing invalid dataset (not an object) should raise an error.', {

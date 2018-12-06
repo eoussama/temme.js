@@ -72,11 +72,22 @@
             const hierarchy = {
                 children: [
                     {
+                        ref: 'p',
                         classes: ['red'],
                         children: [
                             {
                                 ref: 'p',
+                                from: {
+                                    ref: 'p'
+                                },
                                 classes: ['blue']
+                            },
+                            {
+                                ref: 'p',
+                                from: {
+                                    ref: 'p'
+                                },
+                                classes: ['yellow']
                             }
                         ]
                     }

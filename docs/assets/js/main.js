@@ -41,9 +41,9 @@ window.addEventListener('load', async () => {
                         {
                             name: 'img',
                             classes: ['logo'],
-                            attributes: [
-                                { src: 'assets/img/logo.svg' }
-                            ]
+                            attributes: {
+                                src: 'assets/img/logo.svg'
+                            }
                         },
                         {
                             name: 'h1',
@@ -60,24 +60,25 @@ window.addEventListener('load', async () => {
                             classes: ['column-container'],
                             children: [
                                 {
+                                    ref: 'github-btn',
                                     name: 'iframe',
-                                    attributes: [
-                                        { frameborder: 0 },
-                                        { height: '30px' },
-                                        { scrolling: 0 },
-                                        { src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=star&size=large' },
-                                        { width: '80px' }
-                                    ]
+                                    attributes: {
+                                        frameborder: 0,
+                                        height: '30px',
+                                        scrolling: 0,
+                                        src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=star&size=large',
+                                        width: '80px'
+                                    }
                                 },
                                 {
+                                    from: {
+                                        ref: 'github-btn',
+                                        mode: 'append'
+                                    },
                                     name: 'iframe',
-                                    attributes: [
-                                        { frameborder: 0 },
-                                        { height: '30px' },
-                                        { scrolling: 0 },
-                                        { src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=fork&size=large' },
-                                        { width: '80px' }
-                                    ]
+                                    attributes: {
+                                        src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=fork&size=large'
+                                    }
                                 }
                             ]
                         }

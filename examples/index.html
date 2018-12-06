@@ -75,14 +75,22 @@
                         name: 'hr'
                     },
                     {
+                        ref: 'base-p',
                         name: 'p',
+                        classes: ['italic'],
                         html: "This is a paragraph generated using <b>Temme JS</b>."
                     },
                     {
+                        from: {
+                            ref: 'base-p'
+                        },
                         name: 'p',
                         id: 'hierarchy'
                     },
                     {
+                        from: {
+                            ref: 'base-p'
+                        },
                         name: 'p',
                         id: 'skeleton'
                     }
