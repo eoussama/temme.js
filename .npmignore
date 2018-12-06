@@ -13,3 +13,6 @@ gulpfile.js
 # Ignoring git specific files.
 .gitignore
 .gitattributes
+
+# Ignoring bower specific files.
+bower.json
