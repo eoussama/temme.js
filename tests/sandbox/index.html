@@ -65,12 +65,12 @@
 
         <!-- 
             <div>
-                <p class="bold red"></p>
+                <p class="bold red" data-id="26" data-title="title"></p>
                 <div>
-                    <p class="bold red"></p>
-                    <p class="bold red shadow title">content</p>
+                    <p class="bold red" data-id="26" data-title="title"></p>
+                    <p id='some-id' class="bold red shadow title" data-id="26" data-title="title">content</p>
                 </div>
-                <p class="red italic title"></p>
+                <p id='some-id' class="red italic title" data-id="26" data-title="title"></p>
             </div>
         -->
 
@@ -85,16 +85,22 @@
                     {
                         ref: 'reusable-paragraph',
                         name: 'p',
-                        classes: ['bold', 'red']
+                        classes: ['bold', 'red'],
+                        data: {
+                            id: '26',
+                            title: 'some title'
+                        }
                     },
                     {
                         name: 'div',
                         children: [
                             {
+                                name: 'p',
                                 from: 'reusable-paragraph'
                             },
                             {
                                 ref: 'ddd',
+                                name: 'p',
                                 from: 'reusable-paragraph',
                                 mode: 'append',
                                 id: 'some-id',
@@ -104,6 +110,7 @@
                         ]
                     },
                     {
+                        name: 'p',
                         from: 'reusable-paragraph',
                         mode: 'override',
                         id: 'some-id',

@@ -21,12 +21,12 @@
             if (target == null || !(target instanceof HTMLElement)) throw 'The target must be a valid HTML element.';
 
             /**
-             * All the references in the hierarchy object.
+             *  All the references in the hierarchy object.
              */
             let references = [];
 
             /**
-             * Gets all the references in the hierarchy object.
+             *  Gets all the references in the hierarchy object.
              * 
              *  @param {*} _hierarchy
              *  @param {*} depth
@@ -47,48 +47,54 @@
             })(hierarchy, 0);
 
             /**
-             * Performs the Temme JS magic on a given element.
+             *  Replaces all the references.
              * 
-             * @param {*} _hierarchy 
-             * @param {*} element
+             *  @param {*} _hierarchy
+             *  @param {*} depth
              */
-            (function temmefy(_hierarchy, element, depth) {
+            (function affectReferences(_hierarchy, depth) {
                 for (let key in _hierarchy) {
                     switch (key) {
-
                         case 'ref': {
                             break;
                         }
 
-                        // Adding references.
+                        // Replacing the reference.
                         case 'from': {
-                            if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                throw "The reference must be a string.";
-                            } else {
-                                const reference = references
-                                    .filter(ref => ref.ref.ref === _hierarchy[key] && ref.depth <= depth)
-                                    .sort((refA, refB) => refB.depth - refA.depth)[0];
-
-                                if ('mode' in _hierarchy) {
-                                    switch (_hierarchy['mode']) {
-                                        case 'append': {
-                                            console.log('Append');
-
-                                            break;
-                                        }
-
-                                        case 'override': {
-                                            console.log('Override');
-
-                                            break;
-                                        }
-
-                                        default: {
-                                            throw `“${ _hierarchy['mode'] }” is not a valid mode, must be either (“append” or “override”).`;
-                                        }
-                                    }
+                            if ('from' in _hierarchy) {
+                                if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
+                                    throw "The reference must be a string.";
                                 } else {
-                                    console.log('Append');
+                                    const reference = references
+                                        .filter(ref => ref.ref.ref === _hierarchy[key] && ref.depth <= depth)
+                                        .sort((refA, refB) => refB.depth - refA.depth)[0];
+
+                                    if ('mode' in _hierarchy) {
+                                        switch (_hierarchy['mode']) {
+                                            case 'append': {
+                                                console.log('Append');
+
+                                                break;
+                                            }
+
+                                            case 'override': {
+                                                console.log(reference.ref);
+                                                for (let k in reference.ref) {
+                                                    if (!['from', 'mode', 'ref', 'name', ...Object.keys(_hierarchy)].includes(k)) {
+                                                        _hierarchy[k] = reference.ref[k];
+                                                    }
+                                                }
+
+                                                break;
+                                            }
+
+                                            default: {
+                                                throw `“${ _hierarchy['mode'] }” is not a valid mode, must be either (“append” or “override”).`;
+                                            }
+                                        }
+                                    } else {
+                                        console.log('Append');
+                                    }
                                 }
                             }
 
@@ -99,12 +105,42 @@
                             break;
                         }
 
+                        // Looking fort references on child elements.
+                        case 'children': {
+                            if ('children' in _hierarchy) {
+                                if (_hierarchy[key] == null || !Array.isArray(_hierarchy.children)) {
+                                    throw "The element's children must be an array.";
+                                } else {
+                                    _hierarchy.children.forEach(child => {
+                                        affectReferences(child, ++depth);
+                                    });
+                                }
+                            }
+    
+                            break;
+                        }
+                    }
+                }
+            })(hierarchy, 0);
+
+            /**
+             * Performs the Temme JS magic on a given element.
+             * 
+             * @param {*} _hierarchy 
+             * @param {*} element
+             */
+            (function temmefy(_hierarchy, element) {
+                for (let key in _hierarchy) {
+                    switch (key) {
+
                         // Adding id to the element.
                         case 'id': {
-                            if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                throw "The element's id must be a string.";
-                            } else {
-                                element.id = _hierarchy[key];
+                            if ('id' in _hierarchy) {
+                                if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
+                                    throw "The element's id must be a string.";
+                                } else {
+                                    element.id = _hierarchy[key];
+                                }
                             }
 
                             break;
@@ -112,10 +148,12 @@
 
                         // Adding classes to the element.
                         case 'classes': {
-                            if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
-                                throw "The element's classes must be an array.";
-                            } else {
-                                element.classList = [...element.classList, ..._hierarchy[key]].join(' ');
+                            if ('classes' in _hierarchy) {
+                                if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
+                                    throw "The element's classes must be an array.";
+                                } else {
+                                    element.classList = [...element.classList, ..._hierarchy[key]].join(' ');
+                                }
                             }
 
                             break;
@@ -123,18 +161,20 @@
 
                         // Adding attributes to the element.
                         case 'attributes': {
-                            if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
-                                throw "The element's attributes must be an array.";
-                            } else {
-                                _hierarchy.attributes.forEach(attr => {
-                                    if (attr == null || Array.isArray(attr) || typeof attr !== 'object') {
-                                        throw 'Attributes must be of type object.';
-                                    } else {
-                                        const attributeName = Object.keys(attr)[0];
-
-                                        element.setAttribute(attributeName, attr[attributeName]);
-                                    }
-                                });
+                            if ('attributes' in _hierarchy) {
+                                if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
+                                    throw "The element's attributes must be an array.";
+                                } else {
+                                    _hierarchy.attributes.forEach(attr => {
+                                        if (attr == null || Array.isArray(attr) || typeof attr !== 'object') {
+                                            throw 'Attributes must be of type object.';
+                                        } else {
+                                            const attributeName = Object.keys(attr)[0];
+    
+                                            element.setAttribute(attributeName, attr[attributeName]);
+                                        }
+                                    });
+                                }
                             }
 
                             break;
@@ -142,10 +182,12 @@
 
                         // Adding data attributes to the element.
                         case 'data': {
-                            if (_hierarchy[key] == null || Array.isArray(_hierarchy[key]) || typeof _hierarchy[key] !== 'object') {
-                                throw "The element's dataset must be an object.";
-                            } else {
-                                Object.assign(element.dataset, _hierarchy.data);
+                            if ('data' in _hierarchy) {
+                                if (_hierarchy[key] == null || Array.isArray(_hierarchy[key]) || typeof _hierarchy[key] !== 'object') {
+                                    throw "The element's dataset must be an object.";
+                                } else {
+                                    Object.assign(element.dataset, _hierarchy.data);
+                                }
                             }
 
                             break;
@@ -153,10 +195,12 @@
 
                         // Adding text to the element.
                         case 'text': {
-                            if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                throw "The element's text must be a string.";
-                            } else {
-                                element.textContent = _hierarchy[key];
+                            if ('text' in _hierarchy) {
+                                if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
+                                    throw "The element's text must be a string.";
+                                } else {
+                                    element.textContent = _hierarchy[key];
+                                }
                             }
 
                             break;
@@ -164,10 +208,12 @@
 
                         // Adding HTML to the element.
                         case 'html': {
-                            if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                throw "The element's HTML must be a string.";
-                            } else {
-                                element.innerHTML = _hierarchy[key];
+                            if ('html' in _hierarchy) {
+                                if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
+                                    throw "The element's HTML must be a string.";
+                                } else {
+                                    element.innerHTML = _hierarchy[key];
+                                }
                             }
 
                             break;
@@ -175,15 +221,17 @@
 
                         // Adding children to the element.
                         case 'children': {
-                            if (_hierarchy[key] == null || !Array.isArray(_hierarchy.children)) {
-                                throw "The element's children must be an array.";
-                            } else {
-                                _hierarchy.children.forEach(child => {
-                                    const childNode = document.createElement(child['name']);
-
-                                    temmefy(child, childNode, ++depth);
-                                    element.appendChild(childNode);
-                                });
+                            if ('children' in _hierarchy) {
+                                if (_hierarchy[key] == null || !Array.isArray(_hierarchy.children)) {
+                                    throw "The element's children must be an array.";
+                                } else {
+                                    _hierarchy.children.forEach(child => {
+                                        const childNode = document.createElement(child['name']);
+    
+                                        temmefy(child, childNode);
+                                        element.appendChild(childNode);
+                                    });
+                                }
                             }
 
                             break;
@@ -192,13 +240,13 @@
                         // If it was none of the above options, 
                         // flag it as invalid.
                         default: {
-                            if (key !== 'name') {
+                            if (!['ref', 'from', 'mode', 'name'].includes(key)) {
                                 throw `“${key}” is an invalid option.`;
                             }
                         }
                     }
                 }
-            })(hierarchy, target, 0);
+            })(hierarchy, target);
         }
         catch (e) {
             throw `[Temme JS]: ${e}`;
