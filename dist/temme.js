@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    0.2.4
+ * @version:    0.3.0
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -53,10 +53,12 @@ function _typeof(obj) {
         var target = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
 
         try {
-            if (hierarchy == null || _typeof(hierarchy) !== 'object' || Array.isArray(hierarchy)) throw 'The hierarchy must be a valid object.';
+            // Checking if the hieratchy is a valid object.
+            if (hierarchy == null || _typeof(hierarchy) !== 'object' || Array.isArray(hierarchy)) throw 'The hierarchy must be a valid object.'; // Checking if the target is a valid HTML element.
+
             if (target == null || !(target instanceof HTMLElement)) throw 'The target must be a valid HTML element.';
             /**
-             *  All the references in the hierarchy object.
+             *  Holds all elements with a reference in the hierarchy object.
              */
 
             var references = [];
@@ -68,13 +70,19 @@ function _typeof(obj) {
              */
 
             (function getReferences(_hierarchy, depth) {
+                // Checking if the hierarchy object has the `ref` key.
                 if ('ref' in _hierarchy) {
+                    // Adding the element to the references array as it's a
+                    // valid reference.
                     references.push({
-                        ref: _hierarchy,
+                        refElement: _hierarchy,
                         depth: depth
                     });
                 } else {
+                    // Checking if the element has any children.
                     if ('children' in _hierarchy) {
+                        // Looping through the element's children and
+                        // getting all their sub references.
                         var _iteratorNormalCompletion = true;
                         var _didIteratorError = false;
                         var _iteratorError = undefined;
@@ -110,94 +118,118 @@ function _typeof(obj) {
 
 
             (function affectReferences(_hierarchy, depth) {
-                var _loop = function _loop(key) {
+                // Looping through all keys of the hierarchy object.
+                for (var key in _hierarchy) {
                     switch (key) {
-                        case 'ref':
-                            {
-                                break;
-                            }
-                            // Replacing the reference.
-
                         case 'from':
                             {
+                                // If the hierarchy object has a `from` key.
                                 if ('from' in _hierarchy) {
-                                    if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                        throw "The reference must be a string.";
+                                    // Check if the key is valie.
+                                    if (_hierarchy[key] == null || Array.isArray(_hierarchy[key]) || _typeof(_hierarchy[key]) !== 'object') {
+                                        throw "The referencing option must be an object.";
                                     } else {
+                                        // Get the filtered references, must equel the one the current
+                                        // element is pointing to and has a lower or a matching depth
+                                        // indicating it's either a parent or a sibling so that no parent
+                                        // can reference a child element.
                                         var reference = references.filter(function(ref) {
-                                            return ref.ref.ref === _hierarchy[key] && ref.depth <= depth;
+                                            return ref.refElement.ref === _hierarchy['from']['ref'] && ref.depth <= depth;
                                         }).sort(function(refA, refB) {
                                             return refB.depth - refA.depth;
-                                        })[0];
+                                        })[0]; // Checking if the reference object `from` has a referencing mode.
 
-                                        if ('mode' in _hierarchy) {
-                                            switch (_hierarchy['mode']) {
+                                        if ('mode' in _hierarchy['from']) {
+                                            switch (_hierarchy['from']['mode']) {
+                                                // Checking if the referencing mode is set on `append`.
                                                 case 'append':
                                                     {
-                                                        var _loop2 = function _loop2(k) {
-                                                            if (!['from', 'mode', 'ref', 'name'].includes(k)) {
-                                                                if (Array.isArray(reference.ref[k])) {
+                                                        var _loop = function _loop(k) {
+                                                            // Avoiding inheriting the `from`, `name` options.
+                                                            if (!['from', 'ref', 'name'].includes(k)) {
+                                                                // Checking if the option is an array.
+                                                                if (Array.isArray(reference.refElement[k])) {
+                                                                    // Checking if the referencing element already has the said
+                                                                    // option, if yes, appending the value of that option from
+                                                                    // the referenced element with removing any duplicates.
                                                                     if (k in _hierarchy) {
-                                                                        _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.ref[k].filter(function(el) {
+                                                                        _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.refElement[k].filter(function(el) {
                                                                             return !_hierarchy[k].includes(el);
-                                                                        })));
+                                                                        }))); // If the referencing object doesn't have the said option,
+                                                                        // assigning it from its counterpart.
                                                                     } else {
-                                                                        _hierarchy[k] = reference.ref[k];
-                                                                    }
-                                                                } else if (_typeof(reference.ref[k]) === 'object') {
+                                                                        _hierarchy[k] = reference.refElement[k];
+                                                                    } // Checking if the option is an object.
+
+                                                                } else if (_typeof(reference.refElement[k]) === 'object') {
                                                                     _hierarchy[k] = _hierarchy[k] || {};
-                                                                    Object.assign(_hierarchy[k] || {}, reference.ref[k]);
+                                                                    Object.assign(_hierarchy[k] || {}, reference.refElement[k]); // Checking if the option is anything but an Array or Object (primitive).
                                                                 } else {
-                                                                    _hierarchy[k] = reference.ref[k];
+                                                                    _hierarchy[k] = reference.refElement[k];
                                                                 }
                                                             }
                                                         };
 
-                                                        for (var k in reference.ref) {
-                                                            _loop2(k);
+                                                        // looping through all the referenced object's options.
+                                                        for (var k in reference.refElement) {
+                                                            _loop(k);
                                                         }
 
                                                         break;
                                                     }
+                                                    // Checking if the referencing mode is set on `override`.
 
                                                 case 'override':
                                                     {
-                                                        for (var k in reference.ref) {
-                                                            if (!['from', 'mode', 'ref', 'name'].concat(_toConsumableArray(Object.keys(_hierarchy))).includes(k)) {
-                                                                _hierarchy[k] = reference.ref[k];
+                                                        // looping through all the referenced object's options.
+                                                        for (var k in reference.refElement) {
+                                                            // Avoiding inheriting the `from`, `name` or any existing options in
+                                                            // the referencing element. Thus overriding what needs to be overriden
+                                                            // and inheriting only the options that the referencing object lacks.
+                                                            if (!['from', 'ref', 'name'].concat(_toConsumableArray(Object.keys(_hierarchy))).includes(k)) {
+                                                                _hierarchy[k] = reference.refElement[k];
                                                             }
                                                         }
 
                                                         break;
                                                     }
+                                                    // Checking if the referencing mode is none of the above (invalid).
 
                                                 default:
                                                     {
-                                                        throw "\u201C".concat(_hierarchy['mode'], "\u201D is not a valid mode, must be either (\u201Cappend\u201D or \u201Coverride\u201D).");
+                                                        throw "\u201C".concat(_hierarchy['from']['mode'], "\u201D is not a valid referencing mode.");
                                                     }
                                             }
                                         } else {
-                                            var _loop3 = function _loop3(_k) {
-                                                if (!['from', 'mode', 'ref', 'name'].includes(_k)) {
-                                                    if (Array.isArray(reference.ref[_k])) {
+                                            var _loop2 = function _loop2(_k) {
+                                                // Avoiding inheriting the `from`, `name` options.
+                                                if (!['from', 'ref', 'name'].includes(_k)) {
+                                                    // Checking if the option is an array.
+                                                    if (Array.isArray(reference.refElement[_k])) {
+                                                        // Checking if the referencing element already has the said
+                                                        // option, if yes, appending the value of that option from
+                                                        // the referenced element with removing any duplicates.
                                                         if (_k in _hierarchy) {
-                                                            _hierarchy[_k] = _toConsumableArray(_hierarchy[_k]).concat(_toConsumableArray(reference.ref[_k].filter(function(el) {
+                                                            _hierarchy[_k] = _toConsumableArray(_hierarchy[_k]).concat(_toConsumableArray(reference.refElement[_k].filter(function(el) {
                                                                 return !_hierarchy[_k].includes(el);
-                                                            })));
+                                                            }))); // If the referencing object doesn't have the said option,
+                                                            // assigning it from its counterpart.
                                                         } else {
-                                                            _hierarchy[_k] = reference.ref[_k];
-                                                        }
-                                                    } else if (_typeof(reference.ref[_k]) === 'object') {
+                                                            _hierarchy[_k] = reference.refElement[_k];
+                                                        } // Checking if the option is an object.
+
+                                                    } else if (_typeof(reference.refElement[_k]) === 'object') {
                                                         _hierarchy[_k] = _hierarchy[_k] || {};
-                                                        Object.assign(_hierarchy[_k] || {}, reference.ref[_k]);
+                                                        Object.assign(_hierarchy[_k] || {}, reference.refElement[_k]); // Checking if the option is anything but an Array or Object (primitive).
                                                     } else {
-                                                        _hierarchy[_k] = reference.ref[_k];
+                                                        _hierarchy[_k] = reference.refElement[_k];
                                                     }
                                                 }
                                             };
 
-                                            for (var _k in reference.ref) {
-                                                _loop3(_k);
+                                            // looping through all the referenced object's options.
+                                            for (var _k in reference.refElement) {
+                                                _loop2(_k);
                                             }
                                         }
                                     }
@@ -205,18 +237,16 @@ function _typeof(obj) {
 
                                 break;
                             }
-
-                        case 'mode':
-                            {
-                                break;
-                            }
-                            // Looking fort references on child elements.
+                            // helo dd ma frind
+                            // Checking if the hierarchy object has the `children` option.
 
                         case 'children':
                             {
                                 if ('children' in _hierarchy) {
+                                    // Checking if the children option is not valid then raising an error.
                                     if (_hierarchy[key] == null || !Array.isArray(_hierarchy.children)) {
-                                        throw "The element's children must be an array.";
+                                        throw "The children option must be an array."; // Looping through the hierarchy object's children and
+                                        // affecting the proper references to them.
                                     } else {
                                         _hierarchy.children.forEach(function(child) {
                                             affectReferences(child, ++depth);
@@ -227,10 +257,6 @@ function _typeof(obj) {
                                 break;
                             }
                     }
-                };
-
-                for (var key in _hierarchy) {
-                    _loop(key);
                 }
             })(hierarchy, 0);
             /**
@@ -244,12 +270,20 @@ function _typeof(obj) {
             (function temmefy(_hierarchy, element) {
                 for (var key in _hierarchy) {
                     switch (key) {
-                        // Adding id to the element.
+                        // Checking if the name option is valid.
+                        case 'name':
+                            {
+                                if (!('name' in _hierarchy) || _hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
+                                    throw "The name option must be a valid string.";
+                                }
+                            }
+                            // Adding id to the element.
+
                         case 'id':
                             {
                                 if ('id' in _hierarchy) {
                                     if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                        throw "The element's id must be a string.";
+                                        throw "The id option must be a string.";
                                     } else {
                                         element.id = _hierarchy[key];
                                     }
@@ -263,7 +297,7 @@ function _typeof(obj) {
                             {
                                 if ('classes' in _hierarchy) {
                                     if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
-                                        throw "The element's classes must be an array.";
+                                        throw "The classes option must be an array.";
                                     } else {
                                         element.classList = _toConsumableArray(element.classList).concat(_toConsumableArray(_hierarchy[key])).sort().join(' ');
                                     }
@@ -277,7 +311,7 @@ function _typeof(obj) {
                             {
                                 if ('attributes' in _hierarchy) {
                                     if (_hierarchy[key] == null || !Array.isArray(_hierarchy[key])) {
-                                        throw "The element's attributes must be an array.";
+                                        throw "The attributes option must be an array.";
                                     } else {
                                         _hierarchy.attributes.forEach(function(attr) {
                                             if (attr == null || Array.isArray(attr) || _typeof(attr) !== 'object') {
@@ -294,13 +328,13 @@ function _typeof(obj) {
                             }
                             // Adding data attributes to the element.
 
-                        case 'data':
+                        case 'dataset':
                             {
-                                if ('data' in _hierarchy) {
+                                if ('dataset' in _hierarchy) {
                                     if (_hierarchy[key] == null || Array.isArray(_hierarchy[key]) || _typeof(_hierarchy[key]) !== 'object') {
-                                        throw "The element's dataset must be an object.";
+                                        throw "The dataset option must be an object.";
                                     } else {
-                                        Object.assign(element.dataset, _hierarchy.data);
+                                        Object.assign(element.dataset, _hierarchy.datatset);
                                     }
                                 }
 
@@ -312,7 +346,7 @@ function _typeof(obj) {
                             {
                                 if ('text' in _hierarchy) {
                                     if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                        throw "The element's text must be a string.";
+                                        throw "The text option must be a string.";
                                     } else {
                                         element.textContent = _hierarchy[key];
                                     }
@@ -326,7 +360,7 @@ function _typeof(obj) {
                             {
                                 if ('html' in _hierarchy) {
                                     if (_hierarchy[key] == null || typeof _hierarchy[key] !== 'string') {
-                                        throw "The element's HTML must be a string.";
+                                        throw "The HTML option must be a string.";
                                     } else {
                                         element.innerHTML = _hierarchy[key];
                                     }
@@ -340,11 +374,16 @@ function _typeof(obj) {
                             {
                                 if ('children' in _hierarchy) {
                                     if (_hierarchy[key] == null || !Array.isArray(_hierarchy.children)) {
-                                        throw "The element's children must be an array.";
+                                        throw "The children option must be an array.";
                                     } else {
+                                        // Looping through the children of the hierarchy object.
                                         _hierarchy.children.forEach(function(child) {
-                                            var childNode = document.createElement(child['name']);
-                                            temmefy(child, childNode);
+                                            // Creating an element given the name if the hierarchy object.
+                                            // If no valid name is found, create a div as the default behavior.
+                                            var childNode = document.createElement(child['name'] || 'div'); // Temmefying all the sub children as well.
+
+                                            temmefy(child, childNode); // Adding the temmefied element to its parent.
+
                                             element.appendChild(childNode);
                                         });
                                     }
@@ -357,7 +396,7 @@ function _typeof(obj) {
 
                         default:
                             {
-                                if (!['ref', 'from', 'mode', 'name'].includes(key)) {
+                                if (!['from', 'ref'].includes(key)) {
                                     throw "\u201C".concat(key, "\u201D is an invalid option.");
                                 }
                             }

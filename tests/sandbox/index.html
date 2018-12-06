@@ -1,7 +1,7 @@
 <!--
 
     @name:       temmejs
-    @version:    0.2.4
+    @version:    0.3.0
     @author:     EOussama
     @license     MIT
     @source:     https://github.com/EOussama/temmejs
@@ -65,12 +65,12 @@
 
         <!-- 
             <div id="target">
-                <p class="bold red" data-id="26" data-title="title"></p>
+                <p class="bold red"></p>
                 <div>
-                    <p class="bold red" data-id="26" data-title="title"></p>
-                    <p id='some-id' class="bold red shadow title" data-id="26" data-title="title">content</p>
+                    <p class="bold red"></p>
+                    <p id='some-id' class="bold red shadow title">content</p>
                 </div>
-                <p id='some-id' class="red italic title" data-id="26" data-title="title"></p>
+                <p id='some-id' class="red italic title"></p>
             </div>
         -->
 
@@ -85,24 +85,22 @@
                     {
                         ref: 'reusable-paragraph',
                         name: 'p',
-                        classes: ['bold', 'red'],
-                        data: {
-                            id: '26',
-                            title: 'some title'
-                        }
+                        classes: ['bold', 'red']
                     },
                     {
                         name: 'div',
                         children: [
                             {
-                                name: 'p',
-                                from: 'reusable-paragraph'
+                                from: {
+                                    ref: 'reusable-paragraph'
+                                }
                             },
                             {
-                                ref: 'ddd',
+                                from: {
+                                    ref: 'reusable-paragraph',
+                                    mode: 'append'
+                                },
                                 name: 'p',
-                                from: 'reusable-paragraph',
-                                mode: 'append',
                                 id: 'some-id',
                                 classes: ['red', 'shadow', 'title'],
                                 text: 'content'
@@ -110,14 +108,16 @@
                         ]
                     },
                     {
+                        from: {
+                            ref: 'reusable-paragraph',
+                            mode: 'override'
+                        },
                         name: 'p',
-                        from: 'reusable-paragraph',
-                        mode: 'override',
                         id: 'some-id',
                         classes: ['red', 'italic', 'title']
                     }
                 ]
-            }
+            };
 
             // Telling Temme to do us the favor.
             Temme(hierarchy, target);

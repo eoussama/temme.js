@@ -1,7 +1,7 @@
 /**
 *
 * @name:       temmejs
-* @version:    0.2.4
+* @version:    0.3.0
 * @author:     EOussama
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
@@ -91,8 +91,8 @@ describe('Passing invalid values in the hierarchy object.', () => {
         attributes: ["ss", 32, true, []]
     });
 
-    testHierarchy('Passing invalid data (not an object) should raise an error.', {
-        data: []
+    testHierarchy('Passing invalid dataset (not an object) should raise an error.', {
+        dataset: []
     });
 
     testHierarchy('Passing invalid text (not a string) should raise an error.', {
