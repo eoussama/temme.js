@@ -106,6 +106,10 @@ describe('Passing invalid values in the hierarchy object.', () => {
     testHierarchy('Passing invalid children (not an array) should raise an error.', {
         children: {}
     });
+
+    testHierarchy('Passing invalid options should raise an error.', {
+        invalidOption: 'some value'
+    });
 });
 
 describe('Passing invalid target.', () => {

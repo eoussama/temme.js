@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    0.2.2
+ * @version:    0.2.3
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -53,7 +53,7 @@ function _typeof(obj) {
         var target = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
 
         try {
-            if (hierarchy == null || _typeof(hierarchy) !== 'object' || Array.isArray(hierarchy)) throw "The hierarchy must be a valid object.";
+            if (hierarchy == null || _typeof(hierarchy) !== 'object' || Array.isArray(hierarchy)) throw 'The hierarchy must be a valid object.';
             if (target == null || !(target instanceof HTMLElement)) throw 'The target must be a valid HTML element.';
             /**
              * Performs the Temme JS magic on a given element.
@@ -158,6 +158,15 @@ function _typeof(obj) {
                                 }
 
                                 break;
+                            }
+                            // If it was none of the above options, 
+                            // flag it as invalid.
+
+                        default:
+                            {
+                                if (key !== 'name') {
+                                    throw "\u201C".concat(key, "\u201D is an invalid option.");
+                                }
                             }
                     }
                 }

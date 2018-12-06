@@ -17,7 +17,7 @@
 (function (obj) {
     function Temme(hierarchy = {}, target = document.body) {
         try {
-            if (hierarchy == null || typeof hierarchy !== 'object' || Array.isArray(hierarchy)) throw `The hierarchy must be a valid object.`;
+            if (hierarchy == null || typeof hierarchy !== 'object' || Array.isArray(hierarchy)) throw 'The hierarchy must be a valid object.';
             if (target == null || !(target instanceof HTMLElement)) throw 'The target must be a valid HTML element.';
 
             /**
@@ -118,6 +118,14 @@
                             }
 
                             break;
+                        }
+
+                        // If it was none of the above options, 
+                        // flag it as invalid.
+                        default: {
+                            if (key !== 'name') {
+                                throw `“${ key }” is an invalid option.`;
+                            }
                         }
                     }
                 }
