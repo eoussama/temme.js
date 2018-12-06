@@ -78,7 +78,7 @@ describe('Passing invalid hierarchy', () => {
     testHierarchy('Passing invalid hierarchy object (boolean) should raise a warning.', true);
 });
 
-describe('Passing invalid values in the hierarchy object.', () => {   
+describe('Passing invalid values in the hierarchy object.', () => {
     testHierarchy('Passing an invalid id (not a string) should raise an error.', {
         id: 26
     });

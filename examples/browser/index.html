@@ -1,0 +1,102 @@
+<!--
+
+    @name:       temmejs
+    @version:    0.2.0
+    @author:     EOussama
+    @license     MIT
+    @source:     https://github.com/EOussama/temmejs
+    
+    Example of how to use Temme on a browser environment.
+
+-->
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+
+        <!-- Meta data. -->
+        <meta charset="UTF-8">
+	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="EOussama">
+        <meta name="application-name" content="temmejs">
+        <meta name="description" content="Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.">
+        <meta name="keywords" content="javascript, javascript-library, dom, emmet">        
+
+        <!-- The favicon. -->
+        <link rel="shortcut icon" type="image/png" href="../../docs/assets/img/favicon.png">
+
+        <!-- The main styling. -->
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .bold {
+                font-weight: bold;
+            }
+
+            .italic {
+                font-style: italic;
+            }
+
+            .container {
+                padding: 50px 80px;
+            }
+        </style>
+
+        <!-- The title. -->
+        <title>Temme JS</title>
+    </head>
+
+    <body>
+
+        <!-- The main content. -->
+        <div id="target"></div>
+
+        <!-- Temme JS. -->
+        <script src="../../docs/assets/js/lib/temme.min.js"></script>
+
+        <!-- The main javascript code. -->
+        <script>
+            // Getting the parent element that's going to host out skeleton.
+            const target = document.getElementById('target');
+
+            // The object that maps out skeleton.
+            const hierarchy = {
+                classes: ['container'],
+                children: [
+                    {
+                        name: 'h1',
+                        text: 'Browser example'
+                    },
+                    {
+                        name: 'hr'
+                    },
+                    {
+                        name: 'p',
+                        html: "This is a paragraph generated using <b>Temme JS</b>."
+                    },
+                    {
+                        name: 'p',
+                        id: 'hierarchy'
+                    },
+                    {
+                        name: 'p',
+                        id: 'skeleton'
+                    }
+                ]
+            }
+
+            // Calling Temme to do its thing.
+            Temme(hierarchy, target);
+
+            // Displaying the hierarchy object.
+            document.getElementById('hierarchy').textContent = `Hierarchy: ${ JSON.stringify(hierarchy) }`;
+
+            // Displaying the generated skeleton.
+            document.getElementById('skeleton').textContent = `Skeleton: ${ target.innerHTML }`;
+        </script>
+    </body>
+</html>
