@@ -46,6 +46,16 @@
                         refElement: _hierarchy,
                         depth: depth
                     });
+
+                    // Checking if the element has any children.
+                    if ('children' in _hierarchy) {
+
+                        // Looping through the element's children and
+                        // getting all their sub references.
+                        for (let child of _hierarchy['children']) {
+                            getReferences(child, ++depth);
+                        }
+                    }
                 } else {
 
                     // Checking if the element has any children.
@@ -59,7 +69,7 @@
                     }
                 }
             })(hierarchy, 0);
-
+            
             /**
              *  Replaces all the references.
              * 
@@ -111,16 +121,34 @@
                                                                 // Checking if the option is an array.
                                                                 if (Array.isArray(reference.refElement[k])) {
 
-                                                                    // Checking if the referencing element already has the said
-                                                                    // option, if yes, appending the value of that option from
-                                                                    // the referenced element with removing any duplicates.
-                                                                    if (k in _hierarchy) {
-                                                                        _hierarchy[k] = [..._hierarchy[k], ...reference.refElement[k].filter(el => !_hierarchy[k].includes(el))];
+                                                                    // Checking children inheritance is enabled.
+                                                                    if (!('children' in _hierarchy['from']) || _hierarchy['from']['children'] !== true) {
+                                                                        if (k !== 'children') {
+                                                                            // Checking if the referencing element already has the said
+                                                                            // option, if yes, appending the value of that option from
+                                                                            // the referenced element with removing any duplicates.
+                                                                            if (k in _hierarchy) {
+                                                                                _hierarchy[k] = [..._hierarchy[k], ...reference.refElement[k].filter(el => !_hierarchy[k].includes(el))];
 
-                                                                        // If the referencing object doesn't have the said option,
-                                                                        // assigning it from its counterpart.
+                                                                                // If the referencing object doesn't have the said option,
+                                                                                // assigning it from its counterpart.
+                                                                            } else {
+                                                                                _hierarchy[k] = reference.refElement[k];
+                                                                            }
+                                                                        }
                                                                     } else {
-                                                                        _hierarchy[k] = reference.refElement[k];
+
+                                                                        // Checking if the referencing element already has the said
+                                                                        // option, if yes, appending the value of that option from
+                                                                        // the referenced element with removing any duplicates.
+                                                                        if (k in _hierarchy) {
+                                                                            _hierarchy[k] = [..._hierarchy[k], ...reference.refElement[k].filter(el => !_hierarchy[k].includes(el))];
+
+                                                                            // If the referencing object doesn't have the said option,
+                                                                            // assigning it from its counterpart.
+                                                                        } else {
+                                                                            _hierarchy[k] = reference.refElement[k];
+                                                                        }
                                                                     }
 
                                                                     // Checking if the option is an object.
@@ -144,11 +172,24 @@
                                                         // looping through all the referenced object's options.
                                                         for (let k in reference.refElement) {
 
-                                                            // Avoiding inheriting the `from`, `name` or any existing options in
-                                                            // the referencing element. Thus overriding what needs to be overriden
-                                                            // and inheriting only the options that the referencing object lacks.
-                                                            if (!['from', 'ref', 'name', ...Object.keys(_hierarchy)].includes(k)) {
-                                                                _hierarchy[k] = reference.refElement[k];
+                                                            if (!('children' in _hierarchy['from']) || _hierarchy['from']['children'] !== true) {
+                                                                if (k !== 'children') {
+
+                                                                    // Avoiding inheriting the `from`, `name` or any existing options in
+                                                                    // the referencing element. Thus overriding what needs to be overriden
+                                                                    // and inheriting only the options that the referencing object lacks.
+                                                                    if (!['from', 'ref', 'name', ...Object.keys(_hierarchy)].includes(k)) {
+                                                                        _hierarchy[k] = reference.refElement[k];
+                                                                    }
+                                                                }
+                                                            } else {
+
+                                                                // Avoiding inheriting the `from`, `name` or any existing options in
+                                                                // the referencing element. Thus overriding what needs to be overriden
+                                                                // and inheriting only the options that the referencing object lacks.
+                                                                if (!['from', 'ref', 'name', ...Object.keys(_hierarchy)].includes(k)) {
+                                                                    _hierarchy[k] = reference.refElement[k];
+                                                                }
                                                             }
                                                         }
 
@@ -161,6 +202,7 @@
                                                     }
                                                 }
                                             } else {
+
                                                 // looping through all the referenced object's options.
                                                 for (let k in reference.refElement) {
 
@@ -170,16 +212,34 @@
                                                         // Checking if the option is an array.
                                                         if (Array.isArray(reference.refElement[k])) {
 
-                                                            // Checking if the referencing element already has the said
-                                                            // option, if yes, appending the value of that option from
-                                                            // the referenced element with removing any duplicates.
-                                                            if (k in _hierarchy) {
-                                                                _hierarchy[k] = [..._hierarchy[k], ...reference.refElement[k].filter(el => !_hierarchy[k].includes(el))];
+                                                            // Checking children inheritance is enabled.
+                                                            if (!('children' in _hierarchy['from']) || _hierarchy['from']['children'] !== true) {
+                                                                if (k !== 'children') {
+                                                                    // Checking if the referencing element already has the said
+                                                                    // option, if yes, appending the value of that option from
+                                                                    // the referenced element with removing any duplicates.
+                                                                    if (k in _hierarchy) {
+                                                                        _hierarchy[k] = [..._hierarchy[k], ...reference.refElement[k].filter(el => !_hierarchy[k].includes(el))];
 
-                                                                // If the referencing object doesn't have the said option,
-                                                                // assigning it from its counterpart.
+                                                                        // If the referencing object doesn't have the said option,
+                                                                        // assigning it from its counterpart.
+                                                                    } else {
+                                                                        _hierarchy[k] = reference.refElement[k];
+                                                                    }
+                                                                }
                                                             } else {
-                                                                _hierarchy[k] = reference.refElement[k];
+
+                                                                // Checking if the referencing element already has the said
+                                                                // option, if yes, appending the value of that option from
+                                                                // the referenced element with removing any duplicates.
+                                                                if (k in _hierarchy) {
+                                                                    _hierarchy[k] = [..._hierarchy[k], ...reference.refElement[k].filter(el => !_hierarchy[k].includes(el))];
+
+                                                                    // If the referencing object doesn't have the said option,
+                                                                    // assigning it from its counterpart.
+                                                                } else {
+                                                                    _hierarchy[k] = reference.refElement[k];
+                                                                }
                                                             }
 
                                                             // Checking if the option is an object.

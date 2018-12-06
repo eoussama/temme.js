@@ -72,30 +72,33 @@
             const hierarchy = {
                 children: [
                     {
-                        ref: 'p1',
-                        classes: ['bold', 'red'],
-                        dataset: {
-                            id: 1
-                        },
+                        ref: 'p',
+                        classes: ['red'],
                         children: [
                             {
-                                name: 'p'
+                                ref: 'p',
+                                classes: ['blue'],
+                                children: [
+                                    {
+                                        from: {
+                                            ref: 'p'
+                                        },
+                                        name: 'span'
+                                    }
+                                ]
                             }
                         ]
-                    },
-                    {
-                        from: {
-                            ref: 'p2',
-                        },
-                        dataset: {
-                            id: 2
-                        }
                     }
                 ]
             };
 
             // Telling Temme to do us the favor.
-            Temme(hierarchy, target);
+            try {
+                Temme(hierarchy, target);
+            }
+            catch (e) {
+                console.error(e);
+            }
 
             // Outputting the results in the console.
             console.info(target);
