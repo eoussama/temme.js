@@ -101,8 +101,6 @@
 									// Checking if the `ref` option is valid.
 									if ('ref' in _hierarchy['from']) {
 
-										//if (references.filter(ref => ref.refElement.ref === ))
-
 										// Get the filtered references, must equel the one the current
 										// element is pointing to and has a lower or a matching depth
 										// indicating it's either a parent or a sibling so that no parent
