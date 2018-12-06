@@ -131,6 +131,7 @@ function _typeof(obj) {
                                     } else {
                                         // Checking if the `ref` option is valid.
                                         if ('ref' in _hierarchy['from']) {
+                                            //if (references.filter(ref => ref.refElement.ref === ))
                                             // Get the filtered references, must equel the one the current
                                             // element is pointing to and has a lower or a matching depth
                                             // indicating it's either a parent or a sibling so that no parent
@@ -139,100 +140,105 @@ function _typeof(obj) {
                                                 return ref.refElement.ref === _hierarchy['from']['ref'] && ref.depth <= depth;
                                             }).sort(function(refA, refB) {
                                                 return refB.depth - refA.depth;
-                                            })[0]; // Checking if the reference object `from` has a referencing mode.
+                                            })[0];
 
-                                            if ('mode' in _hierarchy['from']) {
-                                                switch (_hierarchy['from']['mode']) {
-                                                    // Checking if the referencing mode is set on `append`.
-                                                    case 'append':
-                                                        {
-                                                            var _loop = function _loop(k) {
-                                                                // Avoiding inheriting the `from`, `name` options.
-                                                                if (!['from', 'ref', 'name'].includes(k)) {
-                                                                    // Checking if the option is an array.
-                                                                    if (Array.isArray(reference.refElement[k])) {
-                                                                        // Checking if the referencing element already has the said
-                                                                        // option, if yes, appending the value of that option from
-                                                                        // the referenced element with removing any duplicates.
-                                                                        if (k in _hierarchy) {
-                                                                            _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.refElement[k].filter(function(el) {
-                                                                                return !_hierarchy[k].includes(el);
-                                                                            }))); // If the referencing object doesn't have the said option,
-                                                                            // assigning it from its counterpart.
+                                            if (typeof reference !== 'undefined') {
+                                                // Checking if the reference object `from` has a referencing mode.
+                                                if ('mode' in _hierarchy['from']) {
+                                                    switch (_hierarchy['from']['mode']) {
+                                                        // Checking if the referencing mode is set on `append`.
+                                                        case 'append':
+                                                            {
+                                                                var _loop = function _loop(k) {
+                                                                    // Avoiding inheriting the `from`, `name` options.
+                                                                    if (!['from', 'ref', 'name'].includes(k)) {
+                                                                        // Checking if the option is an array.
+                                                                        if (Array.isArray(reference.refElement[k])) {
+                                                                            // Checking if the referencing element already has the said
+                                                                            // option, if yes, appending the value of that option from
+                                                                            // the referenced element with removing any duplicates.
+                                                                            if (k in _hierarchy) {
+                                                                                _hierarchy[k] = _toConsumableArray(_hierarchy[k]).concat(_toConsumableArray(reference.refElement[k].filter(function(el) {
+                                                                                    return !_hierarchy[k].includes(el);
+                                                                                }))); // If the referencing object doesn't have the said option,
+                                                                                // assigning it from its counterpart.
+                                                                            } else {
+                                                                                _hierarchy[k] = reference.refElement[k];
+                                                                            } // Checking if the option is an object.
+
+                                                                        } else if (_typeof(reference.refElement[k]) === 'object') {
+                                                                            _hierarchy[k] = _hierarchy[k] || {};
+                                                                            Object.assign(_hierarchy[k] || {}, reference.refElement[k]); // Checking if the option is anything but an Array or Object (primitive).
                                                                         } else {
                                                                             _hierarchy[k] = reference.refElement[k];
-                                                                        } // Checking if the option is an object.
+                                                                        }
+                                                                    }
+                                                                };
 
-                                                                    } else if (_typeof(reference.refElement[k]) === 'object') {
-                                                                        _hierarchy[k] = _hierarchy[k] || {};
-                                                                        Object.assign(_hierarchy[k] || {}, reference.refElement[k]); // Checking if the option is anything but an Array or Object (primitive).
-                                                                    } else {
+                                                                // looping through all the referenced object's options.
+                                                                for (var k in reference.refElement) {
+                                                                    _loop(k);
+                                                                }
+
+                                                                break;
+                                                            }
+                                                            // Checking if the referencing mode is set on `override`.
+
+                                                        case 'override':
+                                                            {
+                                                                // looping through all the referenced object's options.
+                                                                for (var k in reference.refElement) {
+                                                                    // Avoiding inheriting the `from`, `name` or any existing options in
+                                                                    // the referencing element. Thus overriding what needs to be overriden
+                                                                    // and inheriting only the options that the referencing object lacks.
+                                                                    if (!['from', 'ref', 'name'].concat(_toConsumableArray(Object.keys(_hierarchy))).includes(k)) {
                                                                         _hierarchy[k] = reference.refElement[k];
                                                                     }
                                                                 }
-                                                            };
 
-                                                            // looping through all the referenced object's options.
-                                                            for (var k in reference.refElement) {
-                                                                _loop(k);
+                                                                break;
                                                             }
+                                                            // Checking if the referencing mode is none of the above (invalid).
 
-                                                            break;
-                                                        }
-                                                        // Checking if the referencing mode is set on `override`.
-
-                                                    case 'override':
-                                                        {
-                                                            // looping through all the referenced object's options.
-                                                            for (var k in reference.refElement) {
-                                                                // Avoiding inheriting the `from`, `name` or any existing options in
-                                                                // the referencing element. Thus overriding what needs to be overriden
-                                                                // and inheriting only the options that the referencing object lacks.
-                                                                if (!['from', 'ref', 'name'].concat(_toConsumableArray(Object.keys(_hierarchy))).includes(k)) {
-                                                                    _hierarchy[k] = reference.refElement[k];
-                                                                }
+                                                        default:
+                                                            {
+                                                                throw "\u201C".concat(_hierarchy['from']['mode'], "\u201D is not a valid referencing mode.");
                                                             }
+                                                    }
+                                                } else {
+                                                    var _loop2 = function _loop2(_k) {
+                                                        // Avoiding inheriting the `from`, `name` options.
+                                                        if (!['from', 'ref', 'name'].includes(_k)) {
+                                                            // Checking if the option is an array.
+                                                            if (Array.isArray(reference.refElement[_k])) {
+                                                                // Checking if the referencing element already has the said
+                                                                // option, if yes, appending the value of that option from
+                                                                // the referenced element with removing any duplicates.
+                                                                if (_k in _hierarchy) {
+                                                                    _hierarchy[_k] = _toConsumableArray(_hierarchy[_k]).concat(_toConsumableArray(reference.refElement[_k].filter(function(el) {
+                                                                        return !_hierarchy[_k].includes(el);
+                                                                    }))); // If the referencing object doesn't have the said option,
+                                                                    // assigning it from its counterpart.
+                                                                } else {
+                                                                    _hierarchy[_k] = reference.refElement[_k];
+                                                                } // Checking if the option is an object.
 
-                                                            break;
-                                                        }
-                                                        // Checking if the referencing mode is none of the above (invalid).
-
-                                                    default:
-                                                        {
-                                                            throw "\u201C".concat(_hierarchy['from']['mode'], "\u201D is not a valid referencing mode.");
-                                                        }
-                                                }
-                                            } else {
-                                                var _loop2 = function _loop2(_k) {
-                                                    // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'name'].includes(_k)) {
-                                                        // Checking if the option is an array.
-                                                        if (Array.isArray(reference.refElement[_k])) {
-                                                            // Checking if the referencing element already has the said
-                                                            // option, if yes, appending the value of that option from
-                                                            // the referenced element with removing any duplicates.
-                                                            if (_k in _hierarchy) {
-                                                                _hierarchy[_k] = _toConsumableArray(_hierarchy[_k]).concat(_toConsumableArray(reference.refElement[_k].filter(function(el) {
-                                                                    return !_hierarchy[_k].includes(el);
-                                                                }))); // If the referencing object doesn't have the said option,
-                                                                // assigning it from its counterpart.
+                                                            } else if (_typeof(reference.refElement[_k]) === 'object') {
+                                                                _hierarchy[_k] = _hierarchy[_k] || {};
+                                                                Object.assign(_hierarchy[_k] || {}, reference.refElement[_k]); // Checking if the option is anything but an Array or Object (primitive).
                                                             } else {
                                                                 _hierarchy[_k] = reference.refElement[_k];
-                                                            } // Checking if the option is an object.
-
-                                                        } else if (_typeof(reference.refElement[_k]) === 'object') {
-                                                            _hierarchy[_k] = _hierarchy[_k] || {};
-                                                            Object.assign(_hierarchy[_k] || {}, reference.refElement[_k]); // Checking if the option is anything but an Array or Object (primitive).
-                                                        } else {
-                                                            _hierarchy[_k] = reference.refElement[_k];
+                                                            }
                                                         }
-                                                    }
-                                                };
+                                                    };
 
-                                                // looping through all the referenced object's options.
-                                                for (var _k in reference.refElement) {
-                                                    _loop2(_k);
+                                                    // looping through all the referenced object's options.
+                                                    for (var _k in reference.refElement) {
+                                                        _loop2(_k);
+                                                    }
                                                 }
+                                            } else {
+                                                throw "\u201C".concat(_hierarchy['from']['ref'], "\u201D is not a valid reference.");
                                             }
                                         } else {
                                             throw 'The `ref` option is missing from the `from` object.';
