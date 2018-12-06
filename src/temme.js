@@ -133,4 +133,4 @@
     } else {
         obj.Temme = Temme;
     }
-})(window);
+})((typeof window !== 'undefined') ? window : this);
