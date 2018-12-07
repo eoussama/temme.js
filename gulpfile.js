@@ -5,26 +5,22 @@ const
     beautify = require('gulp-beautify'),
     uglify = require('gulp-uglify');
 
-// Translating to es5 and copying the temme.js file to the dist folder.
-gulp.task('copy', () => {
-    gulp.src('src/*.js')
+// Building the code for production.
+gulp.task('build', () => {
+    gulp.src('src/temme.js')
+
+        // Translating the code.
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(beautify())
-        .pipe(gulp.dest('dist'));
-});
+        .pipe(gulp.dest('dist'))
 
-// Translating to es, minifying and copying the temme.js file to the dist folder.
-gulp.task('minify', () => {
-    gulp.src('src/*.js')
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
+        // Minifying the code.
         .pipe(uglify())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist'))
         .pipe(gulp.dest('docs/assets/js/lib'));
 });
 
-gulp.task('build', ['copy', 'minify']);
+gulp.task('default', ['build']);

@@ -60,51 +60,11 @@
 
         <!-- The main javascript code. -->
         <script>
-            // Getting the parent element that's going to host out skeleton.
-            const target = document.getElementById('target');
-
-            // The object that maps out skeleton.
-            const hierarchy = {
-                classes: ['container'],
-                children: [
-                    {
-                        name: 'h1',
-                        text: 'Browser example'
-                    },
-                    {
-                        name: 'hr'
-                    },
-                    {
-                        ref: 'base-p',
-                        name: 'p',
-                        classes: ['italic'],
-                        html: "This is a paragraph generated using <b>Temme JS</b>."
-                    },
-                    {
-                        from: {
-                            ref: 'base-p'
-                        },
-                        name: 'p',
-                        id: 'hierarchy'
-                    },
-                    {
-                        from: {
-                            ref: 'base-p'
-                        },
-                        name: 'p',
-                        id: 'skeleton'
-                    }
-                ]
-            }
-
-            // Calling Temme to do its thing.
+            const
+                target = document.getElementById('target'),
+                hierarchy = new Hierarchy();
+            
             Temme(hierarchy, target);
-
-            // Displaying the hierarchy object.
-            document.getElementById('hierarchy').textContent = `Hierarchy: ${ JSON.stringify(hierarchy) }`;
-
-            // Displaying the generated skeleton.
-            document.getElementById('skeleton').textContent = `Skeleton: ${ target.innerHTML }`;
         </script>
     </body>
 </html>
