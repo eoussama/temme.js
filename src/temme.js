@@ -108,6 +108,7 @@
         from: {
             default: { ref: '' },
             type: 'object',
+            keys: ['ref', 'mode', 'children'],
             isValid: (from) => from != null && !Array.isArray(from) && typeof from === 'object'
         }
     };
@@ -117,7 +118,7 @@
      * 
      * @param {Object} hierarchy The hierarchy to check.
      */
-    function checkOptions (hierarchy) {
+    function checkOptions(hierarchy) {
 
         // Looping through the hierarchy options.
         for (let key in hierarchy) {
@@ -125,7 +126,7 @@
             // Checking if the option is valid.
             if (!(key in options)) {
                 throw new TemmeError('InvalidOptionNameError', `“${key}” is not a valid option.`);
-            } else if (!options[key].isValid(hierarchy[key])){
+            } else if (!options[key].isValid(hierarchy[key])) {
                 throw new TemmeError('InvalidOptionTypeError', `The option “${key}” must be of type ${options[key].type}.`);
             } else if (!(key in hierarchy)) {
                 hierarchy[key] = options[key].default;
@@ -135,7 +136,7 @@
 
         // Checking if the element has children.
         if ('children' in hierarchy) {
-    
+
             // Looping through the children.
             hierarchy['children'].forEach(child => {
                 checkOptions(child);
@@ -168,9 +169,9 @@
     /**
      *  Gets all the references in the hierarchy object.
      * 
-     *  @param {Object} hierarchy The hierarchy object to get the references from.
-     *  @param {Number} depth The depth of the proccessed element in the hierarchy object.
-     *  @param {Array} references The array that will store the references found.
+     * @param {Object} hierarchy The hierarchy object to get the references from.
+     * @param {Number} depth The depth of the proccessed element in the hierarchy object.
+     * @param {Array} references The array that will store the references found.
      */
     function getReferences(hierarchy, depth, references) {
 
@@ -192,6 +193,129 @@
             // getting all their sub references.
             hierarchy['children'].forEach(child => {
                 getReferences(child, ++depth, references);
+            });
+        }
+    }
+
+    /**
+     *  Proccesses all the references.
+     * 
+     * @param {Object} hierarchy The hierarchy object to proccess.
+     * @param {Number} depth The depth of the current element in the hierarchy object.
+     * @param {Array} references The array that has all the referenced elements.
+     */
+    function proccessReferences(hierarchy, depth, references) {
+
+        // Looping through all keys of the hierarchy object.
+        for (let key in hierarchy) {
+            switch (key) {
+
+                // Parssing the references.
+                case 'from': {
+
+                    for (let fromKey in hierarchy['from']) {
+
+                        // Checking if the from key is invalid.
+                        if (!options['from'].keys.includes(fromKey)) {
+                            throw new TemmeError('InvalidReferencingObject', `“${fromKey}” is an invalid key to have in the “from” option.`);
+                        }
+                    }
+
+                    // Getting the filtered references, must equal the one the current
+                    // element is pointing to and has a lower or a matching depth
+                    // indicating it's either a parent or a sibling so that no parent
+                    // element can reference a child element.
+                    const reference = references
+                        .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
+                        .sort((refA, refB) => refB.depth - refA.depth)[0];
+
+                    function referenceMode(mode) {
+                        switch (mode) {
+                            case 'append': {
+
+                                // looping through all the referenced object's options.
+                                for (let k in reference.refElement) {
+
+                                    // Avoiding inheriting the `from`, `name` options.
+                                    if (!['from', 'ref', 'name'].includes(k)) {
+                                        switch (options[k].type) {
+                                            case 'array': {
+
+                                                // If the array is not empty, proceed.
+                                                if (hierarchy[k].length > 0) {
+                                                    // Removing any duplicate classes.
+                                                    const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
+
+                                                    // Sorting and concatinating the classes.
+                                                    const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
+
+                                                    // Assigning the classes.
+                                                    hierarchy[k] = sanitizedClasses;
+                                                }
+
+                                                break;
+                                            }
+
+                                            case 'object': {
+                                                Object.assign(hierarchy[k], reference.refElement[k]);
+
+                                                break;
+                                            }
+
+                                            default: {
+                                                hierarchy[k] = reference.refElement[k];
+                                            }
+                                        }
+                                    }
+                                }
+
+                                break;
+                            }
+
+                            case 'override': {
+
+                                // looping through all the referenced object's options.
+                                for (let k in reference.refElement) {
+
+                                    // Avoiding inheriting the `from` and `name.
+                                    if (!['from', 'ref', 'name'].includes(k)) {
+                                        hierarchy[k] = reference.refElement[k];
+                                    }
+                                }
+
+                                break;
+                            }
+
+                            default: {
+                                throw TemmeError('InvalidReferenceMode', `“${mode}” is not a valid referencing mode.`);
+                            }
+                        }
+                    }
+
+                    if (typeof reference !== 'undefined') {
+
+                        // Checking if the referencing object `from` has a reference mode.
+                        if ('mode' in hierarchy['from']) {
+                            referenceMode(hierarchy['from']['mode']);
+                        } else {
+                            referenceMode('append');
+                        }
+                    } else {
+                        throw new TemmeError('InvalidReference', `“${hierarchy['from']['ref']}” is an invalid reference.`);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        // Checkinf if the element has children.
+        if ('children' in hierarchy) {
+
+            // Looping through the hierarchy object's children and
+            // proccessing their references.
+            hierarchy.children.forEach(child => {
+                proccessReferences(child, ++depth, references);
             });
         }
     }
@@ -342,7 +466,7 @@
                 getReferences(hierarchy, 0, references);
 
                 // Proccessing all the references.
-                console.log(references);
+                proccessReferences(hierarchy, 0, references);
             })();
 
             // Temme, go for it.

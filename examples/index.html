@@ -67,15 +67,26 @@
                 id: '',
                 children: [
                     {
+                        id: 'some-id',
+                        
+                        text: 'ggg',
                         ref: 'base',
-                        classes: ['bold', 'red']
+                        classes: ['bold', 'red'],
+                        attributes: {
+                            name: 'something'
+                        }
                     },
                     {
+                        
                         ref: 'base',
                         from: {
                             ref: 'base'
                         },
-                        text: 'I need some inheritance.'
+                        classes: ['yellow'],
+                        attributes: {
+                            name: 'something-else',
+                            visible: 'something-else'
+                        }
                     }
                 ]
             };

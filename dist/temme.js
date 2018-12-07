@@ -159,6 +159,7 @@ function _typeof(obj) {
                 ref: ''
             },
             type: 'object',
+            keys: ['ref', 'mode', 'children'],
             isValid: function isValid(from) {
                 return from != null && !Array.isArray(from) && _typeof(from) === 'object';
             }
@@ -219,9 +220,9 @@ function _typeof(obj) {
     /**
      *  Gets all the references in the hierarchy object.
      * 
-     *  @param {Object} hierarchy The hierarchy object to get the references from.
-     *  @param {Number} depth The depth of the proccessed element in the hierarchy object.
-     *  @param {Array} references The array that will store the references found.
+     * @param {Object} hierarchy The hierarchy object to get the references from.
+     * @param {Number} depth The depth of the proccessed element in the hierarchy object.
+     * @param {Array} references The array that will store the references found.
      */
 
     function getReferences(hierarchy, depth, references) {
@@ -245,6 +246,136 @@ function _typeof(obj) {
         }
     }
     /**
+     *  Proccesses all the references.
+     * 
+     * @param {Object} hierarchy The hierarchy object to proccess.
+     * @param {Number} depth The depth of the current element in the hierarchy object.
+     * @param {Array} references The array that has all the referenced elements.
+     */
+
+
+    function proccessReferences(hierarchy, depth, references) {
+        // Looping through all keys of the hierarchy object.
+        for (var key in hierarchy) {
+            switch (key) {
+                // Parssing the references.
+                case 'from':
+                    {
+                        var _ret = function() {
+                            var referenceMode = function referenceMode(mode) {
+                                switch (mode) {
+                                    case 'append':
+                                        {
+                                            var _loop = function _loop(k) {
+                                                // Avoiding inheriting the `from`, `name` options.
+                                                if (!['from', 'ref', 'name'].includes(k)) {
+                                                    switch (options[k].type) {
+                                                        case 'array':
+                                                            {
+                                                                // If the array is not empty, proceed.
+                                                                if (hierarchy[k].length > 0) {
+                                                                    // Removing any duplicate classes.
+                                                                    var filteredClasses = reference.refElement[k].filter(function(cls, index) {
+                                                                        return !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0;
+                                                                    }); // Sorting and concatinating the classes.
+
+                                                                    var sanitizedClasses = _toConsumableArray(hierarchy[k]).concat(_toConsumableArray(filteredClasses)).sort(); // Assigning the classes.
+
+
+                                                                    hierarchy[k] = sanitizedClasses;
+                                                                }
+
+                                                                break;
+                                                            }
+
+                                                        case 'object':
+                                                            {
+                                                                Object.assign(hierarchy[k], reference.refElement[k]);
+                                                                break;
+                                                            }
+
+                                                        default:
+                                                            {
+                                                                hierarchy[k] = reference.refElement[k];
+                                                            }
+                                                    }
+                                                }
+                                            };
+
+                                            // looping through all the referenced object's options.
+                                            for (var k in reference.refElement) {
+                                                _loop(k);
+                                            }
+
+                                            break;
+                                        }
+
+                                    case 'override':
+                                        {
+                                            // looping through all the referenced object's options.
+                                            for (var k in reference.refElement) {
+                                                // Avoiding inheriting the `from` and `name.
+                                                if (!['from', 'ref', 'name'].includes(k)) {
+                                                    hierarchy[k] = reference.refElement[k];
+                                                }
+                                            }
+
+                                            break;
+                                        }
+
+                                    default:
+                                        {
+                                            throw TemmeError('InvalidReferenceMode', "\u201C".concat(mode, "\u201D is not a valid referencing mode."));
+                                        }
+                                }
+                            };
+
+                            for (var fromKey in hierarchy['from']) {
+                                // Checking if the from key is invalid.
+                                if (!options['from'].keys.includes(fromKey)) {
+                                    throw new TemmeError('InvalidReferencingObject', "\u201C".concat(fromKey, "\u201D is an invalid key to have in the \u201Cfrom\u201D option."));
+                                }
+                            } // Getting the filtered references, must equal the one the current
+                            // element is pointing to and has a lower or a matching depth
+                            // indicating it's either a parent or a sibling so that no parent
+                            // element can reference a child element.
+
+
+                            var reference = references.filter(function(ref) {
+                                return ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth;
+                            }).sort(function(refA, refB) {
+                                return refB.depth - refA.depth;
+                            })[0];
+
+                            if (typeof reference !== 'undefined') {
+                                // Checking if the referencing object `from` has a reference mode.
+                                if ('mode' in hierarchy['from']) {
+                                    referenceMode(hierarchy['from']['mode']);
+                                } else {
+                                    referenceMode('append');
+                                }
+                            } else {
+                                throw new TemmeError('InvalidReference', "\u201C".concat(hierarchy['from']['ref'], "\u201D is an invalid reference."));
+                            }
+
+                            return "break";
+                        }();
+
+                        if (_ret === "break") break;
+                    }
+            }
+        } // Checkinf if the element has children.
+
+
+        if ('children' in hierarchy) {
+            // Looping through the hierarchy object's children and
+            // proccessing their references.
+            hierarchy.children.forEach(function(child) {
+                proccessReferences(child, ++depth, references);
+            });
+        }
+    }
+    /**
      * Producing an HTML skeleton out of a hierarchy object.
      * 
      * @param {Object} hierarchy The hierarchy object that maps the skeleton.
@@ -253,7 +384,7 @@ function _typeof(obj) {
 
 
     function temmefy(hierarchy, element) {
-        var _loop = function _loop(key) {
+        var _loop2 = function _loop2(key) {
             // Parsing the hierarchy object.
             switch (key) {
                 // Parsing the id.
@@ -345,7 +476,7 @@ function _typeof(obj) {
         };
 
         for (var key in hierarchy) {
-            _loop(key);
+            _loop2(key);
         }
     }
     /**
@@ -382,7 +513,7 @@ function _typeof(obj) {
 
                 getReferences(hierarchy, 0, references); // Proccessing all the references.
 
-                console.log(references);
+                proccessReferences(hierarchy, 0, references);
             })(); // Temme, go for it.
 
 
