@@ -113,6 +113,37 @@
     };
 
     /**
+     * Checks if the hierarchy has valid options.
+     * 
+     * @param {Object} hierarchy The hierarchy to check.
+     */
+    function checkOptions (hierarchy) {
+
+        // Looping through the hierarchy options.
+        for (let key in hierarchy) {
+
+            // Checking if the option is valid.
+            if (!(key in options)) {
+                throw new TemmeError('InvalidOptionNameError', `“${key}” is not a valid option.`);
+            } else if (!options[key].isValid(hierarchy[key])){
+                throw new TemmeError('InvalidOptionTypeError', `The option “${key}” must be of type ${options[key].type}.`);
+            } else if (!(key in hierarchy)) {
+                hierarchy[key] = options[key].default;
+            }
+
+        }
+
+        // Checking if the element has children.
+        if ('children' in hierarchy) {
+    
+            // Looping through the children.
+            hierarchy['children'].forEach(child => {
+                checkOptions(child);
+            });
+        }
+    }
+
+    /**
      * Temme's custom exception.
      * 
      * @param {String} name The name of the exception.
@@ -141,10 +172,10 @@
      *  @param {Number} depth The depth of the proccessed element in the hierarchy object.
      *  @param {Array} references The array that will store the references found.
      */
-    function getReferences(hierarchy, depthn, reference) {
+    function getReferences(hierarchy, depth, references) {
 
-        // Checking if the hierarchy object has the `ref` key.
-        if ('ref' in hierarchy) {
+        // Checking if the hierarchy object has a valid `ref` key.
+        if ('ref' in hierarchy && hierarchy['ref'].length > 0) {
 
             // Adding the element to the references array as it's a
             // valid reference.
@@ -152,27 +183,16 @@
                 refElement: hierarchy,
                 depth: depth
             });
+        }
 
-            // Checking if the element has any children.
-            if ('children' in hierarchy) {
+        // Checking if the element has any children.
+        if ('children' in hierarchy) {
 
-                // Looping through the element's children and
-                // getting all their sub references.
-                for (let child of hierarchy['children']) {
-                    getReferences(child, ++depth);
-                }
-            }
-        } else {
-
-            // Checking if the element has any children.
-            if ('children' in hierarchy) {
-
-                // Looping through the element's children and
-                // getting all their sub references.
-                for (let child of hierarchy['children']) {
-                    getReferences(child, ++depth);
-                }
-            }
+            // Looping through the element's children and
+            // getting all their sub references.
+            hierarchy['children'].forEach(child => {
+                getReferences(child, ++depth, references);
+            });
         }
     }
 
@@ -186,126 +206,104 @@
 
         for (let key in hierarchy) {
 
-            // Checking if the option is valid.
-            if (!(key in options)) {
-                throw new TemmeError('InvalidOptionNameError', `“${key}” is not a valid option.`);
-            } else {
+            // Parsing the hierarchy object.
+            switch (key) {
 
-                // Supervising the options.
-                for (let key in options) {
+                // Parsing the id.
+                case 'id': {
 
-                    // Populating the empty options with defaults.
-                    if (!(key in hierarchy)) {
-                        hierarchy[key] = options[key].default;
+                    if (hierarchy[key].trim().length > 0) {
+
+                        // If the id is a valid string, proceed.
+                        element.id = hierarchy[key];
 
                     } else {
 
-                        // Checking of the option types are correct.
-                        if (!options[key].isValid(hierarchy[key])) {
-                            throw new TemmeError('InvalidOptionTypeError', `The option “${key}” must be of type ${options[key].type}.`);
-                        }
+                        // If the id is an empty string, remove the id attribute.
+                        element.removeAttribute(('id'));
                     }
+
+                    break;
                 }
 
-                // Parsing the hierarchy object.
-                switch (key) {
+                // Parsing the classes.
+                case 'classes': {
 
-                    // Parsing the id.
-                    case 'id': {
+                    // If the classes array is not empty, proceed.
+                    if (hierarchy[key].length > 0) {
 
-                        if (hierarchy[key].trim().length > 0) {
+                        // Removing any duplicate classes.
+                        const filteredClasses = hierarchy[key].filter((cls, index) => !element.classList.contains(cls) && hierarchy[key].indexOf(cls) === index && cls.trim().length > 0);
 
-                            // If the id is a valid string, proceed.
-                            element.id = hierarchy[key];
+                        // Sorting and concatinating the classes.
+                        const sanitizedClasses = [...element.classList, ...filteredClasses].sort().join(' ');
 
-                        } else {
+                        // Assigning the classes.
+                        element.classList = sanitizedClasses;
+                    } else {
 
-                            // If the id is an empty string, remove the id attribute.
-                            element.removeAttribute(('id'));
-                        }
-
-                        break;
+                        // If the classes array is empty, remove the class attribute.
+                        element.removeAttribute('class');
                     }
 
-                    // Parsing the classes.
-                    case 'classes': {
+                    break;
+                }
 
-                        // If the classes array is not empty, proceed.
-                        if (hierarchy[key].length > 0) {
+                // Parsing the attributes.
+                case 'attributes': {
 
-                            // Removing any duplicate classes.
-                            const filteredClasses = hierarchy[key].filter((cls, index) => !element.classList.contains(cls) && hierarchy[key].indexOf(cls) === index && cls.trim().length > 0);
+                    // Extracting all the attribute keys.
+                    const attrKeys = Object.keys(hierarchy[key]);
 
-                            // Sorting and concatinating the classes.
-                            const sanitizedClasses = [...element.classList, ...filteredClasses].sort().join(' ');
+                    // Looping through the extracted attribute keys.
+                    attrKeys.forEach(attrKey => {
+                        element.setAttribute(attrKey, hierarchy[key][attrKey]);
+                    });
 
-                            // Assigning the classes.
-                            element.classList = sanitizedClasses;
-                        } else {
+                    break;
+                }
 
-                            // If the classes array is empty, remove the class attribute.
-                            element.removeAttribute('class');
-                        }
+                // Parsing the dataset.
+                case 'dataset': {
 
-                        break;
-                    }
+                    // Appending values.
+                    Object.assign(element.dataset, hierarchy[key]);
 
-                    // Parsing the attributes.
-                    case 'attributes': {
+                    break;
+                }
 
-                        // Extracting all the attribute keys.
-                        const attrKeys = Object.keys(hierarchy[key]);
+                // Parsing the text.
+                case 'text': {
+                    element.textContent = hierarchy[key];
 
-                        // Looping through the extracted attribute keys.
-                        attrKeys.forEach(attrKey => {
-                            element.setAttribute(attrKey, hierarchy[key][attrKey]);
-                        });
+                    break;
+                }
 
-                        break;
-                    }
+                // Parsing the HTML.
+                case 'html': {
+                    element.innerHTML = hierarchy[key];
 
-                    // Parsing the dataset.
-                    case 'dataset': {
+                    break;
+                }
 
-                        // Appending values.
-                        Object.assign(element.dataset, hierarchy[key]);
+                // Parsing the child nodes.
+                case 'children': {
 
-                        break;
-                    }
+                    // Looping through the children of the hierarchy object.
+                    hierarchy.children.forEach(child => {
 
-                    // Parsing the text.
-                    case 'text': {
-                        element.textContent = hierarchy[key];
+                        // Creating an element given the name if the hierarchy object.
+                        // If no valid name is found, create a div as the default behavior.
+                        const childNode = document.createElement(child['name'] || options['name'].default);
 
-                        break;
-                    }
+                        // Temmefying all the sub children as well.
+                        temmefy(child, childNode);
 
-                    // Parsing the HTML.
-                    case 'html': {
-                        element.innerHTML = hierarchy[key];
+                        // Adding the temmefied element to its parent.
+                        element.appendChild(childNode);
+                    });
 
-                        break;
-                    }
-
-                    // Parsing the child nodes.
-                    case 'children': {
-
-                        // Looping through the children of the hierarchy object.
-                        hierarchy.children.forEach(child => {
-
-                            // Creating an element given the name if the hierarchy object.
-                            // If no valid name is found, create a div as the default behavior.
-                            const childNode = document.createElement(child['name'] || options['name'].default);
-
-                            // Temmefying all the sub children as well.
-                            temmefy(child, childNode);
-
-                            // Adding the temmefied element to its parent.
-                            element.appendChild(childNode);
-                        });
-
-                        break;
-                    }
+                    break;
                 }
             }
         }
@@ -330,16 +328,22 @@
                 throw new TemmeError('InvalidTargetError', 'The target must be a valid HTML element.');
             }
 
-            /**
-			 *  Holds all elements with a reference in the hierarchy object.
-			 */
-            let references = [];
+            // Checking the hierarchy options for our own good.
+            checkOptions(hierarchy);
 
+            // Supervising the references.
+            (() => {
+                /**
+                 *  Holds all elements with a reference in the hierarchy object.
+                 */
+                let references = [];
 
-            // Getting all the references.
-            getReferences(hierarchy, 0, references);
+                // Getting all the references.
+                getReferences(hierarchy, 0, references);
 
-            // Proccessing all the references.
+                // Proccessing all the references.
+                console.log(references);
+            })();
 
             // Temme, go for it.
             temmefy(hierarchy, target);

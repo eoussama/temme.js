@@ -17,10 +17,11 @@ const Temme = require('../src/temme');
 /**
  * Tests against a passed heirarchy value.
  * 
- * @param {*} message The message of the test.
- * @param {*} value The value of the hierarchy to test.
+ * @param {String} message The message of the test.
+ * @param {Object} value The value of the hierarchy to test.
+ * @param {String} errorType The expected error.
  */
-function testHierarchy(message, value, errorType) {
+function testHierarchyParams(message, value, errorType) {
     test(message, () => {
 
         // Arrange.
@@ -46,8 +47,9 @@ function testHierarchy(message, value, errorType) {
 /**
  * Tests against a passed target value.
  * 
- * @param {*} message The message of the test.
- * @param {*} value The value the target to test.
+ * @param {String} message The message of the test.
+ * @param {Object} value The value the target to test.
+ * @param {String} errorType The expected error.
  */
 function testTarget(message, value, errorType) {
     test(message, () => {
@@ -73,43 +75,43 @@ function testTarget(message, value, errorType) {
 }
 
 describe('Passing invalid hierarchy.', () => {
-    testHierarchy('Passing invalid hierarchy object (null) should throw a InvalidHierarchyError error.', 'null', 'InvalidHierarchyError');
-    testHierarchy('Passing invalid hierarchy object (array) should throw a InvalidHierarchyError error.', [], 'InvalidHierarchyError');
-    testHierarchy('Passing invalid hierarchy object (string) should throw a InvalidHierarchyError error.', 'some string', 'InvalidHierarchyError');
-    testHierarchy('Passing invalid hierarchy object (number) should throw a InvalidHierarchyError error.', 26, 'InvalidHierarchyError');
-    testHierarchy('Passing invalid hierarchy object (boolean) should throw a InvalidHierarchyError error.', true, 'InvalidHierarchyError');
+    testHierarchyParams('Passing invalid hierarchy object (null) should throw a InvalidHierarchyError error.', 'null', 'InvalidHierarchyError');
+    testHierarchyParams('Passing invalid hierarchy object (array) should throw a InvalidHierarchyError error.', [], 'InvalidHierarchyError');
+    testHierarchyParams('Passing invalid hierarchy object (string) should throw a InvalidHierarchyError error.', 'some string', 'InvalidHierarchyError');
+    testHierarchyParams('Passing invalid hierarchy object (number) should throw a InvalidHierarchyError error.', 26, 'InvalidHierarchyError');
+    testHierarchyParams('Passing invalid hierarchy object (boolean) should throw a InvalidHierarchyError error.', true, 'InvalidHierarchyError');
 });
 
 describe('Passing invalid values in the hierarchy object.', () => {
-    testHierarchy('Passing an invalid id (not a string) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing an invalid id (not a string) should throw a InvalidOptionTypeError.', {
         id: 26
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid classes (not an array) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing invalid classes (not an array) should throw a InvalidOptionTypeError.', {
         classes: 'not an array'
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid attributes (not an objects as values) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing invalid attributes (not an objects as values) should throw a InvalidOptionTypeError.', {
         attributes: []
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid dataset (not an object) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing invalid dataset (not an object) should throw a InvalidOptionTypeError.', {
         dataset: []
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid text (not a string) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing invalid text (not a string) should throw a InvalidOptionTypeError.', {
         text: {}
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid HTML (not a string) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing invalid HTML (not a string) should throw a InvalidOptionTypeError.', {
         html: true
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid children (not an array) should throw a InvalidOptionTypeError.', {
+    testHierarchyParams('Passing invalid children (not an array) should throw a InvalidOptionTypeError.', {
         children: {}
     }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid options should raise an InvalidOptionNameError.', {
+    testHierarchyParams('Passing invalid options should raise an InvalidOptionNameError.', {
         invalidOption: false
     }, 'InvalidOptionNameError');
 });
