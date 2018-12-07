@@ -212,13 +212,14 @@ describe('Passing valid arguments.', () => {
         expect(target).toEqual(result);
     });
 });
-/*
+
 describe('References.', () => {
     test('Referencing a direct parent.', () => {
         // Arrange.
         const
             result = document.createElement('div'),
-            div = document.createElement('div'),
+            div1 = document.createElement('div'),
+            div2 = document.createElement('div'),
             target = document.createElement('div'),
             hierarchy = {
                 ref: 'ref-1',
@@ -226,15 +227,25 @@ describe('References.', () => {
                 children: [
                     {
                         from: {
+                            ref: 'ref-1',
+                            mode: 'override'
+                        },
+                        classes: ['orange']
+                    },
+                    {
+                        from: {
                             ref: 'ref-1'
-                        }
+                        },
+                        classes: ['yellow']
                     }
                 ]
             };
 
         result.classList.add('blue', 'red');
-        div.classList.add('blue', 'red');
-        result.appendChild(div);
+        div1.classList.add('blue', 'red');
+        div2.classList.add('blue', 'red', 'yellow');
+        result.appendChild(div1);
+        result.appendChild(div2);
 
         // Act.
         try {
@@ -247,4 +258,4 @@ describe('References.', () => {
         // Assert.
         expect(target).toEqual(result);
     });
-});*/
+});
