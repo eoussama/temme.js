@@ -138,6 +138,30 @@ function _typeof(obj) {
             isValid: function isValid(children) {
                 return children != null && Array.isArray(children);
             }
+        },
+
+        /**
+         * The reference key of the element.
+         */
+        ref: {
+            default: '',
+            type: 'string',
+            isValid: function isValid(ref) {
+                return ref != null && typeof ref === 'string';
+            }
+        },
+
+        /**
+         * The referencing key of the element.
+         */
+        from: {
+            default: {
+                ref: ''
+            },
+            type: 'object',
+            isValid: function isValid(from) {
+                return from != null && !Array.isArray(from) && _typeof(from) === 'object';
+            }
         }
     };
     /**

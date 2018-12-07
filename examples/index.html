@@ -64,14 +64,26 @@
         const
             target = document.getElementById('target'),
             hierarchy = {
-                id: '23'
+                id: '',
+                children: [
+                    {
+                        ref: 'base',
+                        classes: ['bold', 'red']
+                    },
+                    {
+                        from: {
+                            ref: 'base'
+                        },
+                        text: 'I need some inheritance.'
+                    }
+                ]
             };
 
         try {
             Temme(hierarchy, target);
         }
         catch (e) {
-            console.error(e);
+            console.error(e.name, e.message);
         }
 
         console.log(target);

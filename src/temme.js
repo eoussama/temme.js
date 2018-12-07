@@ -91,14 +91,32 @@
             default: [],
             type: 'array',
             isValid: (children) => children != null && Array.isArray(children)
+        },
+
+        /**
+         * The reference key of the element.
+         */
+        ref: {
+            default: '',
+            type: 'string',
+            isValid: (ref) => ref != null && typeof ref === 'string'
+        },
+
+        /**
+         * The referencing key of the element.
+         */
+        from: {
+            default: { ref: '' },
+            type: 'object',
+            isValid: (from) => from != null && !Array.isArray(from) && typeof from === 'object'
         }
     };
 
     /**
      * Temme's custom exception.
      * 
-     * @param {*} name The name of the exception.
-     * @param {*} message The message of the exception.
+     * @param {String} name The name of the exception.
+     * @param {String} message The message of the exception.
      */
     function TemmeError(name = 'TemmeError', message = 'Something went wrong.') {
 
@@ -117,10 +135,52 @@
     TemmeError.prototype = Error.prototype;
 
     /**
+     *  Gets all the references in the hierarchy object.
+     * 
+     *  @param {Object} hierarchy The hierarchy object to get the references from.
+     *  @param {Number} depth The depth of the proccessed element in the hierarchy object.
+     *  @param {Array} references The array that will store the references found.
+     */
+    function getReferences(hierarchy, depthn, reference) {
+
+        // Checking if the hierarchy object has the `ref` key.
+        if ('ref' in hierarchy) {
+
+            // Adding the element to the references array as it's a
+            // valid reference.
+            references.push({
+                refElement: hierarchy,
+                depth: depth
+            });
+
+            // Checking if the element has any children.
+            if ('children' in hierarchy) {
+
+                // Looping through the element's children and
+                // getting all their sub references.
+                for (let child of hierarchy['children']) {
+                    getReferences(child, ++depth);
+                }
+            }
+        } else {
+
+            // Checking if the element has any children.
+            if ('children' in hierarchy) {
+
+                // Looping through the element's children and
+                // getting all their sub references.
+                for (let child of hierarchy['children']) {
+                    getReferences(child, ++depth);
+                }
+            }
+        }
+    }
+
+    /**
      * Producing an HTML skeleton out of a hierarchy object.
      * 
-     * @param {*} hierarchy The hierarchy object that maps the skeleton.
-     * @param {*} element The element to host the skeleton.
+     * @param {Object} hierarchy The hierarchy object that maps the skeleton.
+     * @param {HTMLElement} element The element to host the skeleton.
      */
     function temmefy(hierarchy, element) {
 
@@ -254,8 +314,8 @@
     /**
      * The main function behind it all.
      * 
-     * @param {*} hierarchy The hierarchy object that maps the HTML skeleton.
-     * @param {*} target The HTML element that hosts the skeleton.
+     * @param {Object} hierarchy The hierarchy object that maps the HTML skeleton.
+     * @param {HTMLElement} target The HTML element that hosts the skeleton.
      */
     function Temme(hierarchy = {}, target = document.body) {
         try {
@@ -269,6 +329,17 @@
             if (!(target instanceof HTMLElement)) {
                 throw new TemmeError('InvalidTargetError', 'The target must be a valid HTML element.');
             }
+
+            /**
+			 *  Holds all elements with a reference in the hierarchy object.
+			 */
+            let references = [];
+
+
+            // Getting all the references.
+            getReferences(hierarchy, 0, references);
+
+            // Proccessing all the references.
 
             // Temme, go for it.
             temmefy(hierarchy, target);
