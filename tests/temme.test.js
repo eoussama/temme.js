@@ -20,25 +20,26 @@ const Temme = require('../src/temme');
  * @param {*} message The message of the test.
  * @param {*} value The value of the hierarchy to test.
  */
-function testHierarchy(message, value) {
+function testHierarchy(message, value, errorType) {
     test(message, () => {
+
         // Arrange.
         const
             target = document.createElement('div'),
             hierarchy = value;
 
-        let state = true;
+        let errorName = '';
 
         // Act.
         try {
             Temme(hierarchy, target);
         }
         catch (e) {
-            state = false;
+            errorName = e.name;
         }
 
         // Assert.
-        expect(state).toBe(false);
+        expect(errorName).toBe(errorType);
     });
 }
 
@@ -48,95 +49,83 @@ function testHierarchy(message, value) {
  * @param {*} message The message of the test.
  * @param {*} value The value the target to test.
  */
-function testTarget(message, value) {
+function testTarget(message, value, errorType) {
     test(message, () => {
+
         // Arrange.
         const
             target = value,
             hierarchy = {};
 
-        let state = true;
+        let errorName = '';
 
         // Act.
         try {
             Temme(hierarchy, target);
         }
         catch (e) {
-            state = false;
+            errorName = e.name;
         }
 
         // Assert.
-        expect(state).toBe(false);
+        expect(errorName).toBe(errorType);
     });
 }
 
-describe('Passing invalid hierarchy', () => {
-    testHierarchy('Passing invalid hierarchy object (null) should raise a warning.', null);
-    testHierarchy('Passing invalid hierarchy object (array) should raise a warning.', []);
-    testHierarchy('Passing invalid hierarchy object (string) should raise a warning.', 'some string');
-    testHierarchy('Passing invalid hierarchy object (number) should raise a warning.', 26);
-    testHierarchy('Passing invalid hierarchy object (boolean) should raise a warning.', true);
+describe('Passing invalid hierarchy.', () => {
+    testHierarchy('Passing invalid hierarchy object (null) should throw a InvalidHierarchyError error.', 'null', 'InvalidHierarchyError');
+    testHierarchy('Passing invalid hierarchy object (array) should throw a InvalidHierarchyError error.', [], 'InvalidHierarchyError');
+    testHierarchy('Passing invalid hierarchy object (string) should throw a InvalidHierarchyError error.', 'some string', 'InvalidHierarchyError');
+    testHierarchy('Passing invalid hierarchy object (number) should throw a InvalidHierarchyError error.', 26, 'InvalidHierarchyError');
+    testHierarchy('Passing invalid hierarchy object (boolean) should throw a InvalidHierarchyError error.', true, 'InvalidHierarchyError');
 });
 
 describe('Passing invalid values in the hierarchy object.', () => {
-    testHierarchy('Passing an invalid id (not a string) should raise an error.', {
+    testHierarchy('Passing an invalid id (not a string) should throw a InvalidOptionTypeError.', {
         id: 26
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid classes (not an array) should raise an error.', {
+    testHierarchy('Passing invalid classes (not an array) should throw a InvalidOptionTypeError.', {
         classes: 'not an array'
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid attributes (not an objects as values) should raise an error.', {
+    testHierarchy('Passing invalid attributes (not an objects as values) should throw a InvalidOptionTypeError.', {
         attributes: []
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid dataset (not an object) should raise an error.', {
+    testHierarchy('Passing invalid dataset (not an object) should throw a InvalidOptionTypeError.', {
         dataset: []
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid text (not a string) should raise an error.', {
+    testHierarchy('Passing invalid text (not a string) should throw a InvalidOptionTypeError.', {
         text: {}
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid HTML (not a string) should raise an error.', {
+    testHierarchy('Passing invalid HTML (not a string) should throw a InvalidOptionTypeError.', {
         html: true
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid children (not an array) should raise an error.', {
+    testHierarchy('Passing invalid children (not an array) should throw a InvalidOptionTypeError.', {
         children: {}
-    });
+    }, 'InvalidOptionTypeError');
 
-    testHierarchy('Passing invalid reference (not a string) should raise an error.', {
-        ref: 312
-    });
-
-    testHierarchy('Passing invalid referencing object (not an object) should raise an error.', {
-        from: 'not an object'
-    });
-
-    testHierarchy("Passing invalid referencing object (doesn't have a valid reference) should raise an error.", {
-        from: {
-            ref: false
-        }
-    });
-
-    testHierarchy('Passing invalid options should raise an error.', {
+    testHierarchy('Passing invalid options should raise an InvalidOptionNameError.', {
         invalidOption: false
-    });
+    }, 'InvalidOptionNameError');
 });
 
 describe('Passing invalid target.', () => {
-    testTarget('Passing invalid target (null) should raise a warning.', null);
-    testTarget('Passing invalid target (non HTMLElement object) should raise a warning.', {});
-    testTarget('Passing invalid target (array) should raise a warning.', []);
-    testTarget('Passing invalid target (string) should raise a warning.', 'some string');
-    testTarget('Passing invalid target (number) should raise a warning.', 15);
-    testTarget('Passing invalid target (boolean) should raise a warning.', false);
+    testTarget('Passing invalid target (null) should raise an InvalidTargetError.', null, 'InvalidTargetError');
+    testTarget('Passing invalid target (non HTMLElement object) should raise an InvalidTargetError.', {}, 'InvalidTargetError');
+    testTarget('Passing invalid target (array) should raise an InvalidTargetError.', [], 'InvalidTargetError');
+    testTarget('Passing invalid target (string) should raise an InvalidTargetError.', 'some string', 'InvalidTargetError');
+    testTarget('Passing invalid target (number) should raise an InvalidTargetError.', 15, 'InvalidTargetError');
+    testTarget('Passing invalid target (boolean) should raise an InvalidTargetError.', false, 'InvalidTargetError');
 });
 
 describe('Passing valid arguments.', () => {
     test('Passing an empty hierarchy object should leave the target as it is.', () => {
+
         // Arrange.
         const
             result = document.createElement('div'),
@@ -156,6 +145,7 @@ describe('Passing valid arguments.', () => {
     });
 
     test('Altering the parent element.', () => {
+
         // Arrange.
         const
             result = document.createElement('h1'),
@@ -183,6 +173,7 @@ describe('Passing valid arguments.', () => {
     });
 
     test('Appending children.', () => {
+
         // Arrange.
         const
             result = document.createElement('div'),
@@ -219,7 +210,7 @@ describe('Passing valid arguments.', () => {
         expect(target).toEqual(result);
     });
 });
-
+/*
 describe('References.', () => {
     test('Referencing a direct parent.', () => {
         // Arrange.
@@ -254,4 +245,4 @@ describe('References.', () => {
         // Assert.
         expect(target).toEqual(result);
     });
-});
+});*/

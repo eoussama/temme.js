@@ -13,58 +13,69 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    <head>
 
-        <!-- Meta data. -->
-        <meta charset="UTF-8">
-	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="EOussama">
-        <meta name="application-name" content="temmejs">
-        <meta name="description" content="Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.">
-        <meta name="keywords" content="javascript, javascript-library, dom, emmet">        
+<head>
 
-        <!-- The favicon. -->
-        <link rel="shortcut icon" type="image/png" href="../docs/assets/img/favicon.png">
+    <!-- Meta data. -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="EOussama">
+    <meta name="application-name" content="temmejs">
+    <meta name="description" content="Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.">
+    <meta name="keywords" content="javascript, javascript-library, dom, emmet">
 
-        <!-- The main styling. -->
-        <style>
-            * {
-                font-family: Arial, Helvetica, sans-serif;
-            }
+    <!-- The favicon. -->
+    <link rel="shortcut icon" type="image/png" href="../docs/assets/img/favicon.png">
 
-            .bold {
-                font-weight: bold;
-            }
+    <!-- The main styling. -->
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-            .italic {
-                font-style: italic;
-            }
+        .bold {
+            font-weight: bold;
+        }
 
-            .container {
-                padding: 50px 80px;
-            }
-        </style>
+        .italic {
+            font-style: italic;
+        }
 
-        <!-- The title. -->
-        <title>Temme JS - example</title>
-    </head>
+        .container {
+            padding: 50px 80px;
+        }
+    </style>
 
-    <body>
+    <!-- The title. -->
+    <title>Temme JS - example</title>
+</head>
 
-        <!-- The main content. -->
-        <div id="target"></div>
+<body>
 
-        <!-- Temme JS. -->
-        <script src="../dist/temme.min.js"></script>
+    <!-- The main content. -->
+    <div id="target" class="text"></div>
 
-        <!-- The main javascript code. -->
-        <script>
-            const
-                target = document.getElementById('target'),
-                hierarchy = new Hierarchy();
-            
+    <!-- Temme JS. -->
+    <script src="../dist/temme.min.js"></script>
+
+    <!-- The main javascript code. -->
+    <script>
+        const
+            target = document.getElementById('target'),
+            hierarchy = {
+                id: '23'
+            };
+
+        try {
             Temme(hierarchy, target);
-        </script>
-    </body>
+        }
+        catch (e) {
+            console.error(e);
+        }
+
+        console.log(target);
+    </script>
+</body>
+
 </html>
