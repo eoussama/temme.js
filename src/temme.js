@@ -128,10 +128,14 @@
                 throw new TemmeError('InvalidOptionNameError', `“${key}” is not a valid option.`);
             } else if (!options[key].isValid(hierarchy[key])) {
                 throw new TemmeError('InvalidOptionTypeError', `The option “${key}” must be of type ${options[key].type}.`);
-            } else if (!(key in hierarchy)) {
+            }
+        }
+
+        // Populating empty options with defaults.
+        for (let key in options) {
+            if (!(key in hierarchy)) {
                 hierarchy[key] = options[key].default;
             }
-
         }
 
         // Checking if the element has children.
@@ -170,7 +174,7 @@
      *  Gets all the references in the hierarchy object.
      * 
      * @param {Object} hierarchy The hierarchy object to get the references from.
-     * @param {Number} depth The depth of the proccessed element in the hierarchy object.
+     * @param {Number} depth The depth of the processed element in the hierarchy object.
      * @param {Array} references The array that will store the references found.
      */
     function getReferences(hierarchy, depth, references) {
@@ -198,13 +202,13 @@
     }
 
     /**
-     *  Proccesses all the references.
+     *  Processes all the references.
      * 
-     * @param {Object} hierarchy The hierarchy object to proccess.
+     * @param {Object} hierarchy The hierarchy object to process.
      * @param {Number} depth The depth of the current element in the hierarchy object.
      * @param {Array} references The array that has all the referenced elements.
      */
-    function proccessReferences(hierarchy, depth, references) {
+    function processReferences(hierarchy, depth, references) {
 
         // Looping through all keys of the hierarchy object.
         for (let key in hierarchy) {
@@ -213,95 +217,106 @@
                 // Parssing the references.
                 case 'from': {
 
-                    for (let fromKey in hierarchy['from']) {
+                    if (!('ref' in hierarchy['from'])) {
+                        throw new TemmeError('InvalidReferencingObject', "The “from” option must have a “ref” key, otherwise, it's invalid");
+                    } else {
+                        for (let fromKey in hierarchy['from']) {
 
-                        // Checking if the from key is invalid.
-                        if (!options['from'].keys.includes(fromKey)) {
-                            throw new TemmeError('InvalidReferencingObject', `“${fromKey}” is an invalid key to have in the “from” option.`);
+                            // Checking if the from key is invalid.
+                            if (!options['from'].keys.includes(fromKey)) {
+                                throw new TemmeError('InvalidReferencingObject', `“${fromKey}” is an invalid key to have in the “from” option.`);
+                            }
                         }
                     }
 
-                    // Getting the filtered references, must equal the one the current
-                    // element is pointing to and has a lower or a matching depth
-                    // indicating it's either a parent or a sibling so that no parent
-                    // element can reference a child element.
-                    const reference = references
-                        .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
-                        .sort((refA, refB) => refB.depth - refA.depth)[0];
+                    if (hierarchy['from']['ref'].length > 0) {
+                        // Getting the filtered references, must equal the one the current
+                        // element is pointing to and has a lower or a matching depth
+                        // indicating it's either a parent or a sibling so that no parent
+                        // element can reference a child element.
+                        const reference = references
+                            .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
+                            .sort((refA, refB) => refB.depth - refA.depth)[0];
 
-                    function referenceMode(mode) {
-                        switch (mode) {
-                            case 'append': {
+                        /**
+                         * Performs the referencing process.
+                         * 
+                         * @param {String} mode The mode of the reference (append or override).
+                         */
+                        function referenceMode(mode) {
+                            switch (mode) {
+                                case 'append': {
 
-                                // looping through all the referenced object's options.
-                                for (let k in reference.refElement) {
+                                    // looping through all the referenced object's options.
+                                    for (let k in reference.refElement) {
 
-                                    // Avoiding inheriting the `from`, `name` options.
-                                    if (!['from', 'ref', 'name'].includes(k)) {
-                                        switch (options[k].type) {
-                                            case 'array': {
+                                        // Avoiding inheriting the `from`, `name` options.
+                                        if (!['from', 'ref', 'name'].includes(k)) {
+                                            switch (options[k].type) {
+                                                case 'array': {
 
-                                                // If the array is not empty, proceed.
-                                                if (hierarchy[k].length > 0) {
-                                                    // Removing any duplicate classes.
-                                                    const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
+                                                    // If the array is not empty, proceed.
+                                                    if (hierarchy[k].length > 0) {
+                                                        // Removing any duplicate classes.
+                                                        const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
 
-                                                    // Sorting and concatinating the classes.
-                                                    const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
+                                                        // Sorting and concatinating the classes.
+                                                        const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
 
-                                                    // Assigning the classes.
-                                                    hierarchy[k] = sanitizedClasses;
+                                                        // Assigning the classes.
+                                                        hierarchy[k] = sanitizedClasses;
+                                                    }
+
+                                                    break;
                                                 }
 
-                                                break;
-                                            }
+                                                case 'object': {
+                                                    Object.assign(hierarchy[k], reference.refElement[k]);
 
-                                            case 'object': {
-                                                Object.assign(hierarchy[k], reference.refElement[k]);
+                                                    break;
+                                                }
 
-                                                break;
-                                            }
-
-                                            default: {
-                                                hierarchy[k] = reference.refElement[k];
+                                                default: {
+                                                    hierarchy[k] = reference.refElement[k];
+                                                }
                                             }
                                         }
                                     }
+
+                                    break;
                                 }
 
-                                break;
-                            }
+                                case 'override': {
 
-                            case 'override': {
+                                    // looping through all the referenced object's options.
+                                    for (let k in reference.refElement) {
 
-                                // looping through all the referenced object's options.
-                                for (let k in reference.refElement) {
-
-                                    // Avoiding inheriting the `from` and `name.
-                                    if (!['from', 'ref', 'name'].includes(k)) {
-                                        hierarchy[k] = reference.refElement[k];
+                                        // Avoiding inheriting the `from` and `name.
+                                        if (!['from', 'ref', 'name'].includes(k)) {
+                                            hierarchy[k] = reference.refElement[k];
+                                        }
                                     }
+
+                                    break;
                                 }
 
-                                break;
-                            }
-
-                            default: {
-                                throw TemmeError('InvalidReferenceMode', `“${mode}” is not a valid referencing mode.`);
+                                default: {
+                                    throw TemmeError('InvalidReferenceMode', `“${mode}” is not a valid referencing mode.`);
+                                }
                             }
                         }
-                    }
 
-                    if (typeof reference !== 'undefined') {
+                        if (typeof reference !== 'undefined') {
 
-                        // Checking if the referencing object `from` has a reference mode.
-                        if ('mode' in hierarchy['from']) {
-                            referenceMode(hierarchy['from']['mode']);
+                            // Checking if the referencing object `from` has a reference mode.
+                            if ('mode' in hierarchy['from']) {
+                                referenceMode(hierarchy['from']['mode']);
+                            } else {
+                                referenceMode('append');
+                            }
                         } else {
-                            referenceMode('append');
+                            throw new TemmeError('InvalidReference', `“${hierarchy['from']['ref']}” is an invalid reference.`);
                         }
-                    } else {
-                        throw new TemmeError('InvalidReference', `“${hierarchy['from']['ref']}” is an invalid reference.`);
                     }
 
                     break;
@@ -313,9 +328,9 @@
         if ('children' in hierarchy) {
 
             // Looping through the hierarchy object's children and
-            // proccessing their references.
+            // processing their references.
             hierarchy.children.forEach(child => {
-                proccessReferences(child, ++depth, references);
+                processReferences(child, ++depth, references);
             });
         }
     }
@@ -336,15 +351,9 @@
                 // Parsing the id.
                 case 'id': {
 
-                    if (hierarchy[key].trim().length > 0) {
-
-                        // If the id is a valid string, proceed.
+                    // If the id is a valid string, proceed.
+                    if (hierarchy[key] !== options[key].default) {
                         element.id = hierarchy[key];
-
-                    } else {
-
-                        // If the id is an empty string, remove the id attribute.
-                        element.removeAttribute(('id'));
                     }
 
                     break;
@@ -353,9 +362,7 @@
                 // Parsing the classes.
                 case 'classes': {
 
-                    // If the classes array is not empty, proceed.
-                    if (hierarchy[key].length > 0) {
-
+                    if (hierarchy[key] !== options[key].default) {
                         // Removing any duplicate classes.
                         const filteredClasses = hierarchy[key].filter((cls, index) => !element.classList.contains(cls) && hierarchy[key].indexOf(cls) === index && cls.trim().length > 0);
 
@@ -364,10 +371,6 @@
 
                         // Assigning the classes.
                         element.classList = sanitizedClasses;
-                    } else {
-
-                        // If the classes array is empty, remove the class attribute.
-                        element.removeAttribute('class');
                     }
 
                     break;
@@ -376,13 +379,15 @@
                 // Parsing the attributes.
                 case 'attributes': {
 
-                    // Extracting all the attribute keys.
-                    const attrKeys = Object.keys(hierarchy[key]);
+                    if (hierarchy[key] !== options[key].default) {
+                        // Extracting all the attribute keys.
+                        const attrKeys = Object.keys(hierarchy[key]);
 
-                    // Looping through the extracted attribute keys.
-                    attrKeys.forEach(attrKey => {
-                        element.setAttribute(attrKey, hierarchy[key][attrKey]);
-                    });
+                        // Looping through the extracted attribute keys.
+                        attrKeys.forEach(attrKey => {
+                            element.setAttribute(attrKey, hierarchy[key][attrKey]);
+                        });
+                    }
 
                     break;
                 }
@@ -390,22 +395,32 @@
                 // Parsing the dataset.
                 case 'dataset': {
 
-                    // Appending values.
-                    Object.assign(element.dataset, hierarchy[key]);
+                    if (hierarchy[key] !== options[key].default) {
+                        // Appending values.
+                        Object.assign(element.dataset, hierarchy[key]);
+                    }
 
                     break;
                 }
 
                 // Parsing the text.
                 case 'text': {
-                    element.textContent = hierarchy[key];
+
+                    if (hierarchy[key] !== options[key].default) {
+                        // Assigning the text.
+                        element.textContent = hierarchy[key];
+                    }
 
                     break;
                 }
 
                 // Parsing the HTML.
                 case 'html': {
-                    element.innerHTML = hierarchy[key];
+
+                    if (hierarchy[key] !== options[key].default) {
+                        // Assigning the HTML.
+                        element.innerHTML = hierarchy[key];
+                    }
 
                     break;
                 }
@@ -413,19 +428,20 @@
                 // Parsing the child nodes.
                 case 'children': {
 
-                    // Looping through the children of the hierarchy object.
-                    hierarchy.children.forEach(child => {
+                    if (hierarchy[key] !== options[key].default) {
+                        // Looping through the children of the hierarchy object.
+                        hierarchy.children.forEach(child => {
 
-                        // Creating an element given the name if the hierarchy object.
-                        // If no valid name is found, create a div as the default behavior.
-                        const childNode = document.createElement(child['name'] || options['name'].default);
+                            // Creating an element given the name if the hierarchy object.
+                            const childNode = document.createElement(child['name']);
 
-                        // Temmefying all the sub children as well.
-                        temmefy(child, childNode);
+                            // Temmefying all the sub children as well.
+                            temmefy(child, childNode);
 
-                        // Adding the temmefied element to its parent.
-                        element.appendChild(childNode);
-                    });
+                            // Adding the temmefied element to its parent.
+                            element.appendChild(childNode);
+                        });
+                    }
 
                     break;
                 }
@@ -465,8 +481,8 @@
                 // Getting all the references.
                 getReferences(hierarchy, 0, references);
 
-                // Proccessing all the references.
-                proccessReferences(hierarchy, 0, references);
+                // Processing all the references.
+                processReferences(hierarchy, 0, references);
             })();
 
             // Temme, go for it.

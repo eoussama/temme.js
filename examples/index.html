@@ -57,27 +57,28 @@
     <div id="target" class="text"></div>
 
     <!-- Temme JS. -->
-    <script src="../dist/temme.min.js"></script>
+    <script src="../dist/temme.js"></script>
 
     <!-- The main javascript code. -->
     <script>
         const
             target = document.getElementById('target'),
             hierarchy = {
-                id: '',
                 children: [
                     {
-                        id: 'some-id',
-                        
                         text: 'ggg',
                         ref: 'base',
                         classes: ['bold', 'red'],
                         attributes: {
                             name: 'something'
+                        },
+                        dataset: {
+                            id: 100,
+                            title: 'title'
                         }
                     },
                     {
-                        
+                        name: 'header',
                         ref: 'base',
                         from: {
                             ref: 'base'

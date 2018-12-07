@@ -167,7 +167,7 @@ describe('Passing valid arguments.', () => {
             Temme(hierarchy, target);
         }
         catch (e) {
-
+            console.log(e.name, e.message);
         }
 
         // Assert.
