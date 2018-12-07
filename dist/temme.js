@@ -185,7 +185,11 @@ function _typeof(obj) {
 
         for (var _key in options) {
             if (!(_key in hierarchy)) {
-                hierarchy[_key] = options[_key].default;
+                if (options[_key].type === 'object') {
+                    hierarchy[_key] = Object.create(options[_key].default);
+                } else {
+                    hierarchy[_key] = options[_key].default;
+                }
             }
         } // Checking if the element has children.
 
@@ -290,7 +294,7 @@ function _typeof(obj) {
                                             {
                                                 var _loop = function _loop(k) {
                                                     // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'name'].includes(k)) {
+                                                    if (!['from', 'ref', 'name', 'children'].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'array':
                                                                 {
@@ -312,13 +316,14 @@ function _typeof(obj) {
 
                                                             case 'object':
                                                                 {
-                                                                    Object.assign(hierarchy[k], reference.refElement[k]);
-                                                                    break;
-                                                                }
+                                                                    // Override only the matching keys.
+                                                                    for (var refKey in reference.refElement[k]) {
+                                                                        if (!(refKey in hierarchy[k])) {
+                                                                            hierarchy[k][refKey] = reference.refElement[k][refKey];
+                                                                        }
+                                                                    }
 
-                                                            default:
-                                                                {
-                                                                    hierarchy[k] = reference.refElement[k];
+                                                                    break;
                                                                 }
                                                         }
                                                     }
@@ -337,8 +342,23 @@ function _typeof(obj) {
                                                 // looping through all the referenced object's options.
                                                 for (var k in reference.refElement) {
                                                     // Avoiding inheriting the `from` and `name.
-                                                    if (!['from', 'ref', 'name'].includes(k)) {
-                                                        hierarchy[k] = reference.refElement[k];
+                                                    if (!['from', 'ref', 'name', 'children'].includes(k)) {
+                                                        switch (options[k].type) {
+                                                            case 'object':
+                                                                {
+                                                                    // Override only the matching keys.
+                                                                    for (var refKey in reference.refElement[k]) {
+                                                                        hierarchy[k][refKey] = reference.refElement[k][refKey];
+                                                                    }
+
+                                                                    break;
+                                                                }
+
+                                                            default:
+                                                                {
+                                                                    hierarchy[k] = reference.refElement[k];
+                                                                }
+                                                        }
                                                     }
                                                 }
 

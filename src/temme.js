@@ -134,7 +134,11 @@
         // Populating empty options with defaults.
         for (let key in options) {
             if (!(key in hierarchy)) {
-                hierarchy[key] = options[key].default;
+                if (options[key].type === 'object') {
+                    hierarchy[key] = Object.create(options[key].default);
+                } else {
+                    hierarchy[key] = options[key].default;
+                }
             }
         }
 
@@ -251,7 +255,7 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from`, `name` options.
-                                        if (!['from', 'ref', 'name'].includes(k)) {
+                                        if (!['from', 'ref', 'name', 'children'].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
 
@@ -271,13 +275,15 @@
                                                 }
 
                                                 case 'object': {
-                                                    Object.assign(hierarchy[k], reference.refElement[k]);
+
+                                                    // Override only the matching keys.
+                                                    for (let refKey in reference.refElement[k]) {
+                                                        if (!(refKey in hierarchy[k])) {
+                                                            hierarchy[k][refKey] = reference.refElement[k][refKey];
+                                                        }
+                                                    }
 
                                                     break;
-                                                }
-
-                                                default: {
-                                                    hierarchy[k] = reference.refElement[k];
                                                 }
                                             }
                                         }
@@ -292,8 +298,22 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from` and `name.
-                                        if (!['from', 'ref', 'name'].includes(k)) {
-                                            hierarchy[k] = reference.refElement[k];
+                                        if (!['from', 'ref', 'name', 'children'].includes(k)) {
+                                            switch (options[k].type) {
+                                                case 'object': {
+
+                                                    // Override only the matching keys.
+                                                    for (let refKey in reference.refElement[k]) {
+                                                        hierarchy[k][refKey] = reference.refElement[k][refKey];
+                                                    }
+
+                                                    break;
+                                                }
+
+                                                default: {
+                                                    hierarchy[k] = reference.refElement[k];
+                                                }
+                                            }
                                         }
                                     }
 
@@ -363,6 +383,7 @@
                 case 'classes': {
 
                     if (hierarchy[key] !== options[key].default) {
+
                         // Removing any duplicate classes.
                         const filteredClasses = hierarchy[key].filter((cls, index) => !element.classList.contains(cls) && hierarchy[key].indexOf(cls) === index && cls.trim().length > 0);
 
@@ -380,6 +401,7 @@
                 case 'attributes': {
 
                     if (hierarchy[key] !== options[key].default) {
+
                         // Extracting all the attribute keys.
                         const attrKeys = Object.keys(hierarchy[key]);
 
@@ -396,6 +418,7 @@
                 case 'dataset': {
 
                     if (hierarchy[key] !== options[key].default) {
+
                         // Appending values.
                         Object.assign(element.dataset, hierarchy[key]);
                     }
@@ -407,6 +430,7 @@
                 case 'text': {
 
                     if (hierarchy[key] !== options[key].default) {
+
                         // Assigning the text.
                         element.textContent = hierarchy[key];
                     }
@@ -418,6 +442,7 @@
                 case 'html': {
 
                     if (hierarchy[key] !== options[key].default) {
+
                         // Assigning the HTML.
                         element.innerHTML = hierarchy[key];
                     }
@@ -429,6 +454,7 @@
                 case 'children': {
 
                     if (hierarchy[key] !== options[key].default) {
+
                         // Looping through the children of the hierarchy object.
                         hierarchy.children.forEach(child => {
 

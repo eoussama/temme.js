@@ -66,28 +66,24 @@
             hierarchy = {
                 children: [
                     {
-                        text: 'ggg',
                         ref: 'base',
+                        text: 'hello',
                         classes: ['bold', 'red'],
-                        attributes: {
-                            name: 'something'
-                        },
-                        dataset: {
-                            id: 100,
-                            title: 'title'
-                        }
+                        children: [
+                            {
+                                name: 'span'
+                            }
+                        ]
                     },
                     {
-                        name: 'header',
+                        name: 'h1',
+                        text: 'world',
                         ref: 'base',
                         from: {
-                            ref: 'base'
+                            ref: 'base',
+                            mode: 'override'
                         },
-                        classes: ['yellow'],
-                        attributes: {
-                            name: 'something-else',
-                            visible: 'something-else'
-                        }
+                        classes: ['yellow']
                     }
                 ]
             };
