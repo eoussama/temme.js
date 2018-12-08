@@ -53,6 +53,17 @@ function _typeof(obj) {
      */
     var options = {
         /**
+         * The unique id assigned by Temme.
+         */
+        temmeIds: {
+            default: [],
+            type: 'array',
+            isValid: function isValid(temmeIds) {
+                return temmeIds != null && Array.isArray(temmeIds);
+            }
+        },
+
+        /**
          * The name of the HTML tag of the element.
          */
         name: {
@@ -156,22 +167,64 @@ function _typeof(obj) {
          */
         from: {
             default: {
-                ref: ''
+                ref: '',
+                mode: 'append',
+                allowChildren: false
             },
             type: 'object',
-            keys: ['ref', 'mode', 'children'],
+            keys: {
+                ref: {
+                    default: '',
+                    type: 'string',
+                    isValid: function isValid(ref) {
+                        return ref != null && typeof ref === 'string';
+                    }
+                },
+                mode: {
+                    default: 'append',
+                    type: 'string',
+                    values: ['append', 'override'],
+                    isValid: function isValid(mode) {
+                        return mode != null && typeof mode === 'string';
+                    }
+                },
+                allowChildren: {
+                    default: false,
+                    type: 'boolean',
+                    isValid: function isValid(allowChildren) {
+                        return allowChildren != null && typeof allowChildren === 'boolean';
+                    }
+                }
+            },
             isValid: function isValid(from) {
                 return from != null && !Array.isArray(from) && _typeof(from) === 'object';
             }
         }
     };
     /**
+     * Generates a unique string of 6 characters.
+     */
+
+    function generateTemmeId() {
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+        var key = '';
+
+        _toConsumableArray(Array(6).keys()).forEach(function() {
+            var index = Math.floor(Math.random() * chars.length),
+                uppercase = Math.floor(Math.random() * 2);
+            key += uppercase === 1 ? chars[index].toUpperCase() : chars[index];
+        });
+
+        return key;
+    }
+    /**
      * Checks if the hierarchy has valid options.
      * 
      * @param {Object} hierarchy The hierarchy to check.
      */
 
-    function checkOptions(hierarchy) {
+
+    function checkOptions(hierarchy, temmeIds) {
         // Looping through the hierarchy options.
         for (var key in hierarchy) {
             // Checking if the option is valid.
@@ -180,8 +233,11 @@ function _typeof(obj) {
             } else if (!options[key].isValid(hierarchy[key])) {
                 throw new TemmeError('InvalidOptionTypeError', "The option \u201C".concat(key, "\u201D must be of type ").concat(options[key].type, "."));
             }
-        } // Populating empty options with defaults.
+        } // Assigning temmeIds.
 
+
+        hierarchy['temmeIds'] = Array.from(temmeIds);
+        hierarchy['temmeIds'].push(generateTemmeId()); // Populating empty options with defaults.
 
         for (var _key in options) {
             if (!(_key in hierarchy)) {
@@ -197,7 +253,7 @@ function _typeof(obj) {
         if ('children' in hierarchy) {
             // Looping through the children.
             hierarchy['children'].forEach(function(child) {
-                checkOptions(child);
+                checkOptions(child, hierarchy['temmeIds']);
             });
         }
     }
@@ -275,8 +331,18 @@ function _typeof(obj) {
                         } else {
                             for (var fromKey in hierarchy['from']) {
                                 // Checking if the from key is invalid.
-                                if (!options['from'].keys.includes(fromKey)) {
+                                if (!Object.keys(options['from'].keys).includes(fromKey)) {
                                     throw new TemmeError('InvalidReferencingObject', "\u201C".concat(fromKey, "\u201D is an invalid key to have in the \u201Cfrom\u201D option."));
+                                } else {
+                                    // Checking if the keys' values are valid.
+                                    if (!options['from'].keys[fromKey].isValid(hierarchy['from'][fromKey])) {
+                                        throw new TemmeError('InvalidReferencingObject', "\u201C".concat(hierarchy['from'][fromKey], "\u201D is not a valid value for \u201C").concat(fromKey, "\u201D of the \u201Cfrom\u201D option."));
+                                    } else if ('values' in options['from'].keys[fromKey]) {
+                                        // Check if the key has an unsupported value.
+                                        if (!options['from'].keys[fromKey]['values'].includes(hierarchy['from'][fromKey])) {
+                                            throw new TemmeError('InvalidReferencingObject', "\u201C".concat(hierarchy['from'][fromKey], "\u201D is not a valid value for \u201C").concat(fromKey, "\u201D of the \u201Cfrom\u201D option."));
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -294,23 +360,19 @@ function _typeof(obj) {
                                             {
                                                 var _loop = function _loop(k) {
                                                     // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'name', 'children'].includes(k)) {
+                                                    if (!['from', 'ref', 'name', 'children', 'temmeIds'].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'array':
                                                                 {
-                                                                    // If the array is not empty, proceed.
-                                                                    if (hierarchy[k].length > 0) {
-                                                                        // Removing any duplicate classes.
-                                                                        var filteredClasses = reference.refElement[k].filter(function(cls, index) {
-                                                                            return !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0;
-                                                                        }); // Sorting and concatinating the classes.
+                                                                    // Removing any duplicate classes.
+                                                                    var filteredClasses = reference.refElement[k].filter(function(cls, index) {
+                                                                        return !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0;
+                                                                    }); // Sorting and concatinating the classes.
 
-                                                                        var sanitizedClasses = _toConsumableArray(hierarchy[k]).concat(_toConsumableArray(filteredClasses)).sort(); // Assigning the classes.
+                                                                    var sanitizedClasses = _toConsumableArray(hierarchy[k]).concat(_toConsumableArray(filteredClasses)).sort(); // Assigning the classes.
 
 
-                                                                        hierarchy[k] = sanitizedClasses;
-                                                                    }
-
+                                                                    hierarchy[k] = sanitizedClasses;
                                                                     break;
                                                                 }
 
@@ -342,7 +404,7 @@ function _typeof(obj) {
                                                 // looping through all the referenced object's options.
                                                 for (var k in reference.refElement) {
                                                     // Avoiding inheriting the `from` and `name.
-                                                    if (!['from', 'ref', 'name', 'children'].includes(k)) {
+                                                    if (!['from', 'ref', 'name', 'temmeIds', hierarchy['from']['allowChildren'] !== true ? 'children' : ''].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'object':
                                                                 {
@@ -381,6 +443,10 @@ function _typeof(obj) {
                                 }).sort(function(refA, refB) {
                                     return refB.depth - refA.depth;
                                 })[0];
+
+                                if (hierarchy['from']['allowChildren'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
+                                    throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");
+                                }
 
                                 if (typeof reference !== 'undefined') {
                                     // Checking if the referencing object `from` has a reference mode.
@@ -546,7 +612,7 @@ function _typeof(obj) {
             } // Checking the hierarchy options for our own good.
 
 
-            checkOptions(hierarchy); // Supervising the references.
+            checkOptions(hierarchy, []); // Supervising the references.
 
             (function() {
                 /**

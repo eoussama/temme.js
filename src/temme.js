@@ -22,6 +22,15 @@
     const options = {
 
         /**
+         * The unique id assigned by Temme.
+         */
+        temmeIds: {
+            default: [],
+            type: 'array',
+            isValid: (temmeIds) => temmeIds != null && Array.isArray(temmeIds)
+        },
+
+        /**
          * The name of the HTML tag of the element.
          */
         name: {
@@ -106,19 +115,54 @@
          * The referencing key of the element.
          */
         from: {
-            default: { ref: '' },
+            default: { ref: '', mode: 'append', allowChildren: false },
             type: 'object',
-            keys: ['ref', 'mode', 'children'],
+            keys: {
+                ref: {
+                    default: '',
+                    type: 'string',
+                    isValid: (ref) => ref != null && typeof ref === 'string'
+                },
+                mode: {
+                    default: 'append',
+                    type: 'string',
+                    values: ['append', 'override'],
+                    isValid: (mode) => mode != null && typeof mode === 'string'
+                },
+                allowChildren: {
+                    default: false,
+                    type: 'boolean',
+                    isValid: (allowChildren) => allowChildren != null && typeof allowChildren === 'boolean'
+                }
+            },
             isValid: (from) => from != null && !Array.isArray(from) && typeof from === 'object'
         }
     };
+
+    /**
+     * Generates a unique string of 6 characters.
+     */
+    function generateTemmeId() {
+        const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
+        let key = '';
+
+        [...Array(6).keys()].forEach(() => {
+            const
+                index = Math.floor((Math.random() * chars.length)),
+                uppercase = Math.floor(Math.random() * 2);
+
+            key += uppercase === 1 ? chars[index].toUpperCase() : chars[index];
+        });
+
+        return key;
+    }
 
     /**
      * Checks if the hierarchy has valid options.
      * 
      * @param {Object} hierarchy The hierarchy to check.
      */
-    function checkOptions(hierarchy) {
+    function checkOptions(hierarchy, temmeIds) {
 
         // Looping through the hierarchy options.
         for (let key in hierarchy) {
@@ -130,6 +174,10 @@
                 throw new TemmeError('InvalidOptionTypeError', `The option “${key}” must be of type ${options[key].type}.`);
             }
         }
+
+        // Assigning temmeIds.
+        hierarchy['temmeIds'] = Array.from(temmeIds);
+        hierarchy['temmeIds'].push(generateTemmeId());
 
         // Populating empty options with defaults.
         for (let key in options) {
@@ -147,7 +195,7 @@
 
             // Looping through the children.
             hierarchy['children'].forEach(child => {
-                checkOptions(child);
+                checkOptions(child, hierarchy['temmeIds']);
             });
         }
     }
@@ -227,13 +275,26 @@
                         for (let fromKey in hierarchy['from']) {
 
                             // Checking if the from key is invalid.
-                            if (!options['from'].keys.includes(fromKey)) {
+                            if (!Object.keys(options['from'].keys).includes(fromKey)) {
                                 throw new TemmeError('InvalidReferencingObject', `“${fromKey}” is an invalid key to have in the “from” option.`);
+                            } else {
+
+                                // Checking if the keys' values are valid.
+                                if (!options['from'].keys[fromKey].isValid(hierarchy['from'][fromKey])) {
+                                    throw new TemmeError('InvalidReferencingObject', `“${hierarchy['from'][fromKey]}” is not a valid value for “${fromKey}” of the “from” option.`);
+                                } else if ('values' in options['from'].keys[fromKey]) {
+
+                                    // Check if the key has an unsupported value.
+                                    if (!options['from'].keys[fromKey]['values'].includes(hierarchy['from'][fromKey])) {
+                                        throw new TemmeError('InvalidReferencingObject', `“${hierarchy['from'][fromKey]}” is not a valid value for “${fromKey}” of the “from” option.`);
+                                    }
+                                }
                             }
                         }
                     }
 
                     if (hierarchy['from']['ref'].length > 0) {
+
                         // Getting the filtered references, must equal the one the current
                         // element is pointing to and has a lower or a matching depth
                         // indicating it's either a parent or a sibling so that no parent
@@ -241,6 +302,10 @@
                         const reference = references
                             .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
                             .sort((refA, refB) => refB.depth - refA.depth)[0];
+
+                        if (hierarchy['from']['allowChildren'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
+                            throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");
+                        }
 
                         /**
                          * Performs the referencing process.
@@ -255,21 +320,18 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from`, `name` options.
-                                        if (!['from', 'ref', 'name', 'children'].includes(k)) {
+                                        if (!['from', 'ref', 'name', 'children', 'temmeIds'].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
+                                                        
+                                                    // Removing any duplicate classes.
+                                                    const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
 
-                                                    // If the array is not empty, proceed.
-                                                    if (hierarchy[k].length > 0) {
-                                                        // Removing any duplicate classes.
-                                                        const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
+                                                    // Sorting and concatinating the classes.
+                                                    const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
 
-                                                        // Sorting and concatinating the classes.
-                                                        const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
-
-                                                        // Assigning the classes.
-                                                        hierarchy[k] = sanitizedClasses;
-                                                    }
+                                                    // Assigning the classes.
+                                                    hierarchy[k] = sanitizedClasses;
 
                                                     break;
                                                 }
@@ -298,7 +360,7 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from` and `name.
-                                        if (!['from', 'ref', 'name', 'children'].includes(k)) {
+                                        if (!['from', 'ref', 'name', 'temmeIds', (hierarchy['from']['allowChildren'] !== true ? 'children' : '')].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'object': {
 
@@ -495,7 +557,7 @@
             }
 
             // Checking the hierarchy options for our own good.
-            checkOptions(hierarchy);
+            checkOptions(hierarchy, []);
 
             // Supervising the references.
             (() => {

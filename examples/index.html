@@ -64,26 +64,20 @@
         const
             target = document.getElementById('target'),
             hierarchy = {
+                ref: 'ref',
+                classes: ['inherite', 'me'],
+                dataset: {
+                    id: 100
+                },
                 children: [
                     {
-                        ref: 'base',
-                        text: 'hello',
-                        classes: ['bold', 'red'],
-                        children: [
-                            {
-                                name: 'span'
-                            }
-                        ]
-                    },
-                    {
-                        name: 'h1',
-                        text: 'world',
-                        ref: 'base',
                         from: {
-                            ref: 'base',
-                            mode: 'override'
+                            ref: 'ref',
+                            mode: 'append'
                         },
-                        classes: ['yellow']
+                        dataset: {
+                            id: 101
+                        }
                     }
                 ]
             };

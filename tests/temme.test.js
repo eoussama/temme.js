@@ -215,6 +215,7 @@ describe('Passing valid arguments.', () => {
 
 describe('References.', () => {
     test('Referencing a direct parent.', () => {
+
         // Arrange.
         const
             result = document.createElement('div'),
@@ -255,6 +256,47 @@ describe('References.', () => {
 
         }
 
+        // Assert.
+        expect(target).toEqual(result);
+    });
+
+    test('Referencing a direct sibling with children.', () => {
+
+        // Arrange.
+        const
+            result = document.createElement('div'),
+            target = document.createElement('div'),
+            hierarchy = {
+                children: [
+                    {
+                        ref: 'ref-1',
+                        text: 'Hello',
+                        children: [
+                            {
+                                name: 'span',
+                            }
+                        ]
+                    },
+                    {
+                        from: {
+                            ref: 'ref-1',
+                            mode: 'override',
+                            allowChildren: true
+                        }
+                    }
+                ]
+            };
+
+        result.innerHTML = "<div>Hello<span></span></div><div>Hello<span></span></div>";
+
+        // Act.
+        try {
+            Temme(hierarchy, target);
+        }
+        catch (e) {
+
+        }
+        
         // Assert.
         expect(target).toEqual(result);
     });
