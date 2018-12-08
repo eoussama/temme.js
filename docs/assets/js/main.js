@@ -244,7 +244,7 @@ window.addEventListener('load', async () => {
                                 },
                                 {
                                     name: 'p',
-                                    text: "You might have be wondering, yeah cool, but why thought?"
+                                    text: "You might have be wondering, yeah cool, but why though?"
                                 },
                                 {
                                     name: 'p',
