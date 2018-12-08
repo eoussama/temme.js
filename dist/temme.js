@@ -480,10 +480,14 @@ function _typeof(obj) {
      * 
      * @param {Object} hierarchy The hierarchy object that maps the skeleton.
      * @param {HTMLElement} element The element to host the skeleton.
+     * @param {Number} depth The depth of the current element in the hierarchy object.
+     * @param {Function} callback The callback to execute whenever an element has been created.
      */
 
 
-    function temmefy(hierarchy, element) {
+    function temmefy(hierarchy, element, depth) {
+        var callback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function(temmeId, currentHierarchy, depth) {};
+
         var _loop2 = function _loop2(key) {
             // Parsing the hierarchy object.
             switch (key) {
@@ -571,11 +575,11 @@ function _typeof(obj) {
                             // Looping through the children of the hierarchy object.
                             hierarchy.children.forEach(function(child) {
                                 // Creating an element given the name if the hierarchy object.
-                                var childNode = document.createElement(child['name']); // Temmefying all the sub children as well.
+                                var childNode = document.createElement(child['name']); // Adding the temmefied element to its parent.
 
-                                temmefy(child, childNode); // Adding the temmefied element to its parent.
+                                element.appendChild(childNode); // Temmefying all the sub children as well.
 
-                                element.appendChild(childNode);
+                                temmefy(child, childNode, ++depth, callback);
                             });
                         }
 
@@ -584,21 +588,29 @@ function _typeof(obj) {
             }
         };
 
+        // Parsing all the values.
         for (var key in hierarchy) {
             _loop2(key);
-        }
+        } // Executing the passed callback.
+
+
+        callback(hierarchy.temmeIds[hierarchy.temmeIds.length - 1], hierarchy, depth);
     }
     /**
      * The main function behind it all.
      * 
      * @param {Object} hierarchy The hierarchy object that maps the HTML skeleton.
      * @param {HTMLElement} target The HTML element that hosts the skeleton.
+     * @param {Function} temmeCallback The callback to execute when all objects have been created.
+     * @param {Function} elementCallback The callback to execute whenever an element has been created.
      */
 
 
     function Temme() {
         var hierarchy = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         var target = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document.body;
+        var temmeCallback = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function() {};
+        var elementCallback = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function(temmeId, currentHierarchy, depth) {};
 
         try {
             // Checking if the hierarchy object is valid.
@@ -626,7 +638,9 @@ function _typeof(obj) {
             })(); // Temme, go for it.
 
 
-            temmefy(hierarchy, target);
+            temmefy(hierarchy, target, 0, elementCallback); // Execute the user's passed callback.
+
+            temmeCallback();
         } catch (e) {
             // Appending a tag to the error message.
             e.message = "[Temme JS]: ".concat(e.message); // Throwing the error.

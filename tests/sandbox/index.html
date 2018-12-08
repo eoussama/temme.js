@@ -57,7 +57,7 @@
             <hr>
     
             <!-- The main content. -->
-            <div id="target"></div>
+            <div id="target" class="orange"></div>
         </main>
 
         <!-- Temme JS. -->
@@ -70,24 +70,21 @@
 
             // Testing up the hierarchy object.
             const hierarchy = {
+                ref: 'parent',
+                classes: ['red', 'blue'],
                 children: [
                     {
-                        ref: 'p',
                         classes: ['red'],
                         children: [
                             {
-                                ref: 'p',
-                                from: {
-                                    ref: 'p'
-                                },
-                                classes: ['blue']
+                                ref: 'sibling',
+                                classes: ['yellow', 'orange']
                             },
                             {
-                                ref: 'p',
                                 from: {
-                                    ref: 'p'
+                                    ref: 'sibling'
                                 },
-                                classes: ['yellow']
+                                classes: ['black']
                             }
                         ]
                     }
@@ -96,14 +93,23 @@
 
             // Telling Temme to do us the favor.
             try {
-                Temme(hierarchy, target);
+                Temme(hierarchy, target, () => {
+
+                    // Outputting the results in the console.
+                    console.log('%c [TemmeJS]%c All elements were created', 'color: green; font-weight: bold;', 'color: green; font-weight: 300;');
+                    console.info(target);
+                }, (id, h, depth) => {
+
+                    // Outputting information about each object being created.
+                    console.log(`Element ID: %c${id}`, 'font-weight: bold;');
+                    console.log(`Element depth: %c${depth}`, 'font-weight: bold;');
+                    console.log('--------------------');
+                });
             }
             catch (e) {
-                console.error(e);
+                console.error(e.name, e.message);
             }
-
-            // Outputting the results in the console.
-            console.info(target);
+            
         </script>
     </body>
 </html>

@@ -422,9 +422,12 @@
      * 
      * @param {Object} hierarchy The hierarchy object that maps the skeleton.
      * @param {HTMLElement} element The element to host the skeleton.
+     * @param {Number} depth The depth of the current element in the hierarchy object.
+     * @param {Function} callback The callback to execute whenever an element has been created.
      */
-    function temmefy(hierarchy, element) {
+    function temmefy(hierarchy, element, depth, callback = (temmeId, currentHierarchy, depth) => {}) {
 
+        // Parsing all the values.
         for (let key in hierarchy) {
 
             // Parsing the hierarchy object.
@@ -523,11 +526,11 @@
                             // Creating an element given the name if the hierarchy object.
                             const childNode = document.createElement(child['name']);
 
-                            // Temmefying all the sub children as well.
-                            temmefy(child, childNode);
-
                             // Adding the temmefied element to its parent.
                             element.appendChild(childNode);
+                            
+                            // Temmefying all the sub children as well.
+                            temmefy(child, childNode, ++depth, callback);
                         });
                     }
 
@@ -535,6 +538,9 @@
                 }
             }
         }
+
+        // Executing the passed callback.
+        callback(hierarchy.temmeIds[hierarchy.temmeIds.length - 1], hierarchy, depth);
     }
 
     /**
@@ -542,8 +548,10 @@
      * 
      * @param {Object} hierarchy The hierarchy object that maps the HTML skeleton.
      * @param {HTMLElement} target The HTML element that hosts the skeleton.
+     * @param {Function} temmeCallback The callback to execute when all objects have been created.
+     * @param {Function} elementCallback The callback to execute whenever an element has been created.
      */
-    function Temme(hierarchy = {}, target = document.body) {
+    function Temme(hierarchy = {}, target = document.body, temmeCallback = () => {}, elementCallback = (temmeId, currentHierarchy, depth) => {}) {
         try {
 
             // Checking if the hierarchy object is valid.
@@ -574,7 +582,10 @@
             })();
 
             // Temme, go for it.
-            temmefy(hierarchy, target);
+            temmefy(hierarchy, target, 0, elementCallback);
+
+            // Execute the user's passed callback.
+            temmeCallback();
         }
         catch (e) {
 
