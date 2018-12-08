@@ -263,7 +263,9 @@ window.addEventListener('load', async () => {
                     ]
                 }
             ]
-        }, target);
+        }, target, () => {
+            document.body.classList.remove('loader');
+        });
     }
     catch(e) {
         console.error(e.name, e.message);
