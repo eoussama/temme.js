@@ -266,7 +266,7 @@ window.addEventListener('load', async () => {
         }, target);
     }
     catch(e) {
-        console.error(e);
+        console.error(e.name, e.message);
     }
 
     // Highlighting the code snippets.

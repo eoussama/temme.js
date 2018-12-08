@@ -34,15 +34,31 @@
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        .bold {
-            font-weight: bold;
+        .card {
+            border: 1px solid rgba(0, 0, 0, .1);
+            border-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+            box-sizing: border-box;
+            height: 250px;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
         }
 
-        .italic {
-            font-style: italic;
+        .card-header {
+            color: gray;
+            text-align: center;
+        }
+
+        .card-body {
+            margin-top: 30px;
+            text-align: center;
         }
 
         .container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
             padding: 50px 80px;
         }
     </style>
@@ -54,7 +70,7 @@
 <body>
 
     <!-- The main content. -->
-    <div id="target" class="text"></div>
+    <div id="target"></div>
 
     <!-- Temme JS. -->
     <script src="../dist/temme.js"></script>
@@ -64,19 +80,62 @@
         const
             target = document.getElementById('target'),
             hierarchy = {
-                ref: 'ref',
-                classes: ['inherite', 'me'],
-                dataset: {
-                    id: 100
-                },
+                classes: ['container'],
                 children: [
                     {
+                        ref: 'card-ref',
+                        classes: ['card'],
+                        children: [
+                            {
+                                classes: ['card-header'],
+                                children: [
+                                    {
+                                        name: 'h3',
+                                        text: 'Card header'
+                                    }
+                                ]
+                            },
+                            {
+                                classes: ['card-body'],
+                                children: [
+                                    {
+                                        name: 'p',
+                                        html: "This is a dummy paragraph. Generated completed using <b>Temme JS</b>."
+                                    },
+                                    {
+                                        name: 'p',
+                                        html: "And all that follows are duplicates if this one."
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
                         from: {
-                            ref: 'ref',
-                            mode: 'append'
-                        },
-                        dataset: {
-                            id: 101
+                            ref: 'card-ref',
+                            mode: 'override',
+                            allowChildren: true
+                        }
+                    },
+                    {
+                        from: {
+                            ref: 'card-ref',
+                            mode: 'override',
+                            allowChildren: true
+                        }
+                    },
+                    {
+                        from: {
+                            ref: 'card-ref',
+                            mode: 'override',
+                            allowChildren: true
+                        }
+                    },
+                    {
+                        from: {
+                            ref: 'card-ref',
+                            mode: 'override',
+                            allowChildren: true
                         }
                     }
                 ]
