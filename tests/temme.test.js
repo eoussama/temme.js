@@ -1,7 +1,7 @@
 /**
 *
 * @name:       temmejs
-* @version:    0.3.0
+* @version:    0.4.0
 * @author:     EOussama
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
@@ -12,7 +12,7 @@
 *
 */
 
-const Temme = require('../src/temme');
+const Temme = require('../dist/temme');
 
 /**
  * Tests against a passed heirarchy value.
@@ -167,7 +167,7 @@ describe('Passing valid arguments.', () => {
             Temme(hierarchy, target);
         }
         catch (e) {
-            console.log(e.name, e.message);
+            console.error(e.name, e.message);
         }
 
         // Assert.
@@ -296,7 +296,43 @@ describe('References.', () => {
         catch (e) {
 
         }
-        
+
+        // Assert.
+        expect(target).toEqual(result);
+    });
+
+    test('Referencing an outer element.', () => {
+
+        // Arrange.
+        const
+            outer = document.createElement('div'),
+            result = document.createElement('div'),
+            target = document.createElement('div'),
+            hierarchy = {
+                children: [
+                    {
+                        from: {
+                            ref: '@#outer-element'
+                        }
+                    }
+                ]
+            };
+
+        outer.id = 'outer-element';
+        outer.classList.add('red', 'blue');
+        outer.innerHTML = '<b>Hello, there!</b>';
+        document.body.appendChild(outer);
+
+        result.innerHTML = "<div class=\"blue red\"><b>Hello, there!</b></div>";
+
+        // Act.
+        try {
+            Temme(hierarchy, target);
+        }
+        catch (e) {
+            console.error(e.name, e.message);
+        }
+
         // Assert.
         expect(target).toEqual(result);
     });

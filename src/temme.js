@@ -1,7 +1,7 @@
 /**
 *
 * @name:       temmejs
-* @version:    0.3.0
+* @version:    0.4.0
 * @author:     EOussama
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
@@ -358,6 +358,18 @@
                             throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");
                         }
 
+                        if (typeof reference !== 'undefined') {
+
+                            // Checking if the referencing object `from` has a reference mode.
+                            if ('mode' in hierarchy['from']) {
+                                referenceMode(hierarchy['from']['mode']);
+                            } else {
+                                referenceMode('append');
+                            }
+                        } else {
+                            throw new TemmeError('InvalidReference', `“${hierarchy['from']['ref']}” is an invalid reference.`);
+                        }
+
                         /**
                          * Performs the referencing process.
                          * 
@@ -371,7 +383,7 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from`, `name` options.
-                                        if (!['from', 'ref', 'name', 'children', 'temmeIds'].includes(k)) {
+                                        if (!['from', 'ref', 'id', 'name', 'children', 'temmeIds'].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
 
@@ -397,6 +409,10 @@
                                                     }
 
                                                     break;
+                                                }
+
+                                                default: {
+                                                    hierarchy[k] = reference.refElement[k];
                                                 }
                                             }
                                         }
@@ -437,18 +453,6 @@
                                     throw new TemmeError('InvalidReferenceMode', `“${mode}” is not a valid referencing mode.`);
                                 }
                             }
-                        }
-
-                        if (typeof reference !== 'undefined') {
-
-                            // Checking if the referencing object `from` has a reference mode.
-                            if ('mode' in hierarchy['from']) {
-                                referenceMode(hierarchy['from']['mode']);
-                            } else {
-                                referenceMode('append');
-                            }
-                        } else {
-                            throw new TemmeError('InvalidReference', `“${hierarchy['from']['ref']}” is an invalid reference.`);
                         }
                     }
 

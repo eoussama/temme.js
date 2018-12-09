@@ -9,14 +9,14 @@ const
 gulp.task('build', () => {
     gulp.src('src/temme.js')
 
-        // Translating the code.
+        // Translating code.
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(beautify())
         .pipe(gulp.dest('dist'))
 
-        // Minifying the code.
+        // Minifying Temme.
         .pipe(uglify())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest('dist'))

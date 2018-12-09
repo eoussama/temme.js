@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    0.3.0
+ * @version:    0.4.0
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -363,7 +363,7 @@ function _typeof(obj) {
                                             {
                                                 var _loop = function _loop(k) {
                                                     // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'name', 'children', 'temmeIds'].includes(k)) {
+                                                    if (!['from', 'ref', 'id', 'name', 'children', 'temmeIds'].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'array':
                                                                 {
@@ -389,6 +389,11 @@ function _typeof(obj) {
                                                                     }
 
                                                                     break;
+                                                                }
+
+                                                            default:
+                                                                {
+                                                                    hierarchy[k] = reference.refElement[k];
                                                                 }
                                                         }
                                                     }
