@@ -1,7 +1,7 @@
 /**
 *
 * @name:       temmejs
-* @version:    0.4.0
+* @version:    0.4.1
 * @author:     EOussama
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
@@ -115,7 +115,7 @@
          * The referencing key of the element.
          */
         from: {
-            default: { ref: '', mode: 'append', allowChildren: false },
+            default: { ref: '', mode: 'append', children: { allow: false, placement: 'after' } },
             type: 'object',
             keys: {
                 ref: {
@@ -129,15 +129,23 @@
                     values: ['append', 'override'],
                     isValid: (mode) => mode != null && typeof mode === 'string'
                 },
-                allowChildren: {
-                    default: false,
-                    type: 'boolean',
-                    isValid: (allowChildren) => allowChildren != null && typeof allowChildren === 'boolean'
-                },
-                childrenFirst: {
-                    default: false,
-                    type: 'boolean',
-                    isValid: (childrenFirst) => childrenFirst != null && typeof childrenFirst === 'boolean'
+                children: {
+                    default: { allow: false, placement: 'after' },
+                    type: 'object',
+                    keys: {
+                        allow: {
+                            default: false,
+                            type: 'boolean',
+                            isValid: (allow) => allow != null && typeof allow === 'boolean'
+                        },
+                        placement: {
+                            default: 'after',
+                            type: 'string',
+                            values: ['after', 'before'],
+                            isValid: (placement) => placement != null && typeof placement === 'string'
+                        }
+                    },
+                    isValid: (children) => children != null && !Array.isArray(children) && typeof children === 'object'
                 }
             },
             isValid: (from) => from != null && !Array.isArray(from) && typeof from === 'object'
@@ -209,12 +217,24 @@
         hierarchy['temmeIds'].push(generateTemmeId());
 
         // Populating empty options with defaults.
-        for (let key in options) {
+        for (const key in options) {
             if (!(key in hierarchy)) {
                 if (options[key].type === 'object') {
                     hierarchy[key] = Object.create(options[key].default);
                 } else {
                     hierarchy[key] = options[key].default;
+                }
+            } else if (key === 'from') {
+                if (!('children' in hierarchy['from'])) {
+                    hierarchy['from']['children'] = Object.create(options['from']['keys']['children'].default);
+                } else {
+
+                    // Checking of the object lacks any `from.children` keys and setting the default values.
+                    for (const _key in options['from']['keys']['children']['keys']) {
+                        if (!(_key in hierarchy['from']['children'])) {
+                            hierarchy['from']['children'][_key] = options['from']['keys']['children']['keys'][_key].default;
+                        }
+                    }
                 }
             }
         }
@@ -359,8 +379,8 @@
                                 .sort((refA, refB) => refB.depth - refA.depth)[0];
                         }
 
-                        if (hierarchy['from']['allowChildren'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
-                            throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");
+                        if (hierarchy['from']['children']['allow'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
+                            throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “from.children.allow” is set to “true”.");
                         }
 
                         if (typeof reference !== 'undefined') {
@@ -388,7 +408,7 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from`, `name` options.
-                                        if (!['from', 'ref', 'id', 'name', 'temmeIds', (hierarchy['from']['allowChildren'] !== true ? 'children' : '')].includes(k)) {
+                                        if (!['from', 'ref', 'id', 'name', 'temmeIds', (hierarchy['from']['children']['allow'] !== true ? 'children' : '')].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
 
@@ -396,21 +416,33 @@
 
                                                         // Removing any duplicate classes.
                                                         const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
-    
+
                                                         // Sorting and concatinating the classes.
                                                         const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
-    
+
                                                         // Assigning the classes.
                                                         hierarchy[k] = sanitizedClasses;
                                                     } else {
 
-                                                        // If the children append mode is on `childrenFirst`, meaning
-                                                        // The referenced object's children should could before the
-                                                        // referencing object's. Otherwise, the should come after.
-                                                        if (hierarchy['from']['childrenFirst']) {
-                                                            hierarchy[k].unshift(...reference.refElement[k]);
-                                                        } else {
-                                                            hierarchy[k].push(...reference.refElement[k]);
+                                                        // If the children's placement is set to `after`, meaning
+                                                        // The referenced object's children should come after the
+                                                        // referencing object's. Otherwise, the should come before.
+                                                        switch (hierarchy['from']['children']['placement']) {
+                                                            case 'after': {
+                                                                hierarchy[k].push(...reference.refElement[k]);
+
+                                                                break;
+                                                            }
+
+                                                            case 'before': {
+                                                                hierarchy[k].unshift(...reference.refElement[k]);
+
+                                                                break;
+                                                            }
+
+                                                            default: {
+                                                                throw new TemmeError('InvalidReferencingObject', `“${hierarchy['from']['children']['placement']}” is an invalid placement.`);
+                                                            }
                                                         }
                                                     }
 
@@ -445,7 +477,7 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from` and `name.
-                                        if (!['from', 'ref', 'name', 'temmeIds', (hierarchy['from']['allowChildren'] !== true ? 'children' : '')].includes(k)) {
+                                        if (!['from', 'ref', 'name', 'temmeIds', (hierarchy['from']['children']['allow'] !== true ? 'children' : '')].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'object': {
 

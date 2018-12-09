@@ -169,7 +169,10 @@ function _typeof(obj) {
             default: {
                 ref: '',
                 mode: 'append',
-                allowChildren: false
+                children: {
+                    allow: false,
+                    placement: 'after'
+                }
             },
             type: 'object',
             keys: {
@@ -188,18 +191,31 @@ function _typeof(obj) {
                         return mode != null && typeof mode === 'string';
                     }
                 },
-                allowChildren: {
-                    default: false,
-                    type: 'boolean',
-                    isValid: function isValid(allowChildren) {
-                        return allowChildren != null && typeof allowChildren === 'boolean';
-                    }
-                },
-                childrenFirst: {
-                    default: false,
-                    type: 'boolean',
-                    isValid: function isValid(childrenFirst) {
-                        return childrenFirst != null && typeof childrenFirst === 'boolean';
+                children: {
+                    default: {
+                        allow: false,
+                        placement: 'after'
+                    },
+                    type: 'object',
+                    keys: {
+                        allow: {
+                            default: false,
+                            type: 'boolean',
+                            isValid: function isValid(allow) {
+                                return allow != null && typeof allow === 'boolean';
+                            }
+                        },
+                        placement: {
+                            default: 'after',
+                            type: 'string',
+                            values: ['after', 'before'],
+                            isValid: function isValid(placement) {
+                                return placement != null && typeof placement === 'string';
+                            }
+                        }
+                    },
+                    isValid: function isValid(children) {
+                        return children != null && !Array.isArray(children) && _typeof(children) === 'object';
                     }
                 }
             },
@@ -272,12 +288,23 @@ function _typeof(obj) {
         hierarchy['temmeIds'] = Array.from(temmeIds);
         hierarchy['temmeIds'].push(generateTemmeId()); // Populating empty options with defaults.
 
-        for (var _key in options) {
-            if (!(_key in hierarchy)) {
-                if (options[_key].type === 'object') {
-                    hierarchy[_key] = Object.create(options[_key].default);
+        for (var _key2 in options) {
+            if (!(_key2 in hierarchy)) {
+                if (options[_key2].type === 'object') {
+                    hierarchy[_key2] = Object.create(options[_key2].default);
                 } else {
-                    hierarchy[_key] = options[_key].default;
+                    hierarchy[_key2] = options[_key2].default;
+                }
+            } else if (_key2 === 'from') {
+                if (!('children' in hierarchy['from'])) {
+                    hierarchy['from']['children'] = Object.create(options['from']['keys']['children'].default);
+                } else {
+                    // Checking of the object lacks any `from.children` keys and setting the default values.
+                    for (var _key in options['from']['keys']['children']['keys']) {
+                        if (!(_key in hierarchy['from']['children'])) {
+                            hierarchy['from']['children'][_key] = options['from']['keys']['children']['keys'][_key].default;
+                        }
+                    }
                 }
             }
         } // Checking if the element has children.
@@ -370,7 +397,7 @@ function _typeof(obj) {
                                             {
                                                 var _loop = function _loop(k) {
                                                     // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'id', 'name', 'temmeIds', hierarchy['from']['allowChildren'] !== true ? 'children' : ''].includes(k)) {
+                                                    if (!['from', 'ref', 'id', 'name', 'temmeIds', hierarchy['from']['children']['allow'] !== true ? 'children' : ''].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'array':
                                                                 {
@@ -385,17 +412,32 @@ function _typeof(obj) {
 
                                                                         hierarchy[k] = sanitizedClasses;
                                                                     } else {
-                                                                        // If the children append mode is on `childrenFirst`, meaning
-                                                                        // The referenced object's children should could before the
-                                                                        // referencing object's. Otherwise, the should come after.
-                                                                        if (hierarchy['from']['childrenFirst']) {
-                                                                            var _hierarchy$k;
+                                                                        // If the children's placement is set to `after`, meaning
+                                                                        // The referenced object's children should come after the
+                                                                        // referencing object's. Otherwise, the should come before.
+                                                                        switch (hierarchy['from']['children']['placement']) {
+                                                                            case 'after':
+                                                                                {
+                                                                                    var _hierarchy$k;
 
-                                                                            (_hierarchy$k = hierarchy[k]).unshift.apply(_hierarchy$k, _toConsumableArray(reference.refElement[k]));
-                                                                        } else {
-                                                                            var _hierarchy$k2;
+                                                                                    (_hierarchy$k = hierarchy[k]).push.apply(_hierarchy$k, _toConsumableArray(reference.refElement[k]));
 
-                                                                            (_hierarchy$k2 = hierarchy[k]).push.apply(_hierarchy$k2, _toConsumableArray(reference.refElement[k]));
+                                                                                    break;
+                                                                                }
+
+                                                                            case 'before':
+                                                                                {
+                                                                                    var _hierarchy$k2;
+
+                                                                                    (_hierarchy$k2 = hierarchy[k]).unshift.apply(_hierarchy$k2, _toConsumableArray(reference.refElement[k]));
+
+                                                                                    break;
+                                                                                }
+
+                                                                            default:
+                                                                                {
+                                                                                    throw new TemmeError('InvalidReferencingObject', "\u201C".concat(hierarchy['from']['children']['placement'], "\u201D is an invalid placement."));
+                                                                                }
                                                                         }
                                                                     }
 
@@ -435,7 +477,7 @@ function _typeof(obj) {
                                                 // looping through all the referenced object's options.
                                                 for (var k in reference.refElement) {
                                                     // Avoiding inheriting the `from` and `name.
-                                                    if (!['from', 'ref', 'name', 'temmeIds', hierarchy['from']['allowChildren'] !== true ? 'children' : ''].includes(k)) {
+                                                    if (!['from', 'ref', 'name', 'temmeIds', hierarchy['from']['children']['allow'] !== true ? 'children' : ''].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'object':
                                                                 {
@@ -515,8 +557,8 @@ function _typeof(obj) {
                                     })[0];
                                 }
 
-                                if (hierarchy['from']['allowChildren'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
-                                    throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");
+                                if (hierarchy['from']['children']['allow'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
+                                    throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “from.children.allow” is set to “true”.");
                                 }
 
                                 if (typeof reference !== 'undefined') {

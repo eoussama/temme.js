@@ -1,7 +1,7 @@
 /**
 *
 * @name:       temmejs
-* @version:    0.4.0
+* @version:    0.4.1
 * @author:     EOussama
 * @license     MIT
 * @source:     https://github.com/EOussama/temmejs
@@ -281,7 +281,9 @@ describe('References.', () => {
                         from: {
                             ref: 'ref-1',
                             mode: 'override',
-                            allowChildren: true
+                            children: {
+                                allow: true
+                            }
                         }
                     }
                 ]
