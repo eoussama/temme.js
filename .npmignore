@@ -1,3 +1,6 @@
+# Ignoring vscode settings.
+.vscode/
+
 # Ignoring the dependencies' folder.
 node_modules/
 
