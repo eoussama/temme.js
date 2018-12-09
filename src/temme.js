@@ -149,6 +149,15 @@
                 }
             },
             isValid: (from) => from != null && !Array.isArray(from) && typeof from === 'object'
+        },
+
+        /**
+         * The templates.
+         */
+        templates: {
+            default: [],
+            type: 'array',
+            isValid: (templates) => templates != null && Array.isArray(templates)
         }
     };
 
@@ -196,11 +205,13 @@
      * Checks if the hierarchy has valid options.
      * 
      * @param {Object} hierarchy The hierarchy to check.
+     * @param {Array} temmeIds The temme Id series associated with the object.
+     * @param {Object} hierarchy The hierarchy to check.
      */
-    function checkOptions(hierarchy, temmeIds) {
+    function checkOptions(hierarchy, temmeIds, ignore = []) {
 
         // Looping through the hierarchy options.
-        for (let key in hierarchy) {
+        for (const key in hierarchy) {
 
             // Checking if the option is valid.
             if (!(key in options)) {
@@ -220,15 +231,19 @@
         for (const key in options) {
             if (!(key in hierarchy)) {
                 if (options[key].type === 'object') {
-                    hierarchy[key] = Object.create(options[key].default);
+                    if (!ignore.includes(key)) {
+                        hierarchy[key] = Object.create(options[key].default);
+                    }
                 } else {
-                    hierarchy[key] = options[key].default;
+                    if (!ignore.includes(key)) {
+                        hierarchy[key] = options[key].default;
+                    }
                 }
             } else if (key === 'from') {
                 if (!('children' in hierarchy['from'])) {
                     hierarchy['from']['children'] = Object.create(options['from']['keys']['children'].default);
                 } else {
-
+                    
                     // Checking of the object lacks any `from.children` keys and setting the default values.
                     for (const _key in options['from']['keys']['children']['keys']) {
                         if (!(_key in hierarchy['from']['children'])) {
@@ -237,6 +252,15 @@
                     }
                 }
             }
+        }
+
+        // Checking if the element has templates.
+        if ('templates' in hierarchy) {
+
+            // Looping through the children.
+            hierarchy['templates'].forEach(template => {
+                checkOptions(template, hierarchy['temmeIds'], ['name', 'children']);
+            });
         }
 
         // Checking if the element has children.
@@ -257,6 +281,28 @@
      * @param {Array} references The array that will store the references found.
      */
     function getReferences(hierarchy, depth, references) {
+
+        // Checking if the hierarchy object has any templates.
+        if ('templates' in hierarchy && hierarchy['templates'].length > 0) {
+            hierarchy['templates'].forEach(template => {
+                if ('name' in template) {
+                    throw new TemmeError('InvalidTemplate', "Templates must not have a `name` option.");
+                }
+                else if ('children' in template) {
+                    throw new TemmeError('InvalidTemplate', "Templates must not have a `children` option.");
+                } else if ('ref' in template) {
+
+                    // Adding the element to the references array as it's a
+                    // valid reference.
+                    references.push({
+                        refElement: template,
+                        depth: depth
+                    });
+                } else {
+                    throw new TemmeError('InvalidTemplate', "Templates must have a `ref` option, otherwise, they are invalid.");
+                }
+            });
+        }
 
         // Checking if the hierarchy object has a valid `ref` key.
         if ('ref' in hierarchy && hierarchy['ref'].length > 0) {
@@ -511,7 +557,17 @@
             }
         }
 
-        // Checkinf if the element has children.
+        // Checking if the element has templates.
+        if ('templates' in hierarchy) {
+
+            // Looping through the hierarchy object's templates and
+            // processing their references.
+            hierarchy.templates.forEach(template => {
+                processReferences(template, ++depth, references);
+            });
+        }
+
+        // Checking if the element has children.
         if ('children' in hierarchy) {
 
             // Looping through the hierarchy object's children and

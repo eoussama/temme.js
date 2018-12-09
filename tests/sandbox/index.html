@@ -57,11 +57,6 @@
         <h1>Temme JS Sandbox</h1>
         <hr>
 
-        <!-- Some other unrelated element. -->
-        <div id="outer-target" data-id="10" data-title="Hey" visible="true" disabled="false" class="outer-class another-outer-class">
-            <p>lorem <u>ipsum.</u></p>
-        </div>
-
         <!-- The main target element. -->
         <div id="target"></div>
     </main>
@@ -77,48 +72,41 @@
 
         // Testing up the hierarchy object.
         const hierarchy = {
-            ref: 'outer-target',
-            classes: ['red', 'blue'],
+            templates: [
+                {
+                    ref: 'temp-1',
+                    classes: ['bold', 'italic']
+                },
+                {
+                    ref: 'temp-2',
+                    from: {
+                        ref: 'temp-1'
+                    },
+                    classes: ['yellow']
+                }
+            ],
             children: [
                 {
-                    classes: ['red'],
-                    children: [
-                        {
-                            ref: 'sibling',
-                            classes: ['yellow', 'orange'],
-                            children: [
-                                {
-                                    name: 'u',
-                                    text: 'Inherited.'
-                                },
-                                {
-                                    name: 'u',
-                                    text: 'Inherited 2.'
-                                },
-                                {
-                                    name: 'u',
-                                    text: 'Inherited 3.'
-                                }
-                            ]
-                        },
+                    templates: [
                         {
                             from: {
-                                ref: 'sibling',
-                                mode: 'append',
-                                children: {
-                                    allow: true,
-                                    placement: 'before'
-                                }
+                                ref: 't'
                             },
-                            classes: ['black'],
-                            children: [
-                                {
-                                    name: 'i',
-                                    text: 'Not inherited'
-                                }
-                            ]
+                            ref: 'temp-3',
+                            classes: ['magenta']
                         }
-                    ]
+                    ],
+                    ref: 't',
+                    from: {
+                        ref: 'temp-3'
+                    },
+                    name: 'h1',
+                    children: [
+                        {
+                            name: 'span'
+                        }
+                    ],
+                    classes: ['red']
                 }
             ]
         };

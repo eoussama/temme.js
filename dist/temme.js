@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    0.4.0
+ * @version:    0.4.1
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -222,6 +222,17 @@ function _typeof(obj) {
             isValid: function isValid(from) {
                 return from != null && !Array.isArray(from) && _typeof(from) === 'object';
             }
+        },
+
+        /**
+         * The templates.
+         */
+        templates: {
+            default: [],
+            type: 'array',
+            isValid: function isValid(templates) {
+                return templates != null && Array.isArray(templates);
+            }
         }
     };
     /**
@@ -268,10 +279,14 @@ function _typeof(obj) {
      * Checks if the hierarchy has valid options.
      * 
      * @param {Object} hierarchy The hierarchy to check.
+     * @param {Array} temmeIds The temme Id series associated with the object.
+     * @param {Object} hierarchy The hierarchy to check.
      */
 
 
     function checkOptions(hierarchy, temmeIds) {
+        var ignore = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+
         // Looping through the hierarchy options.
         for (var key in hierarchy) {
             // Checking if the option is valid.
@@ -291,9 +306,13 @@ function _typeof(obj) {
         for (var _key2 in options) {
             if (!(_key2 in hierarchy)) {
                 if (options[_key2].type === 'object') {
-                    hierarchy[_key2] = Object.create(options[_key2].default);
+                    if (!ignore.includes(_key2)) {
+                        hierarchy[_key2] = Object.create(options[_key2].default);
+                    }
                 } else {
-                    hierarchy[_key2] = options[_key2].default;
+                    if (!ignore.includes(_key2)) {
+                        hierarchy[_key2] = options[_key2].default;
+                    }
                 }
             } else if (_key2 === 'from') {
                 if (!('children' in hierarchy['from'])) {
@@ -307,6 +326,14 @@ function _typeof(obj) {
                     }
                 }
             }
+        } // Checking if the element has templates.
+
+
+        if ('templates' in hierarchy) {
+            // Looping through the children.
+            hierarchy['templates'].forEach(function(template) {
+                checkOptions(template, hierarchy['temmeIds'], ['name', 'children']);
+            });
         } // Checking if the element has children.
 
 
@@ -327,7 +354,27 @@ function _typeof(obj) {
 
 
     function getReferences(hierarchy, depth, references) {
-        // Checking if the hierarchy object has a valid `ref` key.
+        // Checking if the hierarchy object has any templates.
+        if ('templates' in hierarchy && hierarchy['templates'].length > 0) {
+            hierarchy['templates'].forEach(function(template) {
+                if ('name' in template) {
+                    throw new TemmeError('InvalidTemplate', "Templates must not have a `name` option.");
+                } else if ('children' in template) {
+                    throw new TemmeError('InvalidTemplate', "Templates must not have a `children` option.");
+                } else if ('ref' in template) {
+                    // Adding the element to the references array as it's a
+                    // valid reference.
+                    references.push({
+                        refElement: template,
+                        depth: depth
+                    });
+                } else {
+                    throw new TemmeError('InvalidTemplate', "Templates must have a `ref` option, otherwise, they are invalid.");
+                }
+            });
+        } // Checking if the hierarchy object has a valid `ref` key.
+
+
         if ('ref' in hierarchy && hierarchy['ref'].length > 0) {
             // Adding the element to the references array as it's a
             // valid reference.
@@ -577,7 +624,16 @@ function _typeof(obj) {
                         break;
                     }
             }
-        } // Checkinf if the element has children.
+        } // Checking if the element has templates.
+
+
+        if ('templates' in hierarchy) {
+            // Looping through the hierarchy object's templates and
+            // processing their references.
+            hierarchy.templates.forEach(function(template) {
+                processReferences(template, ++depth, references);
+            });
+        } // Checking if the element has children.
 
 
         if ('children' in hierarchy) {
