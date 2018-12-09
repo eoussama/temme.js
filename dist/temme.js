@@ -202,6 +202,30 @@ function _typeof(obj) {
         }
     };
     /**
+     * Temme's custom exception.
+     * 
+     * @param {String} name The name of the exception.
+     * @param {String} message The message of the exception.
+     */
+
+    function TemmeError() {
+        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'TemmeError';
+        var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Something went wrong.';
+
+        /**
+         * The name of the error.
+         */
+        this.name = name;
+        /**
+         * The message of the error.
+         */
+
+        this.message = message;
+    } // Inheriting from the Error.
+
+
+    TemmeError.prototype = Error.prototype;
+    /**
      * Generates a unique string of 6 characters.
      */
 
@@ -232,6 +256,8 @@ function _typeof(obj) {
                 throw new TemmeError('InvalidOptionNameError', "\u201C".concat(key, "\u201D is not a valid option."));
             } else if (!options[key].isValid(hierarchy[key])) {
                 throw new TemmeError('InvalidOptionTypeError', "The option \u201C".concat(key, "\u201D must be of type ").concat(options[key].type, "."));
+            } else if (key === 'ref' && hierarchy[key].trim()[0] === '@') {
+                throw new TemmeError('InvalidReference', 'References should not start with the symbole `@`.');
             }
         } // Assigning temmeIds.
 
@@ -258,37 +284,13 @@ function _typeof(obj) {
         }
     }
     /**
-     * Temme's custom exception.
-     * 
-     * @param {String} name The name of the exception.
-     * @param {String} message The message of the exception.
-     */
-
-
-    function TemmeError() {
-        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'TemmeError';
-        var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Something went wrong.';
-
-        /**
-         * The name of the error.
-         */
-        this.name = name;
-        /**
-         * The message of the error.
-         */
-
-        this.message = message;
-    } // Inheriting from the Error.
-
-
-    TemmeError.prototype = Error.prototype;
-    /**
      *  Gets all the references in the hierarchy object.
      * 
      * @param {Object} hierarchy The hierarchy object to get the references from.
      * @param {Number} depth The depth of the processed element in the hierarchy object.
      * @param {Array} references The array that will store the references found.
      */
+
 
     function getReferences(hierarchy, depth, references) {
         // Checking if the hierarchy object has a valid `ref` key.
@@ -345,7 +347,8 @@ function _typeof(obj) {
                                     }
                                 }
                             }
-                        }
+                        } // Checking of the reference string is not empty.
+
 
                         if (hierarchy['from']['ref'].length > 0) {
                             (function() {
@@ -429,20 +432,60 @@ function _typeof(obj) {
 
                                         default:
                                             {
-                                                throw TemmeError('InvalidReferenceMode', "\u201C".concat(mode, "\u201D is not a valid referencing mode."));
+                                                throw new TemmeError('InvalidReferenceMode', "\u201C".concat(mode, "\u201D is not a valid referencing mode."));
                                             }
                                     }
                                 };
 
-                                // Getting the filtered references, must equal the one the current
-                                // element is pointing to and has a lower or a matching depth
-                                // indicating it's either a parent or a sibling so that no parent
-                                // element can reference a child element.
-                                var reference = references.filter(function(ref) {
-                                    return ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth;
-                                }).sort(function(refA, refB) {
-                                    return refB.depth - refA.depth;
-                                })[0];
+                                // The reference object to append values from.
+                                var reference = {
+                                    refElement: {},
+                                    depth: depth
+                                };
+
+                                if (hierarchy['from']['ref'].trim()[0] === '@') {
+                                    // If the reference starts with `@` it's pointing to an outer element
+                                    // with that CSS selector.
+                                    var selector = hierarchy['from']['ref'].slice(1),
+                                        outerElement = document.querySelector(selector); // Checking if the referenced element is a valid HTML element.
+
+                                    if (outerElement != null || outerElement instanceof HTMLElement) {
+                                        var outerAttr = {},
+                                            outerData = {}; // Getting the attributes.
+
+                                        for (var attrKey in outerElement.attributes) {
+                                            if (!isNaN(parseInt(attrKey)) && !['id', 'class'].includes(outerElement.attributes[attrKey].nodeName) && !outerElement.attributes[attrKey].nodeName.startsWith('data-')) {
+                                                outerAttr[outerElement.attributes[attrKey].nodeName] = outerElement.attributes[attrKey].nodeValue;
+                                            }
+                                        } // Getting the dataset.
+
+
+                                        for (var dataKey in outerElement.dataset) {
+                                            outerData[dataKey] = outerElement.dataset[dataKey];
+                                        } // Affecting all values.
+
+
+                                        reference.refElement = {
+                                            id: outerElement.id,
+                                            html: outerElement.innerHTML,
+                                            classes: _toConsumableArray(outerElement.classList),
+                                            attributes: outerAttr,
+                                            dataset: outerData
+                                        };
+                                    } else {
+                                        throw new TemmeError('InvalidReference', "No valid HTML element corresponds to the CSS selector \u201C".concat(selector, "\u201D"));
+                                    }
+                                } else {
+                                    // Getting the filtered references, must equal the one the current
+                                    // element is pointing to and has a lower or a matching depth
+                                    // indicating it's either a parent or a sibling so that no parent
+                                    // element can reference a child element.
+                                    reference = references.filter(function(ref) {
+                                        return ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth;
+                                    }).sort(function(refA, refB) {
+                                        return refB.depth - refA.depth;
+                                    })[0];
+                                }
 
                                 if (hierarchy['from']['allowChildren'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
                                     throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");

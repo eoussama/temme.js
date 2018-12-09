@@ -140,6 +140,28 @@
     };
 
     /**
+     * Temme's custom exception.
+     * 
+     * @param {String} name The name of the exception.
+     * @param {String} message The message of the exception.
+     */
+    function TemmeError(name = 'TemmeError', message = 'Something went wrong.') {
+
+        /**
+         * The name of the error.
+         */
+        this.name = name;
+
+        /**
+         * The message of the error.
+         */
+        this.message = message;
+    }
+
+    // Inheriting from the Error.
+    TemmeError.prototype = Error.prototype;
+
+    /**
      * Generates a unique string of 6 characters.
      */
     function generateTemmeId() {
@@ -172,6 +194,8 @@
                 throw new TemmeError('InvalidOptionNameError', `“${key}” is not a valid option.`);
             } else if (!options[key].isValid(hierarchy[key])) {
                 throw new TemmeError('InvalidOptionTypeError', `The option “${key}” must be of type ${options[key].type}.`);
+            } else if (key === 'ref' && hierarchy[key].trim()[0] === '@') {
+                throw new TemmeError('InvalidReference', 'References should not start with the symbole `@`.');
             }
         }
 
@@ -199,28 +223,6 @@
             });
         }
     }
-
-    /**
-     * Temme's custom exception.
-     * 
-     * @param {String} name The name of the exception.
-     * @param {String} message The message of the exception.
-     */
-    function TemmeError(name = 'TemmeError', message = 'Something went wrong.') {
-
-        /**
-         * The name of the error.
-         */
-        this.name = name;
-
-        /**
-         * The message of the error.
-         */
-        this.message = message;
-    }
-
-    // Inheriting from the Error.
-    TemmeError.prototype = Error.prototype;
 
     /**
      *  Gets all the references in the hierarchy object.
@@ -293,15 +295,64 @@
                         }
                     }
 
+                    // Checking of the reference string is not empty.
                     if (hierarchy['from']['ref'].length > 0) {
 
-                        // Getting the filtered references, must equal the one the current
-                        // element is pointing to and has a lower or a matching depth
-                        // indicating it's either a parent or a sibling so that no parent
-                        // element can reference a child element.
-                        const reference = references
-                            .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
-                            .sort((refA, refB) => refB.depth - refA.depth)[0];
+                        // The reference object to append values from.
+                        let reference = {
+                            refElement: {},
+                            depth: depth
+                        };
+
+                        if (hierarchy['from']['ref'].trim()[0] === '@') {
+
+                            // If the reference starts with `@` it's pointing to an outer element
+                            // with that CSS selector.
+                            const
+                                selector = hierarchy['from']['ref'].slice(1),
+                                outerElement = document.querySelector(selector);
+
+                            // Checking if the referenced element is a valid HTML element.
+                            if (outerElement != null || outerElement instanceof HTMLElement) {
+
+                                let
+                                    outerAttr = {},
+                                    outerData = {};
+
+                                // Getting the attributes.
+                                for (let attrKey in outerElement.attributes) {
+                                    if (!isNaN(parseInt(attrKey)) && !['id', 'class'].includes(outerElement.attributes[attrKey].nodeName) && !outerElement.attributes[attrKey].nodeName.startsWith('data-')) {
+                                        outerAttr[outerElement.attributes[attrKey].nodeName] = outerElement.attributes[attrKey].nodeValue;
+                                    }
+                                }
+
+                                // Getting the dataset.
+                                for (let dataKey in outerElement.dataset) {
+                                    outerData[dataKey] = outerElement.dataset[dataKey];
+                                }
+
+                                // Affecting all values.
+                                reference.refElement = {
+                                    id: outerElement.id,
+                                    html: outerElement.innerHTML,
+                                    classes: [...outerElement.classList],
+                                    attributes: outerAttr,
+                                    dataset: outerData
+                                };
+                            } else {
+                                throw new TemmeError('InvalidReference', `No valid HTML element corresponds to the CSS selector “${selector}”`);
+                            }
+
+                        } else {
+
+                            // Getting the filtered references, must equal the one the current
+                            // element is pointing to and has a lower or a matching depth
+                            // indicating it's either a parent or a sibling so that no parent
+                            // element can reference a child element.
+                            reference = references
+                                .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
+                                .sort((refA, refB) => refB.depth - refA.depth)[0];
+                        }
 
                         if (hierarchy['from']['allowChildren'] === true && hierarchy['temmeIds'].includes(reference.refElement['temmeIds'][reference.refElement['temmeIds'].length - 1])) {
                             throw new TemmeError('InvalidReference', "Elements cannot reference their parents while “allowChildren” is set to “true”.");
@@ -323,7 +374,7 @@
                                         if (!['from', 'ref', 'name', 'children', 'temmeIds'].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
-                                                        
+
                                                     // Removing any duplicate classes.
                                                     const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
 
@@ -383,7 +434,7 @@
                                 }
 
                                 default: {
-                                    throw TemmeError('InvalidReferenceMode', `“${mode}” is not a valid referencing mode.`);
+                                    throw new TemmeError('InvalidReferenceMode', `“${mode}” is not a valid referencing mode.`);
                                 }
                             }
                         }
@@ -425,7 +476,7 @@
      * @param {Number} depth The depth of the current element in the hierarchy object.
      * @param {Function} callback The callback to execute whenever an element has been created.
      */
-    function temmefy(hierarchy, element, depth, callback = (temmeId, currentHierarchy, depth) => {}) {
+    function temmefy(hierarchy, element, depth, callback = (temmeId, currentHierarchy, depth) => { }) {
 
         // Parsing all the values.
         for (let key in hierarchy) {
@@ -528,7 +579,7 @@
 
                             // Adding the temmefied element to its parent.
                             element.appendChild(childNode);
-                            
+
                             // Temmefying all the sub children as well.
                             temmefy(child, childNode, ++depth, callback);
                         });
@@ -551,7 +602,7 @@
      * @param {Function} temmeCallback The callback to execute when all objects have been created.
      * @param {Function} elementCallback The callback to execute whenever an element has been created.
      */
-    function Temme(hierarchy = {}, target = document.body, temmeCallback = () => {}, elementCallback = (temmeId, currentHierarchy, depth) => {}) {
+    function Temme(hierarchy = {}, target = document.body, temmeCallback = () => { }, elementCallback = (temmeId, currentHierarchy, depth) => { }) {
         try {
 
             // Checking if the hierarchy object is valid.
@@ -569,6 +620,7 @@
 
             // Supervising the references.
             (() => {
+
                 /**
                  *  Holds all elements with a reference in the hierarchy object.
                  */

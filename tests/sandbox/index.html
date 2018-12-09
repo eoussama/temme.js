@@ -56,7 +56,10 @@
             <h1>Temme JS Sandbox</h1>
             <hr>
     
-            <!-- The main content. -->
+            <!-- Some other unrelated element. -->
+            <div id="outer-target" data-id="10" data-title="Hey" visible="true" disabled="false" class="outer-class another-outer-class"></div>
+
+            <!-- The main target element. -->
             <div id="target" class="orange"></div>
         </main>
 
@@ -65,12 +68,13 @@
 
         <!-- The main javascript code. -->
         <script>
+
             // Getting the parent element.
             const target = document.getElementById('target');
 
             // Testing up the hierarchy object.
             const hierarchy = {
-                ref: 'parent',
+                ref: 'outer-target',
                 classes: ['red', 'blue'],
                 children: [
                     {
@@ -82,7 +86,7 @@
                             },
                             {
                                 from: {
-                                    ref: 'sibling'
+                                    ref: '@#outer-target'
                                 },
                                 classes: ['black']
                             }
