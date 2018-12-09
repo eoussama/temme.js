@@ -58,7 +58,9 @@
         <hr>
 
         <!-- Some other unrelated element. -->
-        <div id="outer-target" data-id="10" data-title="Hey" visible="true" disabled="false" class="outer-class another-outer-class"></div>
+        <div id="outer-target" data-id="10" data-title="Hey" visible="true" disabled="false" class="outer-class another-outer-class">
+            <p>lorem <u>ipsum.</u></p>
+        </div>
 
         <!-- The main target element. -->
         <div id="target"></div>
@@ -83,13 +85,35 @@
                     children: [
                         {
                             ref: 'sibling',
-                            classes: ['yellow', 'orange']
+                            classes: ['yellow', 'orange'],
+                            children: [
+                                {
+                                    name: 'u',
+                                    text: 'Inherited.'
+                                },
+                                {
+                                    name: 'u',
+                                    text: 'Inherited 2.'
+                                },
+                                {
+                                    name: 'u',
+                                    text: 'Inherited 3.'
+                                }
+                            ]
                         },
                         {
                             from: {
-                                ref: '@#outer-target'
+                                ref: 'sibling',
+                                mode: 'append',
+                                allowChildren: false
                             },
-                            classes: ['black']
+                            classes: ['black'],
+                            children: [
+                                {
+                                    name: 'i',
+                                    text: 'Not inherited'
+                                }
+                            ]
                         }
                     ]
                 }

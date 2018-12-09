@@ -133,6 +133,11 @@
                     default: false,
                     type: 'boolean',
                     isValid: (allowChildren) => allowChildren != null && typeof allowChildren === 'boolean'
+                },
+                childrenFirst: {
+                    default: false,
+                    type: 'boolean',
+                    isValid: (childrenFirst) => childrenFirst != null && typeof childrenFirst === 'boolean'
                 }
             },
             isValid: (from) => from != null && !Array.isArray(from) && typeof from === 'object'
@@ -383,18 +388,31 @@
                                     for (let k in reference.refElement) {
 
                                         // Avoiding inheriting the `from`, `name` options.
-                                        if (!['from', 'ref', 'id', 'name', 'children', 'temmeIds'].includes(k)) {
+                                        if (!['from', 'ref', 'id', 'name', 'temmeIds', (hierarchy['from']['allowChildren'] !== true ? 'children' : '')].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
 
-                                                    // Removing any duplicate classes.
-                                                    const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
+                                                    if (k !== 'children') {
 
-                                                    // Sorting and concatinating the classes.
-                                                    const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
+                                                        // Removing any duplicate classes.
+                                                        const filteredClasses = reference.refElement[k].filter((cls, index) => !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0);
+    
+                                                        // Sorting and concatinating the classes.
+                                                        const sanitizedClasses = ([...hierarchy[k], ...filteredClasses]).sort();
+    
+                                                        // Assigning the classes.
+                                                        hierarchy[k] = sanitizedClasses;
+                                                    } else {
 
-                                                    // Assigning the classes.
-                                                    hierarchy[k] = sanitizedClasses;
+                                                        // If the children append mode is on `childrenFirst`, meaning
+                                                        // The referenced object's children should could before the
+                                                        // referencing object's. Otherwise, the should come after.
+                                                        if (hierarchy['from']['childrenFirst']) {
+                                                            hierarchy[k].unshift(...reference.refElement[k]);
+                                                        } else {
+                                                            hierarchy[k].push(...reference.refElement[k]);
+                                                        }
+                                                    }
 
                                                     break;
                                                 }

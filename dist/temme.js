@@ -194,6 +194,13 @@ function _typeof(obj) {
                     isValid: function isValid(allowChildren) {
                         return allowChildren != null && typeof allowChildren === 'boolean';
                     }
+                },
+                childrenFirst: {
+                    default: false,
+                    type: 'boolean',
+                    isValid: function isValid(childrenFirst) {
+                        return childrenFirst != null && typeof childrenFirst === 'boolean';
+                    }
                 }
             },
             isValid: function isValid(from) {
@@ -363,19 +370,35 @@ function _typeof(obj) {
                                             {
                                                 var _loop = function _loop(k) {
                                                     // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'id', 'name', 'children', 'temmeIds'].includes(k)) {
+                                                    if (!['from', 'ref', 'id', 'name', 'temmeIds', hierarchy['from']['allowChildren'] !== true ? 'children' : ''].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'array':
                                                                 {
-                                                                    // Removing any duplicate classes.
-                                                                    var filteredClasses = reference.refElement[k].filter(function(cls, index) {
-                                                                        return !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0;
-                                                                    }); // Sorting and concatinating the classes.
+                                                                    if (k !== 'children') {
+                                                                        // Removing any duplicate classes.
+                                                                        var filteredClasses = reference.refElement[k].filter(function(cls, index) {
+                                                                            return !hierarchy[k].includes(cls) && reference.refElement[k].indexOf(cls) === index && cls.trim().length > 0;
+                                                                        }); // Sorting and concatinating the classes.
 
-                                                                    var sanitizedClasses = _toConsumableArray(hierarchy[k]).concat(_toConsumableArray(filteredClasses)).sort(); // Assigning the classes.
+                                                                        var sanitizedClasses = _toConsumableArray(hierarchy[k]).concat(_toConsumableArray(filteredClasses)).sort(); // Assigning the classes.
 
 
-                                                                    hierarchy[k] = sanitizedClasses;
+                                                                        hierarchy[k] = sanitizedClasses;
+                                                                    } else {
+                                                                        // If the children append mode is on `childrenFirst`, meaning
+                                                                        // The referenced object's children should could before the
+                                                                        // referencing object's. Otherwise, the should come after.
+                                                                        if (hierarchy['from']['childrenFirst']) {
+                                                                            var _hierarchy$k;
+
+                                                                            (_hierarchy$k = hierarchy[k]).unshift.apply(_hierarchy$k, _toConsumableArray(reference.refElement[k]));
+                                                                        } else {
+                                                                            var _hierarchy$k2;
+
+                                                                            (_hierarchy$k2 = hierarchy[k]).push.apply(_hierarchy$k2, _toConsumableArray(reference.refElement[k]));
+                                                                        }
+                                                                    }
+
                                                                     break;
                                                                 }
 
