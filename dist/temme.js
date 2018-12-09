@@ -233,6 +233,17 @@ function _typeof(obj) {
             isValid: function isValid(templates) {
                 return templates != null && Array.isArray(templates);
             }
+        },
+
+        /**
+         * Whether a sub-hierarchy object is a template or not. Used only internaly.
+         */
+        isTemplate: {
+            default: false,
+            type: 'boolean',
+            isValid: function isValid(isTemplate) {
+                return isTemplate != null && typeof isTemplate === 'boolean';
+            }
         }
     };
     /**
@@ -305,16 +316,23 @@ function _typeof(obj) {
 
         for (var _key2 in options) {
             if (!(_key2 in hierarchy)) {
-                if (options[_key2].type === 'object') {
-                    if (!ignore.includes(_key2)) {
+                // Ignore the optional passed arguments, used to 
+                // skip on `name` and `children` for templates.
+                if (!ignore.includes(_key2)) {
+                    if (options[_key2].type === 'object') {
                         hierarchy[_key2] = Object.create(options[_key2].default);
-                    }
-                } else {
-                    if (!ignore.includes(_key2)) {
+                    } else {
                         hierarchy[_key2] = options[_key2].default;
                     }
+
+                    if (hierarchy.isTemplate !== true) {
+                        hierarchy.isTemplate = false;
+                    }
+                } else {
+                    hierarchy.isTemplate = true;
                 }
             } else if (_key2 === 'from') {
+                // If no `children` option exist, assign a default.
                 if (!('children' in hierarchy['from'])) {
                     hierarchy['from']['children'] = Object.create(options['from']['keys']['children'].default);
                 } else {
@@ -332,7 +350,7 @@ function _typeof(obj) {
         if ('templates' in hierarchy) {
             // Looping through the children.
             hierarchy['templates'].forEach(function(template) {
-                checkOptions(template, hierarchy['temmeIds'], ['name', 'children']);
+                checkOptions(template, hierarchy['temmeIds'], ['name', 'children', 'templates']);
             });
         } // Checking if the element has children.
 
@@ -361,12 +379,15 @@ function _typeof(obj) {
                     throw new TemmeError('InvalidTemplate', "Templates must not have a `name` option.");
                 } else if ('children' in template) {
                     throw new TemmeError('InvalidTemplate', "Templates must not have a `children` option.");
+                } else if ('templates' in template) {
+                    throw new TemmeError('InvalidTemplate', "Template nesting is not allowed.");
                 } else if ('ref' in template) {
                     // Adding the element to the references array as it's a
                     // valid reference.
                     references.push({
                         refElement: template,
-                        depth: depth
+                        depth: depth,
+                        isTemplate: true
                     });
                 } else {
                     throw new TemmeError('InvalidTemplate', "Templates must have a `ref` option, otherwise, they are invalid.");
@@ -380,7 +401,8 @@ function _typeof(obj) {
             // valid reference.
             references.push({
                 refElement: hierarchy,
-                depth: depth
+                depth: depth,
+                isTemplate: false
             });
         } // Checking if the element has any children.
 
@@ -444,7 +466,7 @@ function _typeof(obj) {
                                             {
                                                 var _loop = function _loop(k) {
                                                     // Avoiding inheriting the `from`, `name` options.
-                                                    if (!['from', 'ref', 'id', 'name', 'temmeIds', hierarchy['from']['children']['allow'] !== true ? 'children' : ''].includes(k)) {
+                                                    if (!['from', 'ref', 'id', 'name', 'temmeIds', 'isTemplate', 'templates', hierarchy['from']['children']['allow'] !== true ? 'children' : ''].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'array':
                                                                 {
@@ -524,7 +546,7 @@ function _typeof(obj) {
                                                 // looping through all the referenced object's options.
                                                 for (var k in reference.refElement) {
                                                     // Avoiding inheriting the `from` and `name.
-                                                    if (!['from', 'ref', 'name', 'temmeIds', hierarchy['from']['children']['allow'] !== true ? 'children' : ''].includes(k)) {
+                                                    if (!['from', 'ref', 'name', 'temmeIds', 'isTemplate', 'templates', hierarchy['from']['children']['allow'] !== true ? 'children' : ''].includes(k)) {
                                                         switch (options[k].type) {
                                                             case 'object':
                                                                 {
@@ -557,7 +579,8 @@ function _typeof(obj) {
                                 // The reference object to append values from.
                                 var reference = {
                                     refElement: {},
-                                    depth: depth
+                                    depth: depth,
+                                    template: false
                                 };
 
                                 if (hierarchy['from']['ref'].trim()[0] === '@') {
@@ -598,7 +621,7 @@ function _typeof(obj) {
                                     // indicating it's either a parent or a sibling so that no parent
                                     // element can reference a child element.
                                     reference = references.filter(function(ref) {
-                                        return ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth;
+                                        return ref.refElement.ref === hierarchy['from']['ref'] && ref.depth <= depth;
                                     }).sort(function(refA, refB) {
                                         return refB.depth - refA.depth;
                                     })[0];
@@ -609,11 +632,16 @@ function _typeof(obj) {
                                 }
 
                                 if (typeof reference !== 'undefined') {
-                                    // Checking if the referencing object `from` has a reference mode.
-                                    if ('mode' in hierarchy['from']) {
-                                        referenceMode(hierarchy['from']['mode']);
+                                    // Checking if a template trying to inherite an element and preventing it.
+                                    if (reference.isTemplate === false && hierarchy.isTemplate === true) {
+                                        throw new TemmeError('InvalidReference', 'Templates can only reference other templates.');
                                     } else {
-                                        referenceMode('append');
+                                        // Checking if the referencing object `from` has a reference mode.
+                                        if ('mode' in hierarchy['from']) {
+                                            referenceMode(hierarchy['from']['mode']);
+                                        } else {
+                                            referenceMode('append');
+                                        }
                                     }
                                 } else {
                                     throw new TemmeError('InvalidReference', "\u201C".concat(hierarchy['from']['ref'], "\u201D is an invalid reference."));

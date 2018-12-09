@@ -158,6 +158,15 @@
             default: [],
             type: 'array',
             isValid: (templates) => templates != null && Array.isArray(templates)
+        },
+
+        /**
+         * Whether a sub-hierarchy object is a template or not. Used only internaly.
+         */
+        isTemplate: {
+            default: false,
+            type: 'boolean',
+            isValid: (isTemplate) => isTemplate != null && typeof isTemplate === 'boolean'
         }
     };
 
@@ -230,20 +239,29 @@
         // Populating empty options with defaults.
         for (const key in options) {
             if (!(key in hierarchy)) {
-                if (options[key].type === 'object') {
-                    if (!ignore.includes(key)) {
+
+                // Ignore the optional passed arguments, used to 
+                // skip on `name` and `children` for templates.
+                if (!ignore.includes(key)) {
+                    if (options[key].type === 'object') {
                         hierarchy[key] = Object.create(options[key].default);
-                    }
-                } else {
-                    if (!ignore.includes(key)) {
+                    } else {
                         hierarchy[key] = options[key].default;
                     }
+
+                    if (hierarchy.isTemplate !== true) {
+                        hierarchy.isTemplate = false;
+                    }
+                } else {
+                    hierarchy.isTemplate = true;
                 }
             } else if (key === 'from') {
+
+                // If no `children` option exist, assign a default.
                 if (!('children' in hierarchy['from'])) {
                     hierarchy['from']['children'] = Object.create(options['from']['keys']['children'].default);
                 } else {
-                    
+
                     // Checking of the object lacks any `from.children` keys and setting the default values.
                     for (const _key in options['from']['keys']['children']['keys']) {
                         if (!(_key in hierarchy['from']['children'])) {
@@ -259,7 +277,7 @@
 
             // Looping through the children.
             hierarchy['templates'].forEach(template => {
-                checkOptions(template, hierarchy['temmeIds'], ['name', 'children']);
+                checkOptions(template, hierarchy['temmeIds'], ['name', 'children', 'templates']);
             });
         }
 
@@ -287,16 +305,18 @@
             hierarchy['templates'].forEach(template => {
                 if ('name' in template) {
                     throw new TemmeError('InvalidTemplate', "Templates must not have a `name` option.");
-                }
-                else if ('children' in template) {
+                } else if ('children' in template) {
                     throw new TemmeError('InvalidTemplate', "Templates must not have a `children` option.");
+                } else if ('templates' in template) {
+                    throw new TemmeError('InvalidTemplate', "Template nesting is not allowed.");
                 } else if ('ref' in template) {
 
                     // Adding the element to the references array as it's a
                     // valid reference.
                     references.push({
                         refElement: template,
-                        depth: depth
+                        depth: depth,
+                        isTemplate: true
                     });
                 } else {
                     throw new TemmeError('InvalidTemplate', "Templates must have a `ref` option, otherwise, they are invalid.");
@@ -311,7 +331,8 @@
             // valid reference.
             references.push({
                 refElement: hierarchy,
-                depth: depth
+                depth: depth,
+                isTemplate: false
             });
         }
 
@@ -336,7 +357,7 @@
     function processReferences(hierarchy, depth, references) {
 
         // Looping through all keys of the hierarchy object.
-        for (let key in hierarchy) {
+        for (const key in hierarchy) {
             switch (key) {
 
                 // Parssing the references.
@@ -345,7 +366,7 @@
                     if (!('ref' in hierarchy['from'])) {
                         throw new TemmeError('InvalidReferencingObject', "The “from” option must have a “ref” key, otherwise, it's invalid");
                     } else {
-                        for (let fromKey in hierarchy['from']) {
+                        for (const fromKey in hierarchy['from']) {
 
                             // Checking if the from key is invalid.
                             if (!Object.keys(options['from'].keys).includes(fromKey)) {
@@ -372,7 +393,8 @@
                         // The reference object to append values from.
                         let reference = {
                             refElement: {},
-                            depth: depth
+                            depth: depth,
+                            template: false
                         };
 
                         if (hierarchy['from']['ref'].trim()[0] === '@') {
@@ -391,14 +413,14 @@
                                     outerData = {};
 
                                 // Getting the attributes.
-                                for (let attrKey in outerElement.attributes) {
+                                for (const attrKey in outerElement.attributes) {
                                     if (!isNaN(parseInt(attrKey)) && !['id', 'class'].includes(outerElement.attributes[attrKey].nodeName) && !outerElement.attributes[attrKey].nodeName.startsWith('data-')) {
                                         outerAttr[outerElement.attributes[attrKey].nodeName] = outerElement.attributes[attrKey].nodeValue;
                                     }
                                 }
 
                                 // Getting the dataset.
-                                for (let dataKey in outerElement.dataset) {
+                                for (const dataKey in outerElement.dataset) {
                                     outerData[dataKey] = outerElement.dataset[dataKey];
                                 }
 
@@ -421,7 +443,7 @@
                             // indicating it's either a parent or a sibling so that no parent
                             // element can reference a child element.
                             reference = references
-                                .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth < depth)
+                                .filter(ref => ref.refElement.ref === hierarchy['from']['ref'] && ref.depth <= depth)
                                 .sort((refA, refB) => refB.depth - refA.depth)[0];
                         }
 
@@ -431,11 +453,17 @@
 
                         if (typeof reference !== 'undefined') {
 
-                            // Checking if the referencing object `from` has a reference mode.
-                            if ('mode' in hierarchy['from']) {
-                                referenceMode(hierarchy['from']['mode']);
+                            // Checking if a template trying to inherite an element and preventing it.
+                            if (reference.isTemplate === false && hierarchy.isTemplate === true) {
+                                throw new TemmeError('InvalidReference', 'Templates can only reference other templates.');
                             } else {
-                                referenceMode('append');
+
+                                // Checking if the referencing object `from` has a reference mode.
+                                if ('mode' in hierarchy['from']) {
+                                    referenceMode(hierarchy['from']['mode']);
+                                } else {
+                                    referenceMode('append');
+                                }
                             }
                         } else {
                             throw new TemmeError('InvalidReference', `“${hierarchy['from']['ref']}” is an invalid reference.`);
@@ -451,10 +479,10 @@
                                 case 'append': {
 
                                     // looping through all the referenced object's options.
-                                    for (let k in reference.refElement) {
+                                    for (const k in reference.refElement) {
 
                                         // Avoiding inheriting the `from`, `name` options.
-                                        if (!['from', 'ref', 'id', 'name', 'temmeIds', (hierarchy['from']['children']['allow'] !== true ? 'children' : '')].includes(k)) {
+                                        if (!['from', 'ref', 'id', 'name', 'temmeIds', 'isTemplate', 'templates', (hierarchy['from']['children']['allow'] !== true ? 'children' : '')].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'array': {
 
@@ -498,7 +526,7 @@
                                                 case 'object': {
 
                                                     // Override only the matching keys.
-                                                    for (let refKey in reference.refElement[k]) {
+                                                    for (const refKey in reference.refElement[k]) {
                                                         if (!(refKey in hierarchy[k])) {
                                                             hierarchy[k][refKey] = reference.refElement[k][refKey];
                                                         }
@@ -520,15 +548,15 @@
                                 case 'override': {
 
                                     // looping through all the referenced object's options.
-                                    for (let k in reference.refElement) {
+                                    for (const k in reference.refElement) {
 
                                         // Avoiding inheriting the `from` and `name.
-                                        if (!['from', 'ref', 'name', 'temmeIds', (hierarchy['from']['children']['allow'] !== true ? 'children' : '')].includes(k)) {
+                                        if (!['from', 'ref', 'name', 'temmeIds', 'isTemplate', 'templates', (hierarchy['from']['children']['allow'] !== true ? 'children' : '')].includes(k)) {
                                             switch (options[k].type) {
                                                 case 'object': {
 
                                                     // Override only the matching keys.
-                                                    for (let refKey in reference.refElement[k]) {
+                                                    for (const refKey in reference.refElement[k]) {
                                                         hierarchy[k][refKey] = reference.refElement[k][refKey];
                                                     }
 
@@ -589,7 +617,7 @@
     function temmefy(hierarchy, element, depth, callback = (temmeId, currentHierarchy, depth) => { }) {
 
         // Parsing all the values.
-        for (let key in hierarchy) {
+        for (const key in hierarchy) {
 
             // Parsing the hierarchy object.
             switch (key) {
