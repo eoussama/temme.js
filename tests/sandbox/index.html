@@ -75,12 +75,18 @@
             templates: [
                 {
                     ref: 'temp-1',
+                    attributes: {
+                        visible: true
+                    },
                     classes: ['bold', 'italic']
                 },
                 {
                     ref: 'temp-2',
                     from: {
                         ref: 'temp-1'
+                    },
+                    dataset: {
+                        id: 100
                     },
                     classes: ['yellow']
                 }
@@ -101,11 +107,7 @@
                         ref: 'temp-3'
                     },
                     name: 'h1',
-                    children: [
-                        {
-                            name: 'span'
-                        }
-                    ],
+                    html: "<i>Italic</i>",
                     classes: ['red']
                 }
             ]

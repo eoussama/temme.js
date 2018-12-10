@@ -277,7 +277,7 @@
 
             // Looping through the children.
             hierarchy['templates'].forEach(template => {
-                checkOptions(template, hierarchy['temmeIds'], ['name', 'children', 'templates']);
+                checkOptions(template, hierarchy['temmeIds'], ['name', 'children', 'templates', 'text', 'html']);
             });
         }
 
@@ -305,6 +305,10 @@
             hierarchy['templates'].forEach(template => {
                 if ('name' in template) {
                     throw new TemmeError('InvalidTemplate', "Templates must not have a `name` option.");
+                } else if ('text' in template) {
+                    throw new TemmeError('InvalidTemplate', "Templates must not have a `text` option.");
+                } else if ('html' in template) {
+                    throw new TemmeError('InvalidTemplate', "Templates must not have a `html` option.");
                 } else if ('children' in template) {
                     throw new TemmeError('InvalidTemplate', "Templates must not have a `children` option.");
                 } else if ('templates' in template) {
