@@ -1,19 +1,13 @@
 const
     gulp = require('gulp'),
-    babel = require('gulp-babel'),
     rename = require('gulp-rename'),
-    beautify = require('gulp-beautify'),
     uglify = require('gulp-uglify');
 
 // Building the code for production.
 gulp.task('build', () => {
-    gulp.src('src/temme.js')
+    gulp.src('src/temme.ts')
 
-        // Translating code.
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
-        .pipe(beautify())
+        // Compiling from typescript to javascript.
         .pipe(gulp.dest('dist'))
 
         // Minifying Temme.
@@ -23,4 +17,5 @@ gulp.task('build', () => {
         .pipe(gulp.dest('docs/assets/js/lib'));
 });
 
+// Gulp's default task.
 gulp.task('default', ['build']);

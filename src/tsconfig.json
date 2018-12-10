@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"outFile": "../dist/temme.js",
+		"outDir": "../dist/",
+		"rootDir": "./",
+		"sourceRoot": "./",
+		"removeComments": true,
+		"esModuleInterop": true,
+		"strict": true,
+		"sourceMap": true
+	}
+}
