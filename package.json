@@ -1,38 +1,38 @@
 {
-  "name": "temmejs",
-  "version": "1.0.0",
-  "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "test": "tests"
-  },
-  "scripts": {
-    "build": "npx gulp",
-    "test": "clear && npx jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EOussama/temmejs.git"
-  },
-  "keywords": [
-    "javascript",
-    "javascript-library",
-    "dom",
-    "emmet"
-  ],
-  "author": "EOussama",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/EOussama/temmejs/issues"
-  },
-  "homepage": "https://github.com/EOussama/temmejs#readme",
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1",
-    "jest": "^23.6.0",
-    "typescript": "^3.2.2"
-  },
-  "dependencies": {}
+	"name": "temmejs",
+	"version": "1.0.0",
+	"description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
+	"directories": {
+		"doc": "docs",
+		"example": "examples",
+		"test": "tests"
+	},
+	"scripts": {
+		"build": "npx gulp",
+		"test": "clear && npx jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/EOussama/temmejs.git"
+	},
+	"keywords": [
+		"javascript",
+		"javascript-library",
+		"dom",
+		"emmet"
+	],
+	"author": "EOussama",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/EOussama/temmejs/issues"
+	},
+	"homepage": "https://github.com/EOussama/temmejs#readme",
+	"devDependencies": {
+		"gulp": "^3.9.1",
+		"gulp-rename": "^1.4.0",
+		"gulp-typescript": "^5.0.0",
+		"gulp-uglify": "^3.0.1",
+		"jest": "^23.6.0",
+		"typescript": "^3.2.2"
+	}
 }
