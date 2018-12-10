@@ -11,3 +11,8 @@
  * and now, Temme is doing Javascript the same favour too.
  * 
  */
+
+ import { options } from "./modules/options";
+
+ console.log(options);
+ 

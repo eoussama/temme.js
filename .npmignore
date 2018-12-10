@@ -17,5 +17,5 @@ gulpfile.js
 .gitignore
 .gitattributes
 
-# Ignoring bower specific files.
-bower.json
+# Ignoring webpack configurations.
+webpack.config.js

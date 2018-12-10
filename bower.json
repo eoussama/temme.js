@@ -21,7 +21,7 @@
     "tests",
     "src",
     ".vscode",
-    "gulpfile.js",
+    "webpack.config.js",
     ".npmignore"
   ]
 }

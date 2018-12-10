@@ -8,8 +8,11 @@
 		"test": "tests"
 	},
 	"scripts": {
-		"build": "npx gulp",
-		"test": "clear && npx jest"
+		"clean": "rm -rf dist",
+		"build": "npx webpack --mode development",
+		"prod": "npx webpack --mode production",
+		"docs": "mkdir \"docs/assets/js/lib\" && cp \"./dist/temme.js\" \"./docs/assets/js/lib/\"",
+		"test": "npx jest"
 	},
 	"repository": {
 		"type": "git",
@@ -28,11 +31,10 @@
 	},
 	"homepage": "https://github.com/EOussama/temmejs#readme",
 	"devDependencies": {
-		"gulp": "^3.9.1",
-		"gulp-rename": "^1.4.0",
-		"gulp-typescript": "^5.0.0",
-		"gulp-uglify": "^3.0.1",
 		"jest": "^23.6.0",
-		"typescript": "^3.2.2"
+		"ts-loader": "^5.3.1",
+		"typescript": "^3.2.2",
+		"webpack": "^4.27.1",
+		"webpack-cli": "^3.1.2"
 	}
 }
