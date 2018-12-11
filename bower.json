@@ -21,6 +21,7 @@
     "test",
     "tests",
     "src",
+    "build",
     ".vscode",
     "webpack.config.js",
     ".npmignore"

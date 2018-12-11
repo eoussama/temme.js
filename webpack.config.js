@@ -8,7 +8,7 @@ module.exports = {
     	library: 'Temme',
 		path: path.resolve(__dirname, 'dist')
 	},
-	mode: 'development',
+	mode: 'production',
 	devtool: 'inline-source-map',
 	module: {
 		rules: [

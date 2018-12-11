@@ -8,10 +8,11 @@
 		"test": "tests"
 	},
 	"scripts": {
-		"clean": "rm -rf dist",
-		"build": "npx webpack --mode development",
-		"prod": "npx webpack --mode production",
-		"docs": "mkdir \"docs/assets/js/lib\" && cp \"./dist/temme.js\" \"./docs/assets/js/lib/\"",
+		"clean": "rm -rf dist && rm -rf build",
+		"build": "npx tsc --outDir build --module commonjs",
+		"bundle": "npx webpack",
+		"docs": "rm -rf \"docs/assets/js/lib\" && mkdir \"docs/assets/js/lib\" && cp \"./dist/temme.js\" \"./docs/assets/js/lib/\"",
+		"prod": "npm run clean && npm run build && npm run bundle && npm run docs",
 		"test": "npx jest"
 	},
 	"repository": {

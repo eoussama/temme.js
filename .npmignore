@@ -7,6 +7,9 @@ node_modules/
 # Ignoring the source files.
 src/
 
+# Ignoring the build files.
+build/
+
 # Ignoring the tests.
 tests/
 
