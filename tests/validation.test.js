@@ -75,6 +75,59 @@ describe('Target checks.', () => {
 });
 
 
+describe('Hierarchy checks.', () => {
+
+    describe('Invalid hierarchy.', () => {
+
+        test('Checking if invalid hierarchy (undefined) throws an error.', () => {
+    
+            // Assert.
+            expect(validator.isValidHierarchy(undefined)).toBe(false);
+        });
+    
+        test('Checking if invalid hierarchy (null) throws an error.', () => {
+            
+            // Assert.
+            expect(validator.isValidHierarchy(null)).toBe(false);
+        });
+    
+        test('Checking if invalid hierarchy (boolean) throws an error.', () => {
+            
+            // Assert.
+            expect(validator.isValidHierarchy(false)).toBe(false);
+        });
+    
+        test('Checking if invalid hierarchy (number) throws an error.', () => {
+            
+            // Assert.
+            expect(validator.isValidHierarchy(1634)).toBe(false);
+        });
+    
+        test('Checking if invalid hierarchy (string) throws an error.', () => {
+            
+            // Assert.
+            expect(validator.isValidHierarchy('fls')).toBe(false);
+        });
+    
+        test('Checking if invalid hierarchy (array) throws an error.', () => {
+            
+            // Assert.
+            expect(validator.isValidHierarchy([])).toBe(false);
+        });
+    });
+
+    describe('Valid hierarchy.', () => {
+        test("Checking if invalid hierarchy (object) doesn't throw any error.", () => {
+            // Arrange.
+            const hierarchy = {};
+
+            // Assert.
+            expect(validator.isValidHierarchy(hierarchy)).toBe(true);
+        });
+    });
+});
+
+
 describe('Option checks.', () => {
 
     test('Checking if all options are loaded.', () => {
