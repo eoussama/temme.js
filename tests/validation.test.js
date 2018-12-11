@@ -65,6 +65,7 @@ describe('Target checks.', () => {
 
     describe('Valid target.', () => {
         test("Checking if invalid target (HTML element) doesn't throw any error.", () => {
+            
             // Arrange.
             const target = document.createElement('div');
 
@@ -118,6 +119,7 @@ describe('Hierarchy checks.', () => {
 
     describe('Valid hierarchy.', () => {
         test("Checking if invalid hierarchy (object) doesn't throw any error.", () => {
+
             // Arrange.
             const hierarchy = {};
 
