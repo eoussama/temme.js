@@ -6,7 +6,7 @@
 import Option from "../models/Option";
 
 
-export default class NameOption extends Option {
+export default class TemplatesOption extends Option {
 
     /**
      * Parameterless constructor.
@@ -17,7 +17,7 @@ export default class NameOption extends Option {
     }
 
     /**
-     * Checks ff the option is valid.
+     * Checks if the option is valid.
      */
     isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }

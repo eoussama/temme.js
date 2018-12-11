@@ -17,7 +17,7 @@ export default class IdOption extends Option {
     }
 
     /**
-     * Checks ff the option is valid.
+     * Checks if the option is valid.
      */
     isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }

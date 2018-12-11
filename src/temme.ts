@@ -14,7 +14,7 @@
 
 import { Hierarchy } from "./modules/models/Hierarchy";
 import * as Validator from "./modules/validator";
-import { options } from "./modules/options/options";
+import { options } from "./modules/options";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";

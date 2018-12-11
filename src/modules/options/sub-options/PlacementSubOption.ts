@@ -1,19 +1,19 @@
 /**
- * The reference option model.
+ * The placement sub option model.
  */
 
 
-import Option from "../models/Option";
+import Option from "../../models/Option";
 
 
-export default class TemmeIdsOption extends Option {
+export default class PlacementSubOption extends Option {
 
     /**
      * Parameterless constructor.
      */
     constructor() {
 
-        super('temmeIds', 'array', [], []);
+        super('placement', 'string', 'after', ['after', 'before']);
     }
 
     /**

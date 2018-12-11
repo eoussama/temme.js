@@ -1,19 +1,19 @@
 /**
- * The reference option model.
+ * The mode sub option model.
  */
 
 
-import Option from "../models/Option";
+import Option from "../../models/Option";
 
 
-export default class TemmeIdsOption extends Option {
+export default class ModeSubOption extends Option {
 
     /**
      * Parameterless constructor.
      */
     constructor() {
 
-        super('temmeIds', 'array', [], []);
+        super('mode', 'string', 'append', ['append', 'override']);
     }
 
     /**
