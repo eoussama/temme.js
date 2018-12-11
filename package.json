@@ -19,6 +19,7 @@
 		"url": "git+https://github.com/EOussama/temmejs.git"
 	},
 	"keywords": [
+		"typescript",
 		"javascript",
 		"javascript-library",
 		"dom",

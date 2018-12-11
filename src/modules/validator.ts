@@ -2,7 +2,8 @@
  * The module responsible for validating the input.
  */
 
-import Hierarchy from "./models/Hierarchy";
+ 
+import { Hierarchy } from "./models/Hierarchy";
 
 
 /**
@@ -10,9 +11,7 @@ import Hierarchy from "./models/Hierarchy";
  * 
  * @param hierarchy The object to check.
  */
-export function isValidHierarchy(hierarchy: Hierarchy): boolean {
-	return true;
-}
+export const isValidHierarchy = (hierarchy: Hierarchy): boolean => hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy);
 
 
 /**

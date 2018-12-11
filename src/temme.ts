@@ -12,9 +12,11 @@
  * 
  */
 
-import Hierarchy from "./modules/models/Hierarchy";
+import { Hierarchy } from "./modules/models/Hierarchy";
 import * as Validator from "./modules/validator";
-import TemmyError from "./modules/errors/TemmyError";
+import { options } from "./modules/options/options";
+import TemmyError from "./modules/models/TemmyError";
+import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
 
 /**
@@ -27,7 +29,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * @param nodeCallback The function that executes whenever an element has been parsed.
  */
 export function parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
-
+    console.log(options);
     try {
 
         // Checking if the target is a valid HTML element and throwing
@@ -39,7 +41,7 @@ export function parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: ()
         // Checking if the hierarchy object is and throwing
         // an error if it's not.
         if (!Validator.isValidHierarchy(hierarchy)) {
-            throw new InvalidTargetError("");
+            throw new InvalidHierarchyError("");
         }
 
         // Executing the end callback.

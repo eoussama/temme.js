@@ -41,6 +41,6 @@ export default class TemmyError extends Error implements ITemmyError {
         super();
 
         // Updating the error's message.
-        this.message = message.length > 0 ? message : "Temme isn't feeling good";
+        this.message = message.length > 0 ? message : this.message;
     }
 }

@@ -1,21 +1,23 @@
 /**
- * The error throw when a target is not a valid
- * HTML element.
+ * The error throw when a hierarchy object
+ * is not valid.
  */
+
 
 import TemmyError from "../models/TemmyError";
 
-export default class InvalidTargetError extends TemmyError {
+
+export default class InvalidHierarchyError extends TemmyError {
 
     /**
      * The name of the error.
      */
-    public name: string = "InvalidTargetError";
+    public name: string = "InvalidHierarchyError";
 
     /**
      * The message of the error.
      */
-    public message: string = "The target is not a valid HTML element";
+    public message: string = "The hierarchy object is not valid";
 
     /**
      * Constructor with parameters.
