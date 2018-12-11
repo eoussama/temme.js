@@ -2,16 +2,13 @@
  * The module responsible for validating the input.
  */
 
- 
-import { Hierarchy } from "./models/Hierarchy";
-
 
 /**
  * Checks if an object is a valid hierarchy object.
  * 
  * @param hierarchy The object to check.
  */
-export const isValidHierarchy = (hierarchy: Hierarchy): boolean => hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy);
+export const isValidHierarchy = (hierarchy: Object): boolean => hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy);
 
 
 /**
@@ -20,3 +17,14 @@ export const isValidHierarchy = (hierarchy: Hierarchy): boolean => hierarchy != 
  * @param target The object to check.
  */
 export const isValidHTMLElement = (target: HTMLElement): boolean => target != null && target instanceof HTMLElement;
+
+
+/**
+ * Validates the options in a hierarchy object for any
+ * options it has or values it contains.
+ * 
+ * @param hierarchy The hierarchy object to validate the options for.
+ */
+export function validateOptions(hierarchy: Object): void {
+    console.log(hierarchy);
+}

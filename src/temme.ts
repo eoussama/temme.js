@@ -14,7 +14,6 @@
 
 import { Hierarchy } from "./modules/models/Hierarchy";
 import * as Validator from "./modules/validator";
-import { options } from "./modules/options";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
@@ -28,7 +27,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * @param endBallback The function that execute when the skeleton has been parsed.
  * @param nodeCallback The function that executes whenever an element has been parsed.
  */
-export function parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
+export function parse(hierarchy: Object, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
 
     try {
 
@@ -43,6 +42,10 @@ export function parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: ()
         if (!Validator.isValidHierarchy(hierarchy)) {
             throw new InvalidHierarchyError("");
         }
+
+        // Checking if the hierarchy object contains
+        // valid options and/or values.
+        Validator.validateOptions(hierarchy);
 
         // Executing the end callback.
         endBallback();

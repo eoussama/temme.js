@@ -21,6 +21,7 @@ function parse(hierarchy, target, endBallback, nodeCallback) {
         if (!Validator.isValidHierarchy(hierarchy)) {
             throw new InvalidHierarchyError_1.default("");
         }
+        Validator.validateOptions(hierarchy);
         endBallback();
     }
     catch (e) {
