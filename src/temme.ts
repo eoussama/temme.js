@@ -13,7 +13,9 @@
  */
 
 import Hierarchy from "./modules/models/Hierarchy";
-import TemmyError from "./modules/models/TemmyError";
+import * as Validator from "./modules/validator";
+import TemmyError from "./modules/errors/TemmyError";
+import InvalidTargetError from "./modules/errors/InvalidTargetError";
 
 /**
  * `Parse` is the entry point of Temme, it's what initiates everything
@@ -24,9 +26,21 @@ import TemmyError from "./modules/models/TemmyError";
  * @param endBallback The function that execute when the skeleton has been parsed.
  * @param nodeCallback The function that executes whenever an element has been parsed.
  */
-export function Parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
+export function parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
 
     try {
+
+        // Checking if the target is a valid HTML element and throwing
+        // an error if it's not.
+        if (!Validator.isValidHTMLElement(target)) {
+            throw new InvalidTargetError("");
+        }
+
+        // Checking if the hierarchy object is and throwing
+        // an error if it's not.
+        if (!Validator.isValidHierarchy(hierarchy)) {
+            throw new InvalidTargetError("");
+        }
 
         // Executing the end callback.
         endBallback();

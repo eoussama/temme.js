@@ -1,7 +1,24 @@
 /**
+ * Temme's error interface.
+ */
+interface ITemmyError {
+
+    /**
+     * The name of the error.
+     */
+    readonly name: string;
+
+    /**
+     * The message of the error.
+     */
+    message: string;
+}
+
+
+/**
  * Temme's custom errors.
  */
-export default class TemmyError extends Error {
+export default class TemmyError extends Error implements ITemmyError {
 
     /**
      * The name of the error.
@@ -24,6 +41,6 @@ export default class TemmyError extends Error {
         super();
 
         // Updating the error's message.
-        this.message = message;
+        this.message = message.length > 0 ? message : "Temme isn't feeling good";
     }
 }
