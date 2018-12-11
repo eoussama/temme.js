@@ -12,7 +12,6 @@
  * 
  */
 
- import { options } from "./modules/options";
-
- console.log(options);
- 
+export function Parse(hierarchy: any, target: any, endBallback: any, nodeCallback: any) {
+    console.log('Hello, world!\nFrom temme.ts .');
+}

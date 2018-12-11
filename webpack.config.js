@@ -4,6 +4,8 @@ module.exports = {
 	entry: './src/temme.ts',
 	output: {
 		filename: 'temme.js',
+		libraryTarget: 'var',
+    	library: 'Temme',
 		path: path.resolve(__dirname, 'dist')
 	},
 	mode: 'development',
