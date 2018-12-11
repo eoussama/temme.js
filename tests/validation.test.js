@@ -10,3 +10,15 @@
  * data checks to value matching goes in here.
  *
  */
+
+
+const options = require('../build/modules/options').options;
+
+
+describe('Option checks.', () => {
+
+    test('Checking of all options are loaded.', () => {
+
+        expect(options.length).toBe(12);
+    })
+});
