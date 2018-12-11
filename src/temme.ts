@@ -29,7 +29,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * @param nodeCallback The function that executes whenever an element has been parsed.
  */
 export function parse(hierarchy: Hierarchy, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
-    console.log(options);
+
     try {
 
         // Checking if the target is a valid HTML element and throwing

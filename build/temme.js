@@ -11,11 +11,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Validator = __importStar(require("./modules/validator"));
-var options_1 = require("./modules/options");
 var InvalidHierarchyError_1 = __importDefault(require("./modules/errors/InvalidHierarchyError"));
 var InvalidTargetError_1 = __importDefault(require("./modules/errors/InvalidTargetError"));
 function parse(hierarchy, target, endBallback, nodeCallback) {
-    console.log(options_1.options);
     try {
         if (!Validator.isValidHTMLElement(target)) {
             throw new InvalidTargetError_1.default("");
