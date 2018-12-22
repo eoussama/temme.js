@@ -3,7 +3,9 @@
  * and raising the appropriate errors.
  */
 
+
 import { Hierarchy } from "./models/Hierarchy";
+
 
 export default function Sanitize(target: Hierarchy): void {
 

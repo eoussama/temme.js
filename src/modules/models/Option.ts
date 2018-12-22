@@ -3,6 +3,7 @@
  * What defines a valid option.
  */
 
+
 interface IOption {
 
     name: string;
@@ -12,6 +13,7 @@ interface IOption {
 
     isValid(): boolean;
 }
+
 
 export default abstract class Option implements IOption {
 

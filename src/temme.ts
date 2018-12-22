@@ -12,11 +12,13 @@
  * 
  */
 
+ 
 import { Hierarchy } from "./modules/models/Hierarchy";
 import * as Validator from "./modules/validator";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
+
 
 /**
  * `Parse` is the entry point of Temme, it's what initiates everything
