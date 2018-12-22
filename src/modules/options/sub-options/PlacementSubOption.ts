@@ -15,9 +15,4 @@ export default class PlacementSubOption extends Option {
 
         super('placement', 'string', 'after', ['after', 'before']);
     }
-
-    /**
-     * Checks if the option is valid.
-     */
-    isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }

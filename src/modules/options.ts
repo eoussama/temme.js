@@ -7,8 +7,7 @@ import Option from "./models/Option";
 import RefOption from "./options/RefOption";
 import NameOption from "./options/NameOption";
 import IdOption from "./options/IdOption";
-import TextOption from "./options/TextOption";
-import HtmlOption from "./options/HtmlOption";
+import ContentOption from "./options/ContentOption";
 import TemmeIdsOption from "./options/TemmeIdsOption";
 import TemplatesOption from "./options/TemplatesOption";
 import ClassesOption from "./options/ClassesOption";
@@ -22,8 +21,7 @@ export const options: Array<Option> = [
     new RefOption(),
     new NameOption(),
     new IdOption(),
-    new TextOption(),
-    new HtmlOption(),
+    new ContentOption(),
     new TemmeIdsOption(),
     new TemplatesOption(),
     new ClassesOption(),

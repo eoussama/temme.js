@@ -18,6 +18,7 @@ import * as Validator from "./modules/validator";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
+import { options } from "./modules/options";
 
 
 /**
@@ -46,7 +47,7 @@ export function parse(hierarchy: Object, target: HTMLElement, endBallback: () =>
         }
 
         // Checking if the hierarchy object contains
-        // valid options and/or values.
+        // valid options.
         Validator.validateOptions(hierarchy);
 
         // Executing the end callback.

@@ -5,14 +5,22 @@
 
 import Option from "../../models/Option";
 import PlacementSubOption from "./PlacementSubOption";
+import ChildrenAllowSubOption from "./ChildrenAllowSubOption";
 
 
+/**
+ * The children sub option class
+ * of the from option.
+ */
 export default class ChildrenSubOption extends Option {
 
     /**
-     * The sub keys of the `children` sub option.
+     * The keys of the `children` sub option.
      */
-    public keys: ChildrenKeys = new ChildrenKeys();
+    public keys: FromChildrenKeys = {
+        allow: new ChildrenAllowSubOption(),
+        placement: new PlacementSubOption()
+    };
 
     /**
      * Parameterless constructor.
@@ -21,22 +29,21 @@ export default class ChildrenSubOption extends Option {
 
         super('children', 'object', '', []);
     }
-
-    /**
-     * Checks if the option is valid.
-     */
-    isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }
 
-class ChildrenKeys {
+
+/**
+ * The FromChildrenKeys type.
+ */
+type FromChildrenKeys = {
 
     /**
      * Whether or not to allow children inheritance.
      */
-    public allow: boolean = false;
+    allow: ChildrenAllowSubOption;
 
     /**
      * The inheritance mode.
      */
-    public placement: PlacementSubOption = new PlacementSubOption();
+    placement: PlacementSubOption;
 }

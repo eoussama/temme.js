@@ -9,6 +9,9 @@ import InvalidOptionTypeError from "../errors/InvalidOptionTypeError";
 import InvalidOptionValueError from "../errors/InvalidOptionValueError";
 
 
+/**
+ * The option's interface.
+ */
 interface IOption {
 
     name: string;
@@ -18,6 +21,9 @@ interface IOption {
 }
 
 
+/**
+ * The option's class.
+ */
 export default abstract class Option implements IOption {
 
     /**

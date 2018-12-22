@@ -15,9 +15,4 @@ export default class NameOption extends Option {
 
         super('name', 'string', 'div', []);
     }
-
-    /**
-     * Checks if the option is valid.
-     */
-    isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }

@@ -23,7 +23,7 @@ var InvalidOptionValueError = (function (_super) {
         var _this = _super.call(this, "") || this;
         _this.name = "InvalidOptionValueError";
         _this.message = "An option doesn't have a valid value";
-        var message = "The \u201C" + option + "\u201D option doesn't accept \u201C" + value + "\u201D as a type";
+        var message = "The \u201C" + option + "\u201D option doesn't accept \u201C" + value + "\u201D as a value";
         _this.message = option.length > 0 ? message : _this.message;
         return _this;
     }

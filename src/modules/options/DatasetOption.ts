@@ -15,9 +15,4 @@ export default class DatasetOption extends Option {
 
         super('dataset', 'object', {}, []);
     }
-
-    /**
-     * Checks if the option is valid.
-     */
-    isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }

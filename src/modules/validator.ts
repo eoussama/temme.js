@@ -54,6 +54,14 @@ export function validateOptions(hierarchy: any): void {
             Option.validateOptionValue(option, optionValue, matchingOption);
         }
 
+        // Checking if the hierarchy object contains any templates.
+        if ('templates' in hierarchy) {
+
+            hierarchy.templates.forEach((template: Object) => {
+                validateTemplates(template);
+            });
+        }
+
         // Repeating the same check for the hierarchy's children.
         if ('children' in hierarchy) {
 
@@ -61,6 +69,23 @@ export function validateOptions(hierarchy: any): void {
                 validateOptions(child);
             });
         }
+    }
+    catch(e) {
+
+        throw e;
+    }
+}
+
+
+/**
+ * Validates the templates in a hierarchy object.
+ * 
+ * @param template The template object to validate.
+ */
+export function validateTemplates(template: any): void {
+
+    try {
+
     }
     catch(e) {
 

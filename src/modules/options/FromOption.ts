@@ -12,9 +12,13 @@ import ChildrenSubOption from "./sub-options/ChildrenSubOption";
 export default class FromOption extends Option {
 
     /**
-     * The sub keys of the `from` option.
+     * The keys of the `from` option.
      */
-    public keys: FromKeys = new FromKeys();
+    public keys: FromKeys = {
+        ref: new RefOption(),
+        mode: new ModeSubOption(),
+        children: new ChildrenSubOption()
+    };
 
     /**
      * Parameterless constructor.
@@ -23,28 +27,26 @@ export default class FromOption extends Option {
 
         super('from', 'object', '', []);
     }
-
-    /**
-     * Checks if the option is valid.
-     */
-    isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }
 
 
-class FromKeys {
+/**
+ * The FromKeys type.
+ */
+type FromKeys = {
 
     /**
      * The reference sub option.
      */
-    public ref: RefOption = new RefOption();
+    ref: RefOption;
 
     /**
      * The inheritance mode.
      */
-    public mode: ModeSubOption = new ModeSubOption();
+    mode: ModeSubOption;
 
     /**
      * The inheritance mode.
      */
-    public children: ChildrenSubOption = new ChildrenSubOption();
+    children: ChildrenSubOption;
 }

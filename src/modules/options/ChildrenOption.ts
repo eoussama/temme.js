@@ -15,9 +15,4 @@ export default class ChildrenOption extends Option {
 
         super('children', 'array', [], []);
     }
-
-    /**
-     * Checks if the option is valid.
-     */
-    isValid = (): boolean => this.name != null && typeof this.name == this.type;
 }
