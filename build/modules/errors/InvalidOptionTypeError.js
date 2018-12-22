@@ -17,16 +17,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var TemmyError_1 = __importDefault(require("../models/TemmyError"));
-var InvalidOptionError = (function (_super) {
-    __extends(InvalidOptionError, _super);
-    function InvalidOptionError(option) {
+var InvalidOptionTypeError = (function (_super) {
+    __extends(InvalidOptionTypeError, _super);
+    function InvalidOptionTypeError(option, type) {
         var _this = _super.call(this, "") || this;
-        _this.name = "InvalidOptionError";
-        _this.message = "An option is not valid";
-        _this.message = option.length > 0 ? option + " is not a valid option" : _this.message;
+        _this.name = "InvalidOptionTypeError";
+        _this.message = "An option doesn't have a valid value type";
+        var message = "The \u201C" + option + "\u201D option doesn't accept values of type \u201C" + type + "\u201D";
+        _this.message = option.length > 0 ? message : _this.message;
         return _this;
     }
-    return InvalidOptionError;
+    return InvalidOptionTypeError;
 }(TemmyError_1.default));
-exports.default = InvalidOptionError;
-//# sourceMappingURL=InvalidOptionError.js.map
+exports.default = InvalidOptionTypeError;
+//# sourceMappingURL=InvalidOptionTypeError.js.map
