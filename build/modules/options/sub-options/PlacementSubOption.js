@@ -20,9 +20,7 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var PlacementSubOption = (function (_super) {
     __extends(PlacementSubOption, _super);
     function PlacementSubOption() {
-        var _this = _super.call(this, 'placement', 'string', 'after', ['after', 'before']) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
-        return _this;
+        return _super.call(this, 'placement', 'string', 'after', ['after', 'before']) || this;
     }
     return PlacementSubOption;
 }(Option_1.default));

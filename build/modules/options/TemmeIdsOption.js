@@ -20,9 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var TemmeIdsOption = (function (_super) {
     __extends(TemmeIdsOption, _super);
     function TemmeIdsOption() {
-        var _this = _super.call(this, 'temmeIds', 'array', [], []) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
-        return _this;
+        return _super.call(this, 'temmeIds', 'array', [], []) || this;
     }
     return TemmeIdsOption;
 }(Option_1.default));

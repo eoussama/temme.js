@@ -16,13 +16,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Option_1 = __importDefault(require("../models/Option"));
-var RefOption = (function (_super) {
-    __extends(RefOption, _super);
-    function RefOption() {
-        return _super.call(this, 'ref', 'string', '', []) || this;
+var Option_1 = __importDefault(require("../../models/Option"));
+var ChildrenAllowSubOption = (function (_super) {
+    __extends(ChildrenAllowSubOption, _super);
+    function ChildrenAllowSubOption() {
+        return _super.call(this, 'allow', 'boolean', true, []) || this;
     }
-    return RefOption;
+    return ChildrenAllowSubOption;
 }(Option_1.default));
-exports.default = RefOption;
-//# sourceMappingURL=RefOption.js.map
+exports.default = ChildrenAllowSubOption;
+//# sourceMappingURL=ChildrenAllowSubOption.js.map

@@ -24,19 +24,14 @@ var FromOption = (function (_super) {
     __extends(FromOption, _super);
     function FromOption() {
         var _this = _super.call(this, 'from', 'object', '', []) || this;
-        _this.keys = new FromKeys();
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
+        _this.keys = {
+            ref: new RefOption_1.default(),
+            mode: new ModeSubOption_1.default(),
+            children: new ChildrenSubOption_1.default()
+        };
         return _this;
     }
     return FromOption;
 }(Option_1.default));
 exports.default = FromOption;
-var FromKeys = (function () {
-    function FromKeys() {
-        this.ref = new RefOption_1.default();
-        this.mode = new ModeSubOption_1.default();
-        this.children = new ChildrenSubOption_1.default();
-    }
-    return FromKeys;
-}());
 //# sourceMappingURL=FromOption.js.map

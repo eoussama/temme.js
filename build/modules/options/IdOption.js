@@ -20,9 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var IdOption = (function (_super) {
     __extends(IdOption, _super);
     function IdOption() {
-        var _this = _super.call(this, 'id', 'string', '', []) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
-        return _this;
+        return _super.call(this, 'id', 'string', '', []) || this;
     }
     return IdOption;
 }(Option_1.default));

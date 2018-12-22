@@ -135,6 +135,6 @@ describe('Option checks.', () => {
     test('Checking if all options are loaded.', () => {
 
         // Assert.
-        expect(options.length).toBe(12);
+        expect(options.length).toBe(11);
     });
 });

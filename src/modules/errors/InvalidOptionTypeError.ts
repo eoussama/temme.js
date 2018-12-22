@@ -27,7 +27,7 @@ export default class InvalidOptionTypeError extends TemmyError {
      */
     constructor(option: string, type: string) {
 
-        // Calling the parent class `Error`.
+        // Calling the parent class `TemmyError`.
         super("");
 
         // Constructing the error message.

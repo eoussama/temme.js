@@ -4,10 +4,8 @@
 
 
 import Option from "./models/Option";
-import InvalidOptionNameError from "./errors/InvalidOptionNameError";
-import InvalidOptionTypeError from "./errors/InvalidOptionTypeError";
-import InvalidOptionValueError from "./errors/InvalidOptionValueError";
 import { options } from "./options";
+import InvalidTemplateOptionError from "./errors/InvalidTemplateOptionError";
 
 
 /**
@@ -31,7 +29,7 @@ export const isValidHTMLElement = (target: HTMLElement): boolean => target != nu
  * 
  * @param hierarchy The hierarchy object to validate the options for.
  * 
- * @throws InvalidOptionNameError, InvalidOptionTypeError, InvalidOptionValueError
+ * @throws InvalidOptionNameError, InvalidOptionTypeError, InvalidOptionValueError, InvalidTemplateOptionError
  */
 export function validateOptions(hierarchy: any): void {
 
@@ -81,11 +79,26 @@ export function validateOptions(hierarchy: any): void {
  * Validates the templates in a hierarchy object.
  * 
  * @param template The template object to validate.
+ * 
+ * @throws InvalidOptionNameError, InvalidOptionTypeError, InvalidOptionValueError, InvalidTemplateOptionError
  */
 export function validateTemplates(template: any): void {
 
+    // The options that are not allowed for templates.
+    const forbiddenOptions: Array<string> = ['name', 'children', 'templates'];
+
     try {
 
+        // Looping through the options of the template.
+        for (const option in template) {
+
+            // Checking if the template contains any invalid options.
+            if (forbiddenOptions.indexOf(option) > -1) {
+                throw new InvalidTemplateOptionError(option);
+            } else {
+                validateOptions(template);
+            }
+        }
     }
     catch(e) {
 

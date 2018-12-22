@@ -37,7 +37,7 @@ export default class TemmyError extends Error implements ITemmyError {
      */
     constructor(message: string) {
 
-        // Calling the parent class `Error`.
+        // Calling the parent class `TemmyError`.
         super();
 
         // Updating the error's message.

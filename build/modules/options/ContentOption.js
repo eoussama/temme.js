@@ -17,14 +17,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Option_1 = __importDefault(require("../models/Option"));
-var TextOption = (function (_super) {
-    __extends(TextOption, _super);
-    function TextOption() {
-        var _this = _super.call(this, 'text', 'string', '', []) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
+var ValueSubOption_1 = __importDefault(require("./sub-options/ValueSubOption"));
+var ContentTypeSubOption_1 = __importDefault(require("./sub-options/ContentTypeSubOption"));
+var ContentOption = (function (_super) {
+    __extends(ContentOption, _super);
+    function ContentOption() {
+        var _this = _super.call(this, 'content', 'string', '', []) || this;
+        _this.keys = {
+            type: new ContentTypeSubOption_1.default(),
+            value: new ValueSubOption_1.default()
+        };
         return _this;
     }
-    return TextOption;
+    return ContentOption;
 }(Option_1.default));
-exports.default = TextOption;
-//# sourceMappingURL=TextOption.js.map
+exports.default = ContentOption;
+//# sourceMappingURL=ContentOption.js.map

@@ -20,9 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var TemplatesOption = (function (_super) {
     __extends(TemplatesOption, _super);
     function TemplatesOption() {
-        var _this = _super.call(this, 'templates', 'array', [], []) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
-        return _this;
+        return _super.call(this, 'templates', 'array', [], []) || this;
     }
     return TemplatesOption;
 }(Option_1.default));

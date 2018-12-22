@@ -20,9 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var DatasetOption = (function (_super) {
     __extends(DatasetOption, _super);
     function DatasetOption() {
-        var _this = _super.call(this, 'dataset', 'object', {}, []) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
-        return _this;
+        return _super.call(this, 'dataset', 'object', {}, []) || this;
     }
     return DatasetOption;
 }(Option_1.default));

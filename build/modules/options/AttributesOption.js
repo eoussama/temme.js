@@ -20,9 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var AttributesOption = (function (_super) {
     __extends(AttributesOption, _super);
     function AttributesOption() {
-        var _this = _super.call(this, 'attributes', 'object', {}, []) || this;
-        _this.isValid = function () { return _this.name != null && typeof _this.name == _this.type; };
-        return _this;
+        return _super.call(this, 'attributes', 'object', {}, []) || this;
     }
     return AttributesOption;
 }(Option_1.default));

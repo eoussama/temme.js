@@ -18,7 +18,6 @@ import * as Validator from "./modules/validator";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
-import { options } from "./modules/options";
 
 
 /**
