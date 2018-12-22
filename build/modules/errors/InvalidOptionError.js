@@ -17,16 +17,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var TemmyError_1 = __importDefault(require("../models/TemmyError"));
-var InvalidTargetError = (function (_super) {
-    __extends(InvalidTargetError, _super);
-    function InvalidTargetError(message) {
+var InvalidOptionError = (function (_super) {
+    __extends(InvalidOptionError, _super);
+    function InvalidOptionError(option) {
         var _this = _super.call(this, "") || this;
-        _this.name = "InvalidTargetError";
-        _this.message = "The target is not a valid HTML element";
-        _this.message = message.length > 0 ? message : _this.message;
+        _this.name = "InvalidOptionError";
+        _this.message = "An option is not valid";
+        _this.message = option.length > 0 ? option + " is not a valid option" : _this.message;
         return _this;
     }
-    return InvalidTargetError;
+    return InvalidOptionError;
 }(TemmyError_1.default));
-exports.default = InvalidTargetError;
-//# sourceMappingURL=InvalidTargetError.js.map
+exports.default = InvalidOptionError;
+//# sourceMappingURL=InvalidOptionError.js.map

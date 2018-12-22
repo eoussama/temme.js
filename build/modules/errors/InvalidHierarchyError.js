@@ -20,7 +20,7 @@ var TemmyError_1 = __importDefault(require("../models/TemmyError"));
 var InvalidHierarchyError = (function (_super) {
     __extends(InvalidHierarchyError, _super);
     function InvalidHierarchyError(message) {
-        var _this = _super.call(this, message) || this;
+        var _this = _super.call(this, "") || this;
         _this.name = "InvalidHierarchyError";
         _this.message = "The hierarchy object is not valid";
         _this.message = message.length > 0 ? message : _this.message;

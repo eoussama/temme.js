@@ -1,5 +1,5 @@
 /**
- * The error throw when a target is not a valid
+ * The error thrown when a target is not a valid
  * HTML element.
  */
 
@@ -25,7 +25,7 @@ export default class InvalidTargetError extends TemmyError {
     constructor(message: string) {
 
         // Calling the parent class `Error`.
-        super(message);
+        super("");
 
         // Updating the error's message.
         this.message = message.length > 0 ? message : this.message;

@@ -1,5 +1,5 @@
 /**
- * The error throw when a hierarchy object
+ * The error thrown when a hierarchy object
  * is not valid.
  */
 
@@ -27,7 +27,7 @@ export default class InvalidHierarchyError extends TemmyError {
     constructor(message: string) {
 
         // Calling the parent class `Error`.
-        super(message);
+        super("");
 
         // Updating the error's message.
         this.message = message.length > 0 ? message : this.message;
