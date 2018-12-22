@@ -115,6 +115,7 @@
 
         // Telling Temme to do us the favor.
         try {
+
             Temme.parse(hierarchy, target, () => {
 
                 // Outputting the results in the console.
@@ -129,6 +130,7 @@
             });
         }
         catch (e) {
+            
             console.error(e.name, e.message);
         }
 

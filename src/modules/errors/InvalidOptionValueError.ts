@@ -31,7 +31,7 @@ export default class InvalidOptionValueError extends TemmyError {
         super("");
 
         // Constructing the error message.
-        const message: string = `The “${option}” option doesn't accept “${value}” as a type`;
+        const message: string = `The “${option}” option doesn't accept “${value}” as a value`;
 
         // Updating the error's message.
         this.message = option.length > 0 ? message : this.message;
