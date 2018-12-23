@@ -22,13 +22,15 @@ var ContentTypeSubOption_1 = __importDefault(require("./sub-options/ContentTypeS
 var ContentOption = (function (_super) {
     __extends(ContentOption, _super);
     function ContentOption() {
-        var _this = _super.call(this, 'content', 'string', '', []) || this;
-        _this.keys = {
-            type: new ContentTypeSubOption_1.default(),
-            value: new ValueSubOption_1.default()
-        };
-        return _this;
+        return _super.call(this, 'content', 'string', [], {
+            type: (new ContentTypeSubOption_1.default()).default,
+            value: (new ValueSubOption_1.default()).default
+        }) || this;
     }
+    ContentOption.keys = {
+        type: new ContentTypeSubOption_1.default(),
+        value: new ValueSubOption_1.default()
+    };
     return ContentOption;
 }(Option_1.default));
 exports.default = ContentOption;

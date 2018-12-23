@@ -7,11 +7,11 @@ var InvalidOptionNameError_1 = __importDefault(require("../errors/InvalidOptionN
 var InvalidOptionTypeError_1 = __importDefault(require("../errors/InvalidOptionTypeError"));
 var InvalidOptionValueError_1 = __importDefault(require("../errors/InvalidOptionValueError"));
 var Option = (function () {
-    function Option(name, type, defaultValue, values) {
-        this.name = name;
+    function Option(label, type, values, defaultValue) {
+        this.label = label;
         this.type = type;
-        this.default = defaultValue;
         this.values = values;
+        this.default = defaultValue;
     }
     Option.validateOptionName = function (option, matchingOption) {
         if (matchingOption == null) {

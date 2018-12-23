@@ -11,7 +11,7 @@ exports.isValidHTMLElement = function (target) { return target != null && target
 function validateOptions(hierarchy) {
     try {
         var _loop_1 = function (option) {
-            var matchingOption = options_1.options.filter(function (opt) { return opt.name === option; })[0], optionValue = hierarchy[option];
+            var matchingOption = options_1.options.filter(function (opt) { return opt.label === option; })[0], optionValue = hierarchy[option];
             Option_1.default.validateOptionName(option, matchingOption);
             Option_1.default.validateOptionType(option, optionValue, matchingOption);
             Option_1.default.validateOptionValue(option, optionValue, matchingOption);

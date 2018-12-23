@@ -13,6 +13,6 @@ export default class PlacementSubOption extends Option {
      */
     constructor() {
 
-        super('placement', 'string', 'after', ['after', 'before']);
+        super('placement', 'string', ['after', 'before'], 'after');
     }
 }

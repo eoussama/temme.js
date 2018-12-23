@@ -10,26 +10,14 @@ import InvalidOptionValueError from "../errors/InvalidOptionValueError";
 
 
 /**
- * The option's interface.
- */
-interface IOption {
-
-    name: string;
-    type: string;
-    default: any;
-    values: Array<any>;
-}
-
-
-/**
  * The option's class.
  */
-export default abstract class Option implements IOption {
+export default abstract class Option {
 
     /**
      * The name of the option.
      */
-    public name: string;
+    public label: string;
 
     /**
      * The data type of the option.
@@ -37,29 +25,29 @@ export default abstract class Option implements IOption {
     public type: string;
 
     /**
-     * The default value of the option.
-     */
-    public default: any;
-
-    /**
      * The possible values of the option.
      */
     public values: Array<any>;
 
     /**
+     * The default value of the option.
+     */
+    public default: any;
+
+    /**
      * Constructor with parameters.
      * 
-     * @param name The name of the option.
+     * @param label The name of the option.
      * @param type The data type of the option.
      * @param defaultValue The default value of the option.
      * @param values The possible values of the option.
      */
-    constructor(name: string, type: string, defaultValue: any, values: Array<any>) {
+    constructor(label: string, type: string, values: Array<any>, defaultValue: any) {
 
-        this.name = name;
+        this.label = label;
         this.type = type;
-        this.default = defaultValue;
         this.values = values;
+        this.default = defaultValue;
     }
 
     /**

@@ -20,7 +20,7 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var ValueSubOption = (function (_super) {
     __extends(ValueSubOption, _super);
     function ValueSubOption() {
-        return _super.call(this, 'value', 'string', '', []) || this;
+        return _super.call(this, 'value', 'string', [], '') || this;
     }
     return ValueSubOption;
 }(Option_1.default));

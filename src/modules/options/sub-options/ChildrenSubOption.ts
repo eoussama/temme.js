@@ -27,7 +27,10 @@ export default class ChildrenSubOption extends Option {
      */
     constructor() {
 
-        super('children', 'object', '', []);
+        super('children', 'object', [], {
+            allow: (new ChildrenAllowSubOption()).default,
+            placement: (new PlacementSubOption()).default
+        });
     }
 }
 

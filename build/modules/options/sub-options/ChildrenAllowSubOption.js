@@ -20,7 +20,7 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var ChildrenAllowSubOption = (function (_super) {
     __extends(ChildrenAllowSubOption, _super);
     function ChildrenAllowSubOption() {
-        return _super.call(this, 'allow', 'boolean', true, []) || this;
+        return _super.call(this, 'allow', 'boolean', [], true) || this;
     }
     return ChildrenAllowSubOption;
 }(Option_1.default));

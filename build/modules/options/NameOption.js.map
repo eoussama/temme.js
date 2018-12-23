@@ -1,1 +1,1 @@
-{"version":3,"file":"NameOption.js","sourceRoot":"./src/","sources":["modules/options/NameOption.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAKA,4DAAsC;AAGtC;IAAwC,8BAAM;IAK1C;eAEI,kBAAM,MAAM,EAAE,QAAQ,EAAE,KAAK,EAAE,EAAE,CAAC;IACtC,CAAC;IACL,iBAAC;AAAD,CAAC,AATD,CAAwC,gBAAM,GAS7C"}
+{"version":3,"file":"NameOption.js","sourceRoot":"./src/","sources":["modules/options/NameOption.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAKA,4DAAsC;AAGtC;IAAwC,8BAAM;IAK1C;eAEI,kBAAM,MAAM,EAAE,QAAQ,EAAE,EAAE,EAAE,KAAK,CAAC;IACtC,CAAC;IACL,iBAAC;AAAD,CAAC,AATD,CAAwC,gBAAM,GAS7C"}

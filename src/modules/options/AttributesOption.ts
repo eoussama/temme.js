@@ -13,6 +13,6 @@ export default class AttributesOption extends Option {
      */
     constructor() {
 
-        super('attributes', 'object', {}, []);
+        super('attributes', 'object', [], {});
     }
 }

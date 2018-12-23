@@ -13,6 +13,6 @@ export default class IdOption extends Option {
      */
     constructor() {
 
-        super('id', 'string', '', []);
+        super('id', 'string', [], '');
     }
 }

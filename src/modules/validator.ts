@@ -39,7 +39,7 @@ export function validateOptions(hierarchy: any): void {
         for (const option in hierarchy) {
 
             const 
-                matchingOption: Option = options.filter(opt => opt.name === option)[0],
+                matchingOption: Option = options.filter((opt: Option) => opt.label === option)[0],
                 optionValue: any = hierarchy[option];
 
             // Validating the option's name.

@@ -20,7 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var RefOption = (function (_super) {
     __extends(RefOption, _super);
     function RefOption() {
-        return _super.call(this, 'ref', 'string', '', []) || this;
+        return _super.call(this, 'ref', 'string', [], '') || this;
     }
     return RefOption;
 }(Option_1.default));

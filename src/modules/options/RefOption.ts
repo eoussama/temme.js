@@ -13,6 +13,6 @@ export default class RefOption extends Option {
      */
     constructor() {
 
-        super('ref', 'string', '', []);
+        super('ref', 'string', [], '');
     }
 }

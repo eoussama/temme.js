@@ -16,7 +16,7 @@ export default class ContentOption extends Option {
     /**
      * The keys of the `content` option.
      */
-    public keys: ContentKeys = {
+    public static keys: ContentKeys = {
         type: new ContentTypeSubOption(),
         value: new ValueSubOption()
     };
@@ -26,7 +26,10 @@ export default class ContentOption extends Option {
      */
     constructor() {
 
-        super('content', 'string', '', []);
+        super('content', 'string', [], {
+            type: (new ContentTypeSubOption()).default,
+            value: (new ValueSubOption()).default
+        });
     }
 }
 

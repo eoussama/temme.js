@@ -23,7 +23,11 @@ var ChildrenSubOption_1 = __importDefault(require("./sub-options/ChildrenSubOpti
 var FromOption = (function (_super) {
     __extends(FromOption, _super);
     function FromOption() {
-        var _this = _super.call(this, 'from', 'object', '', []) || this;
+        var _this = _super.call(this, 'from', 'object', [], {
+            ref: (new RefOption_1.default()).default,
+            mode: (new ModeSubOption_1.default()).default,
+            children: (new ChildrenSubOption_1.default()).default
+        }) || this;
         _this.keys = {
             ref: new RefOption_1.default(),
             mode: new ModeSubOption_1.default(),

@@ -13,6 +13,6 @@ export default class ContentTypeSubOption extends Option {
      */
     constructor() {
 
-        super('type', 'text', '', ['text', 'html']);
+        super('type', 'string', ['text', 'html'], 'text');
     }
 }

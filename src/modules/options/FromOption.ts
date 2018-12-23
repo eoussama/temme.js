@@ -25,7 +25,11 @@ export default class FromOption extends Option {
      */
     constructor() {
 
-        super('from', 'object', '', []);
+        super('from', 'object', [], {
+            ref: (new RefOption()).default,
+            mode: (new ModeSubOption()).default,
+            children: (new ChildrenSubOption()).default
+        });
     }
 }
 

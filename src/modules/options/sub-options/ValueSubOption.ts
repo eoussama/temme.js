@@ -13,6 +13,6 @@ export default class ValueSubOption extends Option {
      */
     constructor() {
 
-        super('value', 'string', '', []);
+        super('value', 'string', [], '');
     }
 }

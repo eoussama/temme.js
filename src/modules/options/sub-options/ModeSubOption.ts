@@ -13,6 +13,6 @@ export default class ModeSubOption extends Option {
      */
     constructor() {
 
-        super('mode', 'string', 'append', ['append', 'override']);
+        super('mode', 'string', ['append', 'override'], 'append');
     }
 }

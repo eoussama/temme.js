@@ -13,6 +13,6 @@ export default class NameOption extends Option {
      */
     constructor() {
 
-        super('name', 'string', 'div', []);
+        super('name', 'string', [], 'div');
     }
 }
