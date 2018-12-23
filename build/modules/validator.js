@@ -87,6 +87,10 @@ function validateSubOptions(optionName, optionValue, subOptions) {
             if (Option_1.default.validateOptionValue(subOptionValue, matchingSubOption) === false) {
                 throw new InvalidSubOptionValueError_1.default(subOption, subOptionValue);
             }
+            if ('keys' in matchingSubOption) {
+                var subOptionValue_1 = optionValue[subOption];
+                validateSubOptions(subOption, subOptionValue_1, matchingSubOption);
+            }
         }
         else {
             throw new InvalidSubOptionNameError_1.default(optionName, subOption);

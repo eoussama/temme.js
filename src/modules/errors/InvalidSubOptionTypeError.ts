@@ -31,7 +31,7 @@ export default class InvalidSubOptionTypeError extends TemmyError {
         super("");
 
         // Constructing the error message.
-        const message: string = `The “${subOption}” subOption doesn't accept values of type “${type}”`;
+        const message: string = `The “${subOption}” sub-option doesn't accept values of type “${type}”`;
 
         // Updating the error's message.
         this.message = subOption.length > 0 || type.length > 0 ? message : this.message;

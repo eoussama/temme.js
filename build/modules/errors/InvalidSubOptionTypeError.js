@@ -23,7 +23,7 @@ var InvalidSubOptionTypeError = (function (_super) {
         var _this = _super.call(this, "") || this;
         _this.name = "InvalidSubOptionTypeError";
         _this.message = "A sub-option doesn't have a valid value type";
-        var message = "The \u201C" + subOption + "\u201D subOption doesn't accept values of type \u201C" + type + "\u201D";
+        var message = "The \u201C" + subOption + "\u201D sub-option doesn't accept values of type \u201C" + type + "\u201D";
         _this.message = subOption.length > 0 || type.length > 0 ? message : _this.message;
         return _this;
     }

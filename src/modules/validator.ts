@@ -173,6 +173,14 @@ function validateSubOptions(optionName: string, optionValue: any, subOptions: IK
                 throw new InvalidSubOptionValueError(subOption, subOptionValue);
             }
 
+            if ('keys' in matchingSubOption) {
+
+                // Getting the option's sub-options.
+                const subOptionValue = optionValue[subOption];
+
+                validateSubOptions(subOption, subOptionValue, <IKeys>matchingSubOption);
+            }
+
         } else {
             throw new InvalidSubOptionNameError(optionName, subOption);
         }

@@ -104,7 +104,10 @@
                     ],
                     ref: 't',
                     from: {
-                        ref: 'temp-3'
+                        ref: 'temp-3',
+                        children: {
+                            allow: true
+                        }
                     },
                     name: 'h1',
                     content: {
@@ -116,9 +119,9 @@
             ]
         };
 
-        // Telling Temme to do us the favor.
         try {
-
+            
+            // Telling Temme to do us the favor.
             Temme.parse(hierarchy, target, () => {
 
                 // Outputting the results in the console.
