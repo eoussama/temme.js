@@ -3,7 +3,7 @@
  */
 
 
-import Option from "../../models/Option";
+import Option, { IKeys } from "../../models/Option";
 import PlacementSubOption from "./PlacementSubOption";
 import ChildrenAllowSubOption from "./ChildrenAllowSubOption";
 
@@ -12,7 +12,7 @@ import ChildrenAllowSubOption from "./ChildrenAllowSubOption";
  * The children sub option class
  * of the from option.
  */
-export default class ChildrenSubOption extends Option {
+export default class ChildrenSubOption extends Option implements IKeys {
 
     /**
      * The keys of the `children` sub option.

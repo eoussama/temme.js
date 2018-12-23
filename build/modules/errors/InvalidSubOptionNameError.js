@@ -16,23 +16,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Option_1 = __importDefault(require("../models/Option"));
-var ValueSubOption_1 = __importDefault(require("./sub-options/ValueSubOption"));
-var ContentTypeSubOption_1 = __importDefault(require("./sub-options/ContentTypeSubOption"));
-var ContentOption = (function (_super) {
-    __extends(ContentOption, _super);
-    function ContentOption() {
-        var _this = _super.call(this, 'content', 'object', [], {
-            type: (new ContentTypeSubOption_1.default()).default,
-            value: (new ValueSubOption_1.default()).default
-        }) || this;
-        _this.keys = {
-            type: new ContentTypeSubOption_1.default(),
-            value: new ValueSubOption_1.default()
-        };
+var TemmyError_1 = __importDefault(require("../models/TemmyError"));
+var InvalidSubOptionNameError = (function (_super) {
+    __extends(InvalidSubOptionNameError, _super);
+    function InvalidSubOptionNameError(option, subOption) {
+        var _this = _super.call(this, "") || this;
+        _this.name = "InvalidSubOptionNameError";
+        _this.message = "A sub-option is not valid";
+        var message = "The \u201C" + option + "\u201D option doesn't not recognize \u201C" + subOption + "\u201D as a valid sub-option";
+        _this.message = option.length > 0 || subOption.length > 0 ? message : _this.message;
         return _this;
     }
-    return ContentOption;
-}(Option_1.default));
-exports.default = ContentOption;
-//# sourceMappingURL=ContentOption.js.map
+    return InvalidSubOptionNameError;
+}(TemmyError_1.default));
+exports.default = InvalidSubOptionNameError;
+//# sourceMappingURL=InvalidSubOptionNameError.js.map

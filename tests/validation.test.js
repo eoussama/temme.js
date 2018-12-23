@@ -177,6 +177,26 @@ describe('Option checks.', () => {
         // Assert.
         expect(errorName).toBe("InvalidOptionTypeError");
     });
+
+    test('“InvalidSubOptionValueError” should be thrown if a sub-option in the hierarchy object is of an incorrect value.', () => {
+        
+        // Arrange.
+        const hierarchy = { content: { type: 'invalid-content-type' } };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateOptions(hierarchy);
+        }
+        catch(e) {
+
+            errorName = e.name;
+        }
+
+        // Assert.
+        expect(errorName).toBe("InvalidSubOptionValueError");
+    });
 });
 
 describe('Template checks.', () => {

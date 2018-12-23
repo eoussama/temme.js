@@ -3,13 +3,14 @@
  */
 
 
-import Option from "../models/Option";
+
+import Option, { IKeys } from "../models/Option";
 import RefOption from "./RefOption";
 import ModeSubOption from "./sub-options/ModeSubOption";
 import ChildrenSubOption from "./sub-options/ChildrenSubOption";
 
 
-export default class FromOption extends Option {
+export default class FromOption extends Option implements IKeys {
 
     /**
      * The keys of the `from` option.

@@ -3,7 +3,7 @@
  */
 
 
-import Option from "./models/Option";
+import Option, { IKeys } from "./models/Option";
 import RefOption from "./options/RefOption";
 import NameOption from "./options/NameOption";
 import IdOption from "./options/IdOption";
@@ -30,3 +30,33 @@ export const options: Array<Option> = [
     new DatasetOption(),
     new FromOption()
 ];
+
+
+/**
+ * Gets all the sub-options of an option.
+ * 
+ * @param option The parent option's name.
+ */
+export function getSubOptions(option: string): Array<Option> {
+
+    const subOptions: Array<Option> = [];
+
+    // Looping through all of the options.
+    options.forEach((opt: Option) => {
+
+        if ('keys' in opt && (<Option>opt).label === option) {
+            
+            for (const key in (<IKeys>opt).keys) {
+
+                // Getting the sub-option.
+                const subOption = (<IKeys>opt).keys[key];
+
+                // Pushing the sub-option.
+                subOptions.push(subOption);
+            }
+        }
+    });
+
+    // Returning the found sub-options.
+    return subOptions;
+}

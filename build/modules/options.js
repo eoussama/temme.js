@@ -27,4 +27,17 @@ exports.options = [
     new DatasetOption_1.default(),
     new FromOption_1.default()
 ];
+function getSubOptions(option) {
+    var subOptions = [];
+    exports.options.forEach(function (opt) {
+        if ('keys' in opt && opt.label === option) {
+            for (var key in opt.keys) {
+                var subOption = opt.keys[key];
+                subOptions.push(subOption);
+            }
+        }
+    });
+    return subOptions;
+}
+exports.getSubOptions = getSubOptions;
 //# sourceMappingURL=options.js.map

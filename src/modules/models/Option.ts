@@ -4,9 +4,14 @@
  */
 
 
-import InvalidOptionNameError from "../errors/InvalidOptionNameError";
-import InvalidOptionTypeError from "../errors/InvalidOptionTypeError";
-import InvalidOptionValueError from "../errors/InvalidOptionValueError";
+/**
+ * The interface that indicates
+ * sub-options.
+ */
+export interface IKeys {
+
+    keys: any;
+}
 
 
 /**
@@ -53,30 +58,23 @@ export default abstract class Option {
     /**
      * Validates the option's name.
      * 
-     * @param option The option to check.
      * @param matchingOption The option object with the matching name.
      * 
-     * @throws InvalidOptionNameError
      */
-    public static validateOptionName(option: string, matchingOption: Option): void {
+    public static validateOptionName(matchingOption: Option): boolean {
 
-        // If the option is invalid, throw an error.
-        if (matchingOption == null) {
-            throw new InvalidOptionNameError(option);
-        }
+        return matchingOption != null;
     }
 
 
     /**
      * Validates the data type of the option.
      * 
-     * @param option The option to check.
      * @param value The value of the option.
      * @param matchingOption The option object with the matching name.
      * 
-     * @throws InvalidOptionTypeError
      */
-    public static validateOptionType(option: string, value: any, matchingOption: Option): void {
+    public static validateOptionType(value: any, matchingOption: Option): { valid: boolean, type: string } {
 
         let optionType: string = "";
 
@@ -87,8 +85,9 @@ export default abstract class Option {
             optionType = typeof value;
         }
 
-        if (optionType !== matchingOption.type) {
-            throw new InvalidOptionTypeError(option, optionType);
+        return {
+            valid: optionType === matchingOption.type,
+            type: optionType
         }
     }
 
@@ -96,21 +95,19 @@ export default abstract class Option {
     /**
      * Validates the option's value.
      * 
-     * @param option The option to check.
      * @param value The value to check.
      * @param matchingOption The option object with the matching name.
      * 
-     * @throws InvalidOptionValueError
      */
-    public static validateOptionValue(option: string, value: any, matchingOption: Option): void {
-
+    public static validateOptionValue(value: any, matchingOption: Option): boolean {
+        
         // Checking if the matching object is valid.
         if (matchingOption != null && matchingOption.values.length > 0) {
-
+            
             // Checking if the value is not a valid one.
-            if (matchingOption.values.indexOf(value) === -1) {
-                throw new InvalidOptionValueError(option, value);
-            }
+            return matchingOption.values.indexOf(value) !== -1;
         }
+
+        return true;
     }
 }

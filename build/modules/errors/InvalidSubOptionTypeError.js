@@ -16,23 +16,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Option_1 = __importDefault(require("../models/Option"));
-var ValueSubOption_1 = __importDefault(require("./sub-options/ValueSubOption"));
-var ContentTypeSubOption_1 = __importDefault(require("./sub-options/ContentTypeSubOption"));
-var ContentOption = (function (_super) {
-    __extends(ContentOption, _super);
-    function ContentOption() {
-        var _this = _super.call(this, 'content', 'object', [], {
-            type: (new ContentTypeSubOption_1.default()).default,
-            value: (new ValueSubOption_1.default()).default
-        }) || this;
-        _this.keys = {
-            type: new ContentTypeSubOption_1.default(),
-            value: new ValueSubOption_1.default()
-        };
+var TemmyError_1 = __importDefault(require("../models/TemmyError"));
+var InvalidSubOptionTypeError = (function (_super) {
+    __extends(InvalidSubOptionTypeError, _super);
+    function InvalidSubOptionTypeError(subOption, type) {
+        var _this = _super.call(this, "") || this;
+        _this.name = "InvalidSubOptionTypeError";
+        _this.message = "A sub-option doesn't have a valid value type";
+        var message = "The \u201C" + subOption + "\u201D subOption doesn't accept values of type \u201C" + type + "\u201D";
+        _this.message = subOption.length > 0 || type.length > 0 ? message : _this.message;
         return _this;
     }
-    return ContentOption;
-}(Option_1.default));
-exports.default = ContentOption;
-//# sourceMappingURL=ContentOption.js.map
+    return InvalidSubOptionTypeError;
+}(TemmyError_1.default));
+exports.default = InvalidSubOptionTypeError;
+//# sourceMappingURL=InvalidSubOptionTypeError.js.map

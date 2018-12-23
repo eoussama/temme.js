@@ -1,6 +1,6 @@
 /**
  * The error thrown when an option
- * is not of a valid value.
+ * is not of a valid data type.
  */
 
 

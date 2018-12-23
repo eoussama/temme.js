@@ -3,7 +3,7 @@
  */
 
 
-import Option from "../models/Option";
+import Option, { IKeys } from "../models/Option";
 import ValueSubOption from "./sub-options/ValueSubOption";
 import ContentTypeSubOption from "./sub-options/ContentTypeSubOption";
 
@@ -11,12 +11,12 @@ import ContentTypeSubOption from "./sub-options/ContentTypeSubOption";
 /**
  * The content option class.
  */
-export default class ContentOption extends Option {
+export default class ContentOption extends Option implements IKeys {
 
     /**
      * The keys of the `content` option.
      */
-    public static keys: ContentKeys = {
+    public keys: ContentKeys = {
         type: new ContentTypeSubOption(),
         value: new ValueSubOption()
     };
@@ -26,7 +26,7 @@ export default class ContentOption extends Option {
      */
     constructor() {
 
-        super('content', 'string', [], {
+        super('content', 'object', [], {
             type: (new ContentTypeSubOption()).default,
             value: (new ValueSubOption()).default
         });
