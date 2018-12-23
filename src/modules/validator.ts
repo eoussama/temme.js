@@ -12,6 +12,7 @@ import InvalidOptionValueError from "./errors/InvalidOptionValueError";
 import InvalidSubOptionNameError from "./errors/InvalidSubOptionNameError";
 import InvalidSubOptionTypeError from "./errors/InvalidSubOptionTypeError";
 import InvalidSubOptionValueError from "./errors/InvalidSubOptionValueError";
+import InvalidReferencingOptionError from "./errors/InvalidReferencingOptionError";
 
 
 /**
@@ -45,7 +46,7 @@ export function validateOptions(hierarchy: any): void {
         // Looping through the hierarchy's options.
         for (const option in hierarchy) {
 
-            const 
+            const
                 matchingOption: Option = <Option>options.filter((opt: Option) => opt.label === option)[0],
                 optionValue: any = hierarchy[option];
 
@@ -56,10 +57,10 @@ export function validateOptions(hierarchy: any): void {
 
             // Validating the option's type.
             const typeValidation: { valid: boolean, type: string } = Option.validateOptionType(optionValue, matchingOption);
-            
+
             if (typeValidation.valid === false) {
                 throw new InvalidOptionTypeError(option, typeValidation.type);
-            }   
+            }
 
             // Validating the option's value.
             if (Option.validateOptionValue(optionValue, matchingOption) === false) {
@@ -71,10 +72,15 @@ export function validateOptions(hierarchy: any): void {
 
                 // Getting the option's sub-options.
                 const subOptions = (<IKeys>matchingOption).keys;
-                
+
                 // Validating the sub-options.
                 validateSubOptions(option, optionValue, subOptions);
             }
+        }
+
+        // Validating references.
+        if (validateReferences(hierarchy) === false) {
+            throw new InvalidReferencingOptionError("The “from” option must always have a “ref” sub-option");
         }
 
         // Checking if the hierarchy object contains any templates.
@@ -93,51 +99,9 @@ export function validateOptions(hierarchy: any): void {
             });
         }
     }
-    catch(e) {
+    catch (e) {
 
         throw e;
-    }
-}
-
-
-/**
- * Validates the sub-options of another option.
- * @param optionName The name of the option to validate the sub-options for. 
- * @param optionValue The sub-options to validate.
- * @param subOptions The expected sub-options.
- */
-function validateSubOptions(optionName: string, optionValue: any, subOptions: IKeys) {
-
-    // Looping through the expected sub-options.
-    for (const subOption in optionValue) {
-
-        const 
-            matchingSubOption: Option =  getSubOptions(optionName).filter((subOptions: Option) => subOptions.label === subOption)[0],
-            subOptionValue: any = optionValue[subOption];
-
-        // Checking if a sub-option is in the parent option.
-        if (subOption in subOptions) {
-            
-            // Validating the sub-option's name.
-            if (Option.validateOptionName(matchingSubOption) === false) {
-                throw new InvalidSubOptionNameError(optionName, subOption);
-            }
-
-            // Validating the sub-options's data type.
-            const typeValidation: { valid: boolean, type: string } = Option.validateOptionType(subOptionValue, matchingSubOption);
-
-            if (typeValidation.valid === false) {
-                throw new InvalidSubOptionTypeError(subOption, typeValidation.type);
-            }
-
-            // Validating the sub-option's value.
-            if (Option.validateOptionValue(subOptionValue, matchingSubOption) === false) {
-                throw new InvalidSubOptionValueError(subOption, subOptionValue);
-            }
-            
-        } else {
-            throw new InvalidSubOptionNameError(optionName, subOption);
-        }
     }
 }
 
@@ -167,8 +131,66 @@ export function validateTemplates(template: any): void {
             }
         }
     }
-    catch(e) {
+    catch (e) {
 
         throw e;
     }
+}
+
+
+/**
+ * Validates the sub-options of another option.
+ * @param optionName The name of the option to validate the sub-options for. 
+ * @param optionValue The sub-options to validate.
+ * @param subOptions The expected sub-options.
+ */
+function validateSubOptions(optionName: string, optionValue: any, subOptions: IKeys) {
+
+    // Looping through the expected sub-options.
+    for (const subOption in optionValue) {
+
+        const
+            matchingSubOption: Option = getSubOptions(optionName).filter((subOptions: Option) => subOptions.label === subOption)[0],
+            subOptionValue: any = optionValue[subOption];
+
+        // Checking if a sub-option is in the parent option.
+        if (subOption in subOptions) {
+
+            // Validating the sub-option's name.
+            if (Option.validateOptionName(matchingSubOption) === false) {
+                throw new InvalidSubOptionNameError(optionName, subOption);
+            }
+
+            // Validating the sub-options's data type.
+            const typeValidation: { valid: boolean, type: string } = Option.validateOptionType(subOptionValue, matchingSubOption);
+
+            if (typeValidation.valid === false) {
+                throw new InvalidSubOptionTypeError(subOption, typeValidation.type);
+            }
+
+            // Validating the sub-option's value.
+            if (Option.validateOptionValue(subOptionValue, matchingSubOption) === false) {
+                throw new InvalidSubOptionValueError(subOption, subOptionValue);
+            }
+
+        } else {
+            throw new InvalidSubOptionNameError(optionName, subOption);
+        }
+    }
+}
+
+
+/**
+ * Validates the references in a hierarchy object.
+ * 
+ * @param hierarchy The hierarchy object to validate the references for.
+ */
+function validateReferences(hierarchy: any): boolean {
+
+    if ('from' in hierarchy) {
+
+        return 'ref' in hierarchy.from;
+    }
+
+    return true;
 }

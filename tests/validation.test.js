@@ -199,6 +199,7 @@ describe('Option checks.', () => {
     });
 });
 
+
 describe('Template checks.', () => {
 
     test('“InvalidTemplateOptionError” should be thrown if a template has a forbidden option.', () => {
@@ -214,6 +215,7 @@ describe('Template checks.', () => {
         }
         catch(e) {
 
+            console.log(e.name, e.message);
             errorName = e.name;
         }
         

@@ -12,6 +12,7 @@ var InvalidOptionValueError_1 = __importDefault(require("./errors/InvalidOptionV
 var InvalidSubOptionNameError_1 = __importDefault(require("./errors/InvalidSubOptionNameError"));
 var InvalidSubOptionTypeError_1 = __importDefault(require("./errors/InvalidSubOptionTypeError"));
 var InvalidSubOptionValueError_1 = __importDefault(require("./errors/InvalidSubOptionValueError"));
+var InvalidReferencingOptionError_1 = __importDefault(require("./errors/InvalidReferencingOptionError"));
 exports.isValidHierarchy = function (hierarchy) { return hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy); };
 exports.isValidHTMLElement = function (target) { return target != null && target instanceof HTMLElement; };
 function validateOptions(hierarchy) {
@@ -36,6 +37,9 @@ function validateOptions(hierarchy) {
         for (var option in hierarchy) {
             _loop_1(option);
         }
+        if (validateReferences(hierarchy) === false) {
+            throw new InvalidReferencingOptionError_1.default("The “from” option must always have a “ref” sub-option");
+        }
         if ('templates' in hierarchy) {
             hierarchy.templates.forEach(function (template) {
                 validateTemplates(template);
@@ -52,6 +56,23 @@ function validateOptions(hierarchy) {
     }
 }
 exports.validateOptions = validateOptions;
+function validateTemplates(template) {
+    var forbiddenOptions = ['name', 'children', 'templates'];
+    try {
+        for (var option in template) {
+            if (forbiddenOptions.indexOf(option) > -1) {
+                throw new InvalidTemplateOptionError_1.default(option);
+            }
+            else {
+                validateOptions(template);
+            }
+        }
+    }
+    catch (e) {
+        throw e;
+    }
+}
+exports.validateTemplates = validateTemplates;
 function validateSubOptions(optionName, optionValue, subOptions) {
     var _loop_2 = function (subOption) {
         var matchingSubOption = options_1.getSubOptions(optionName).filter(function (subOptions) { return subOptions.label === subOption; })[0], subOptionValue = optionValue[subOption];
@@ -75,21 +96,10 @@ function validateSubOptions(optionName, optionValue, subOptions) {
         _loop_2(subOption);
     }
 }
-function validateTemplates(template) {
-    var forbiddenOptions = ['name', 'children', 'templates'];
-    try {
-        for (var option in template) {
-            if (forbiddenOptions.indexOf(option) > -1) {
-                throw new InvalidTemplateOptionError_1.default(option);
-            }
-            else {
-                validateOptions(template);
-            }
-        }
+function validateReferences(hierarchy) {
+    if ('from' in hierarchy) {
+        return 'ref' in hierarchy.from;
     }
-    catch (e) {
-        throw e;
-    }
+    return true;
 }
-exports.validateTemplates = validateTemplates;
 //# sourceMappingURL=validator.js.map
