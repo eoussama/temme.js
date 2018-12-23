@@ -23,6 +23,7 @@ export const isValidHierarchy = (hierarchy: Object): boolean => hierarchy != nul
  */
 export const isValidHTMLElement = (target: HTMLElement): boolean => target != null && target instanceof HTMLElement;
 
+
 /**
  * Validates the options in a hierarchy object for any
  * options it has or values it contains.

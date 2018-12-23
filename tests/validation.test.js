@@ -1,15 +1,15 @@
 /**
-*
-* @name:       temmejs
-* @version:    1.0.0
-* @author:     EOussama
-* @license     MIT
-* @source:     https://github.com/EOussama/temmejs
-* 
-* Everything that has to do with validation, from
-* data checks to value matching goes in here.
-*
-*/
+ *
+ * @name:       temmejs
+ * @version:    1.0.0
+ * @author:     EOussama
+ * @license     MIT
+ * @source:     https://github.com/EOussama/temmejs
+ * 
+ * Everything that has to do with validation, from
+ * data checks to value matching goes in here.
+ *
+ */
 
 
 const validator = require('../build/modules/validator');
@@ -136,5 +136,45 @@ describe('Option checks.', () => {
 
         // Assert.
         expect(options.length).toBe(11);
+    });
+
+    test('“InvalidOptionNameError” should be thrown if the hierarchy object has an invalid option name.', () => {
+        
+        // Arrange.
+        const hierarchy = { invalidOption: "some value" };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateOptions(hierarchy);
+        }
+        catch(e) {
+
+            errorName = e.name;
+        }
+        
+        // Assert.
+        expect(errorName).toBe("InvalidOptionNameError");
+    });
+
+    test('“InvalidOptionTypeError” should be thrown if an option in the hierarchy object is of an incorrect type.', () => {
+        
+        // Arrange.
+        const hierarchy = { name: [] };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateOptions(hierarchy);
+        }
+        catch(e) {
+
+            errorName = e.name;
+        }
+        console.log(errorName);
+        // Assert.
+        expect(errorName).toBe("InvalidOptionTypeError");
     });
 });
