@@ -11,6 +11,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Validator = __importStar(require("./modules/validator"));
+var Sanitizer = __importStar(require("./modules/sanitizer"));
 var InvalidHierarchyError_1 = __importDefault(require("./modules/errors/InvalidHierarchyError"));
 var InvalidTargetError_1 = __importDefault(require("./modules/errors/InvalidTargetError"));
 function parse(hierarchy, target, endBallback, nodeCallback) {
@@ -22,6 +23,8 @@ function parse(hierarchy, target, endBallback, nodeCallback) {
             throw new InvalidHierarchyError_1.default("");
         }
         Validator.validateOptions(hierarchy);
+        Sanitizer.sanitize(hierarchy);
+        console.log(hierarchy);
         endBallback();
     }
     catch (e) {

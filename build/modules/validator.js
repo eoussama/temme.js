@@ -13,6 +13,7 @@ var InvalidSubOptionNameError_1 = __importDefault(require("./errors/InvalidSubOp
 var InvalidSubOptionTypeError_1 = __importDefault(require("./errors/InvalidSubOptionTypeError"));
 var InvalidSubOptionValueError_1 = __importDefault(require("./errors/InvalidSubOptionValueError"));
 var InvalidReferencingOptionError_1 = __importDefault(require("./errors/InvalidReferencingOptionError"));
+var InvalidTemplateError_1 = __importDefault(require("./errors/InvalidTemplateError"));
 exports.isValidHierarchy = function (hierarchy) { return hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy); };
 exports.isValidHTMLElement = function (target) { return target != null && target instanceof HTMLElement; };
 function validateOptions(hierarchy) {
@@ -59,6 +60,9 @@ exports.validateOptions = validateOptions;
 function validateTemplates(template) {
     var forbiddenOptions = ['name', 'children', 'templates'];
     try {
+        if (!('ref' in template)) {
+            throw new InvalidTemplateError_1.default("");
+        }
         for (var option in template) {
             if (forbiddenOptions.indexOf(option) > -1) {
                 throw new InvalidTemplateOptionError_1.default(option);

@@ -260,10 +260,10 @@ describe('Option checks.', () => {
 
 describe('Template checks.', () => {
 
-    test('“InvalidTemplateOptionError” should be thrown if a template has a forbidden option.', () => {
+    test("“InvalidTemplateError” should be thrown if a template doesn't have a “ref” option.", () => {
         
         // Arrange.
-        const template = { classes: ['red', 'bold'], name: 'h1' };
+        const template = { classes: ['red', 'bold'] };
         let errorName = "";
 
         // Act.
@@ -273,7 +273,26 @@ describe('Template checks.', () => {
         }
         catch(e) {
 
-            console.log(e.name, e.message);
+            errorName = e.name;
+        }
+        
+        // Assert.
+        expect(errorName).toBe("InvalidTemplateError");
+    });
+
+    test('“InvalidTemplateOptionError” should be thrown if a template has a forbidden option.', () => {
+        
+        // Arrange.
+        const template = { classes: ['red', 'bold'], name: 'h1', ref: 'temp-1' };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateTemplates(template);
+        }
+        catch(e) {
+
             errorName = e.name;
         }
         

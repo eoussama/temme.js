@@ -27,9 +27,10 @@ exports.options = [
     new DatasetOption_1.default(),
     new FromOption_1.default()
 ];
+exports.allOptions = getAllOptions();
 function getSubOptions(option) {
-    var options = getAllOptions(), subOptions = [];
-    options.forEach(function (opt) {
+    var subOptions = [];
+    exports.allOptions.forEach(function (opt) {
         if ('keys' in opt && opt.label === option) {
             for (var key in opt.keys) {
                 var subOption = opt.keys[key];

@@ -16,13 +16,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Option_1 = __importDefault(require("../../models/Option"));
-var ChildrenAllowSubOption = (function (_super) {
-    __extends(ChildrenAllowSubOption, _super);
-    function ChildrenAllowSubOption() {
-        return _super.call(this, 'allow', 'boolean', [], false) || this;
+var TemmyError_1 = __importDefault(require("../models/TemmyError"));
+var InvalidTemplateError = (function (_super) {
+    __extends(InvalidTemplateError, _super);
+    function InvalidTemplateError(message) {
+        var _this = _super.call(this, "") || this;
+        _this.name = "InvalidTemplateError";
+        _this.message = "A template does not have a “ref” option";
+        _this.message = message.length > 0 ? message : _this.message;
+        return _this;
     }
-    return ChildrenAllowSubOption;
-}(Option_1.default));
-exports.default = ChildrenAllowSubOption;
-//# sourceMappingURL=ChildrenAllowSubOption.js.map
+    return InvalidTemplateError;
+}(TemmyError_1.default));
+exports.default = InvalidTemplateError;
+//# sourceMappingURL=InvalidTemplateError.js.map
