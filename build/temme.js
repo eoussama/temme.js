@@ -24,7 +24,6 @@ function parse(hierarchy, target, endBallback, nodeCallback) {
         }
         Validator.validateOptions(hierarchy);
         Sanitizer.sanitize(hierarchy);
-        console.log(hierarchy);
         endBallback();
     }
     catch (e) {

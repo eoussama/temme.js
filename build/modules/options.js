@@ -28,6 +28,7 @@ exports.options = [
     new FromOption_1.default()
 ];
 exports.allOptions = getAllOptions();
+exports.forbiddenOptions = ['name', 'childrenNodes', 'templates'];
 function getSubOptions(option) {
     var subOptions = [];
     exports.allOptions.forEach(function (opt) {

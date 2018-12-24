@@ -58,13 +58,12 @@ function validateOptions(hierarchy) {
 }
 exports.validateOptions = validateOptions;
 function validateTemplates(template) {
-    var forbiddenOptions = ['name', 'children', 'templates'];
     try {
         if (!('ref' in template)) {
             throw new InvalidTemplateError_1.default("");
         }
         for (var option in template) {
-            if (forbiddenOptions.indexOf(option) > -1) {
+            if (options_1.forbiddenOptions.indexOf(option) > -1) {
                 throw new InvalidTemplateOptionError_1.default(option);
             }
             else {

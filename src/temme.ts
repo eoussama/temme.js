@@ -54,7 +54,6 @@ export function parse(hierarchy: Object, target: HTMLElement, endBallback: () =>
 
         // Sanitizing the hierarchy.
         Sanitizer.sanitize(hierarchy);
-        console.log(hierarchy);
 
         // Executing the end callback.
         endBallback();

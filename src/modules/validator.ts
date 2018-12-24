@@ -4,7 +4,7 @@
 
 
 import Option, { IKeys } from "./models/Option";
-import { options, getSubOptions } from "./options";
+import { options, forbiddenOptions, getSubOptions} from "./options";
 import InvalidTemplateOptionError from "./errors/InvalidTemplateOptionError";
 import InvalidOptionNameError from "./errors/InvalidOptionNameError";
 import InvalidOptionTypeError from "./errors/InvalidOptionTypeError";
@@ -115,9 +115,6 @@ export function validateOptions(hierarchy: any): void {
  * @throws InvalidOptionNameError, InvalidOptionTypeError, InvalidOptionValueError, InvalidSubOptionNameError, InvalidSubOptionTypeError, InvalidSubOptionValueError, InvalidTemplateError, InvalidTemplateOptionError
  */
 export function validateTemplates(template: any): void {
-
-    // The options that are not allowed for templates.
-    const forbiddenOptions: Array<string> = ['name', 'children', 'templates'];
 
     try {
 

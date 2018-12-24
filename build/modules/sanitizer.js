@@ -50,7 +50,21 @@ function sanitizeOption(hierarchy, option) {
 }
 function sanitizeTemplate(template) {
     try {
-        console.log(template);
+        options_1.options
+            .filter(function (opt) { return options_1.forbiddenOptions.indexOf(opt.label) === -1; })
+            .forEach(function (opt) {
+            if (!(opt.label in template)) {
+                template[opt.label] = opt.default;
+            }
+            else {
+                if ('keys' in opt) {
+                    for (var key in opt.keys) {
+                        var subOption = opt.keys[key];
+                        sanitizeOption(template[opt.label], subOption);
+                    }
+                }
+            }
+        });
     }
     catch (e) {
         throw e;

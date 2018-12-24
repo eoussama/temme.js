@@ -6,7 +6,7 @@
 
 import { Hierarchy } from "./models/Hierarchy";
 import Option, { IKeys } from "./models/Option";
-import { options } from "./options";
+import { options, forbiddenOptions } from "./options";
 
 
 /**
@@ -31,7 +31,7 @@ export function sanitize(hierarchy: any): void {
                 if ('keys' in opt) {
 
                     for (const key in (<IKeys>opt).keys) {
-                        
+
                         // Getting the sub-option.
                         const subOption: Option = (<IKeys>opt).keys[key];
 
@@ -47,7 +47,7 @@ export function sanitize(hierarchy: any): void {
         if ('childrenNodes' in hierarchy && hierarchy.childrenNodes.length > 0) {
 
             hierarchy.childrenNodes.forEach((child: any) => {
-                
+
                 sanitize(child);
             });
         }
@@ -56,7 +56,7 @@ export function sanitize(hierarchy: any): void {
         if ('templates' in hierarchy && hierarchy.templates.length > 0) {
 
             hierarchy.templates.forEach((template: any) => {
-                
+
                 sanitizeTemplate(template);
             });
         }
@@ -79,23 +79,23 @@ function sanitizeOption(hierarchy: any, option: Option): void {
     try {
 
         if (!(option.label in hierarchy)) {
-    
+
             hierarchy[option.label] = option.default;
         }
-    
+
         if ('keys' in option) {
-    
+
             for (const key in (<IKeys>option).keys) {
-    
+
                 const
                     subHierarchy: any = hierarchy[(<Option>option).label],
                     subOption = (<IKeys>option).keys[key];
-    
+
                 sanitizeOption(subHierarchy, subOption);
             }
         }
     }
-    catch(e) {
+    catch (e) {
 
         throw e;
     }
@@ -111,9 +111,34 @@ function sanitizeTemplate(template: any): void {
 
     try {
 
-        console.log(template);
+        // Looping through the allowed options in templates.
+        options
+            .filter((opt: Option) => forbiddenOptions.indexOf(opt.label) === -1)
+            .forEach((opt: Option) => {
+
+                // Checking of the template doesn't have a said option.
+                if (!(opt.label in template)) {
+
+                    // Populating a default.
+                    template[opt.label] = opt.default;
+                } else {
+
+                    // Sanitizing the sub-option.
+                    if ('keys' in opt) {
+
+                        for (const key in (<IKeys>opt).keys) {
+
+                            // Getting the sub-option.
+                            const subOption: Option = (<IKeys>opt).keys[key];
+
+                            // Sanitizing the sub-option.
+                            sanitizeOption(template[(<Option>opt).label], subOption);
+                        }
+                    }
+                }
+            });
     }
-    catch(e) {
+    catch (e) {
 
         throw e;
     }

@@ -42,6 +42,12 @@ export const allOptions = getAllOptions();
 
 
 /**
+ * The options that are not allowed for templates.
+ */
+export const forbiddenOptions: Array<string> = ['name', 'childrenNodes', 'templates'];
+
+
+/**
  * Gets all the sub-options of an option.
  * 
  * @param option The parent option's name.
