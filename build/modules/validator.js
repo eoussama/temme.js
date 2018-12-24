@@ -45,8 +45,8 @@ function validateOptions(hierarchy) {
                 validateTemplates(template);
             });
         }
-        if ('children' in hierarchy) {
-            hierarchy.children.forEach(function (child) {
+        if ('childrenNodes' in hierarchy) {
+            hierarchy.childrenNodes.forEach(function (child) {
                 validateOptions(child);
             });
         }
@@ -89,7 +89,7 @@ function validateSubOptions(optionName, optionValue, subOptions) {
             }
             if ('keys' in matchingSubOption) {
                 var subOptionValue_1 = optionValue[subOption];
-                validateSubOptions(subOption, subOptionValue_1, matchingSubOption);
+                validateSubOptions(subOption, subOptionValue_1, matchingSubOption.keys);
             }
         }
         else {

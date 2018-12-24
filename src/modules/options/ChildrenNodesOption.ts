@@ -6,13 +6,13 @@
 import Option from "../models/Option";
 
 
-export default class ChildrenOption extends Option {
+export default class ChildrenNodesOption extends Option {
 
     /**
      * Parameterless constructor.
      */
     constructor() {
 
-        super('children', 'array', [], []);
+        super('childrenNodes', 'array', [], []);
     }
 }

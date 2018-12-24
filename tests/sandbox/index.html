@@ -91,7 +91,7 @@
                     classes: ['yellow']
                 }
             ],
-            children: [
+            childrenNodes: [
                 {
                     templates: [
                         {
@@ -106,7 +106,8 @@
                     from: {
                         ref: 'temp-3',
                         children: {
-                            allow: true
+                            allow: true,
+                            placement: 'after'
                         }
                     },
                     name: 'h1',

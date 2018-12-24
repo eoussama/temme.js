@@ -7,9 +7,6 @@ var Option = (function () {
         this.values = values;
         this.default = defaultValue;
     }
-    Option.validateOptionName = function (matchingOption) {
-        return matchingOption != null;
-    };
     Option.validateOptionType = function (value, matchingOption) {
         var optionType = "";
         if (Array.isArray(value)) {
@@ -29,6 +26,7 @@ var Option = (function () {
         }
         return true;
     };
+    Option.validateOptionName = function (matchingOption) { return matchingOption != null; };
     return Option;
 }());
 exports.default = Option;

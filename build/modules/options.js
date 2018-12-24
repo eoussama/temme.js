@@ -10,7 +10,7 @@ var ContentOption_1 = __importDefault(require("./options/ContentOption"));
 var TemmeIdsOption_1 = __importDefault(require("./options/TemmeIdsOption"));
 var TemplatesOption_1 = __importDefault(require("./options/TemplatesOption"));
 var ClassesOption_1 = __importDefault(require("./options/ClassesOption"));
-var ChildrenOption_1 = __importDefault(require("./options/ChildrenOption"));
+var ChildrenNodesOption_1 = __importDefault(require("./options/ChildrenNodesOption"));
 var AttributesOption_1 = __importDefault(require("./options/AttributesOption"));
 var DatasetOption_1 = __importDefault(require("./options/DatasetOption"));
 var FromOption_1 = __importDefault(require("./options/FromOption"));
@@ -22,14 +22,14 @@ exports.options = [
     new TemmeIdsOption_1.default(),
     new TemplatesOption_1.default(),
     new ClassesOption_1.default(),
-    new ChildrenOption_1.default(),
+    new ChildrenNodesOption_1.default(),
     new AttributesOption_1.default(),
     new DatasetOption_1.default(),
     new FromOption_1.default()
 ];
 function getSubOptions(option) {
-    var subOptions = [];
-    exports.options.forEach(function (opt) {
+    var options = getAllOptions(), subOptions = [];
+    options.forEach(function (opt) {
         if ('keys' in opt && opt.label === option) {
             for (var key in opt.keys) {
                 var subOption = opt.keys[key];
@@ -40,4 +40,27 @@ function getSubOptions(option) {
     return subOptions;
 }
 exports.getSubOptions = getSubOptions;
+function getAllOptions() {
+    var allOptions = [];
+    exports.options.forEach(function (opt) {
+        allOptions.push(opt);
+        if ('keys' in opt) {
+            var subOptions = getAllSubOptions(opt);
+            allOptions = allOptions.concat(subOptions);
+        }
+    });
+    return allOptions;
+}
+function getAllSubOptions(option) {
+    var allSubOptions = [];
+    for (var key in option.keys) {
+        var subOption = option.keys[key];
+        allSubOptions.push(subOption);
+        if ('keys' in subOption) {
+            var opts = getAllSubOptions(subOption);
+            allSubOptions = allSubOptions.concat(opts);
+        }
+    }
+    return allSubOptions;
+}
 //# sourceMappingURL=options.js.map

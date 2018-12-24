@@ -92,9 +92,9 @@ export function validateOptions(hierarchy: any): void {
         }
 
         // Repeating the same check for the hierarchy's children.
-        if ('children' in hierarchy) {
+        if ('childrenNodes' in hierarchy) {
 
-            hierarchy.children.forEach((child: Object) => {
+            hierarchy.childrenNodes.forEach((child: Object) => {
                 validateOptions(child);
             });
         }
@@ -178,7 +178,7 @@ function validateSubOptions(optionName: string, optionValue: any, subOptions: IK
                 // Getting the option's sub-options.
                 const subOptionValue = optionValue[subOption];
 
-                validateSubOptions(subOption, subOptionValue, <IKeys>matchingSubOption);
+                validateSubOptions(subOption, subOptionValue, (<IKeys>matchingSubOption).keys);
             }
 
         } else {

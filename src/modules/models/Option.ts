@@ -55,16 +55,14 @@ export default abstract class Option {
         this.default = defaultValue;
     }
 
+
     /**
      * Validates the option's name.
      * 
      * @param matchingOption The option object with the matching name.
      * 
      */
-    public static validateOptionName(matchingOption: Option): boolean {
-
-        return matchingOption != null;
-    }
+    public static validateOptionName = (matchingOption: Option): boolean => matchingOption != null;
 
 
     /**

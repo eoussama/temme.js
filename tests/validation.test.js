@@ -197,6 +197,63 @@ describe('Option checks.', () => {
         // Assert.
         expect(errorName).toBe("InvalidSubOptionValueError");
     });
+
+    test('“InvalidSubOptionNameError” should be thrown if a sub-option in the hierarchy is invalid.', () => {
+        
+        // Arrange.
+        const hierarchy = { 
+            templates: [
+                {
+                    ref: 'temp-1',
+                    classes: ['red']
+                }
+            ],
+            childrenNodes: [
+                {
+                    from: {
+                        ref: 'temp-1',
+                        children: {
+                            'invalid-sub-option': false
+                        }
+                    },
+                }
+            ]
+        };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateOptions(hierarchy);
+        }
+        catch(e) {
+
+            errorName = e.name;
+        }
+
+        // Assert.
+        expect(errorName).toBe("InvalidSubOptionNameError");
+    });
+
+    test("“InvalidReferencingOptionError” should be thrown if the hierarchy object's “from” option doesn't have a “ref” sub-opotion.", () => {
+        
+        // Arrange.
+        const hierarchy = { from: {} };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateOptions(hierarchy);
+        }
+        catch(e) {
+
+            errorName = e.name;
+        }
+        
+        // Assert.
+        expect(errorName).toBe("InvalidReferencingOptionError");
+    });
 });
 
 

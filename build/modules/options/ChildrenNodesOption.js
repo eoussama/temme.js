@@ -17,12 +17,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Option_1 = __importDefault(require("../models/Option"));
-var ChildrenOption = (function (_super) {
-    __extends(ChildrenOption, _super);
-    function ChildrenOption() {
-        return _super.call(this, 'children', 'array', [], []) || this;
+var ChildrenNodesOption = (function (_super) {
+    __extends(ChildrenNodesOption, _super);
+    function ChildrenNodesOption() {
+        return _super.call(this, 'childrenNodes', 'array', [], []) || this;
     }
-    return ChildrenOption;
+    return ChildrenNodesOption;
 }(Option_1.default));
-exports.default = ChildrenOption;
-//# sourceMappingURL=ChildrenOption.js.map
+exports.default = ChildrenNodesOption;
+//# sourceMappingURL=ChildrenNodesOption.js.map
