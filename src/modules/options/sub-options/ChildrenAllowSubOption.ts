@@ -13,6 +13,6 @@ export default class ChildrenAllowSubOption extends Option {
      */
     constructor() {
 
-        super('allow', 'boolean', [], true);
+        super('allow', 'boolean', [], false);
     }
 }

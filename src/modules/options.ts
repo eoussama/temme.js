@@ -17,6 +17,9 @@ import DatasetOption from "./options/DatasetOption";
 import FromOption from "./options/FromOption";
 
 
+/**
+ * All the global options.
+ */
 export const options: Array<Option> = [
     new RefOption(),
     new NameOption(),
@@ -33,18 +36,22 @@ export const options: Array<Option> = [
 
 
 /**
+ * The of the options available (including sub-options).
+ */
+export const allOptions = getAllOptions();
+
+
+/**
  * Gets all the sub-options of an option.
  * 
  * @param option The parent option's name.
  */
 export function getSubOptions(option: string): Array<Option> {
 
-    const 
-        options = getAllOptions(),
-        subOptions: Array<any> = [];
+    const subOptions: Array<any> = [];
 
     // Looping through all of the options.
-    options.forEach((opt: Option) => {
+    allOptions.forEach((opt: Option) => {
 
         if ('keys' in opt && (<Option>opt).label === option) {
             

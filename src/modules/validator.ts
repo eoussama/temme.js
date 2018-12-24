@@ -144,7 +144,7 @@ export function validateTemplates(template: any): void {
  * @param optionValue The sub-options to validate.
  * @param subOptions The expected sub-options.
  */
-function validateSubOptions(optionName: string, optionValue: any, subOptions: IKeys) {
+function validateSubOptions(optionName: string, optionValue: any, subOptions: IKeys): void {
 
     // Looping through the expected sub-options.
     for (const subOption in optionValue) {
@@ -182,6 +182,7 @@ function validateSubOptions(optionName: string, optionValue: any, subOptions: IK
             }
 
         } else {
+            
             throw new InvalidSubOptionNameError(optionName, subOption);
         }
     }

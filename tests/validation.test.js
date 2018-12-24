@@ -64,7 +64,8 @@ describe('Target checks.', () => {
     });
 
     describe('Valid target.', () => {
-        test("Checking if invalid target (HTML element) doesn't throw any error.", () => {
+
+        test("Checking if valid target (HTML element) doesn't throw any error.", () => {
 
             // Arrange.
             const target = document.createElement('div');

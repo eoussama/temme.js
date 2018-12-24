@@ -106,8 +106,7 @@
                     from: {
                         ref: 'temp-3',
                         children: {
-                            allow: true,
-                            placement: 'after'
+                            allow: true
                         }
                     },
                     name: 'h1',
@@ -122,18 +121,28 @@
 
         try {
             
+            // Starting a timer.
+            console.time('Temme');
+
             // Telling Temme to do us the favor.
             Temme.parse(hierarchy, target, () => {
 
                 // Outputting the results in the console.
                 console.log('%c [TemmeJS]%c All elements were created', 'color: green; font-weight: bold;', 'color: green; font-weight: 300;');
+                
+                // Displaying the time took.
+                console.log('\nTime took:');
+                console.timeEnd('Temme');
+
+                // Displaying the DOM element.
+                console.log('\nThe DOM element:')
                 console.info(target);
+
             }, (id, h, depth) => {
 
                 // Outputting information about each object being created.
                 console.log(`Element ID: %c${id}`, 'font-weight: bold;');
                 console.log(`Element depth: %c${depth}`, 'font-weight: bold;');
-                console.log('--------------------');
             });
         }
         catch (e) {

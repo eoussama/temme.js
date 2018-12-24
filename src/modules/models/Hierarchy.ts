@@ -1,6 +1,12 @@
 /**
  * The hierarchy model that maps the HTML skeleton.
  */
+
+
+import ContentKeys from "../options/ContentOption";
+import FromKeys from "../options/FromOption";
+
+
 export type Hierarchy = {
     
     /**
@@ -36,17 +42,17 @@ export type Hierarchy = {
     /**
      * The hierarchy object's children.
      */
-    children: Array<Hierarchy>;
+    childrenNodes: Array<Hierarchy>;
     
     /**
      * The HTML element's content.
      */
-    content: Object;
+    content: ContentKeys;
     
     /**
      * The hierarchy object's referencing object.
      */
-    from: Object;
+    from: FromKeys;
 
     /**
      * The HTML element's attributes.
