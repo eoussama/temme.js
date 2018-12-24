@@ -51,6 +51,15 @@ export function sanitize(hierarchy: any): void {
                 sanitize(child);
             });
         }
+
+        // Checking if the hierarchy has templates.
+        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
+
+            hierarchy.templates.forEach((template: any) => {
+                
+                sanitizeTemplate(template);
+            });
+        }
     }
     catch (e) {
 
@@ -67,20 +76,45 @@ export function sanitize(hierarchy: any): void {
  */
 function sanitizeOption(hierarchy: any, option: Option): void {
 
-    if (!(option.label in hierarchy)) {
+    try {
 
-        hierarchy[option.label] = option.default;
-    }
-
-    if ('keys' in option) {
-
-        for (const key in (<IKeys>option).keys) {
-
-            const
-                subHierarchy: any = hierarchy[(<Option>option).label],
-                subOption = (<IKeys>option).keys[key];
-
-            sanitizeOption(subHierarchy, subOption);
+        if (!(option.label in hierarchy)) {
+    
+            hierarchy[option.label] = option.default;
         }
+    
+        if ('keys' in option) {
+    
+            for (const key in (<IKeys>option).keys) {
+    
+                const
+                    subHierarchy: any = hierarchy[(<Option>option).label],
+                    subOption = (<IKeys>option).keys[key];
+    
+                sanitizeOption(subHierarchy, subOption);
+            }
+        }
+    }
+    catch(e) {
+
+        throw e;
+    }
+}
+
+
+/**
+ * Sanitizes templates.
+ * 
+ * @param template The template to sanitize.
+ */
+function sanitizeTemplate(template: any): void {
+
+    try {
+
+        console.log(template);
+    }
+    catch(e) {
+
+        throw e;
     }
 }

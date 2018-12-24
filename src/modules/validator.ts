@@ -13,6 +13,7 @@ import InvalidSubOptionNameError from "./errors/InvalidSubOptionNameError";
 import InvalidSubOptionTypeError from "./errors/InvalidSubOptionTypeError";
 import InvalidSubOptionValueError from "./errors/InvalidSubOptionValueError";
 import InvalidReferencingOptionError from "./errors/InvalidReferencingOptionError";
+import InvalidTemplateError from "./errors/InvalidTemplateError";
 
 
 /**
@@ -111,7 +112,7 @@ export function validateOptions(hierarchy: any): void {
  * 
  * @param template The template object to validate.
  * 
- * @throws InvalidOptionNameError, InvalidOptionTypeError, InvalidOptionValueError, InvalidSubOptionNameError, InvalidSubOptionTypeError, InvalidSubOptionValueError, InvalidTemplateOptionError
+ * @throws InvalidOptionNameError, InvalidOptionTypeError, InvalidOptionValueError, InvalidSubOptionNameError, InvalidSubOptionTypeError, InvalidSubOptionValueError, InvalidTemplateError, InvalidTemplateOptionError
  */
 export function validateTemplates(template: any): void {
 
@@ -119,6 +120,10 @@ export function validateTemplates(template: any): void {
     const forbiddenOptions: Array<string> = ['name', 'children', 'templates'];
 
     try {
+
+        if (!('ref' in template)) {
+            throw new InvalidTemplateError("");
+        }
 
         // Looping through the options of the template.
         for (const option in template) {
