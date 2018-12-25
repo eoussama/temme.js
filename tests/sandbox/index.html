@@ -122,7 +122,10 @@
 
                                 },
                                 {
-                                    
+                                    name: 'span',
+                                    content: {
+                                        value: '<i>Italic content</i>'
+                                    }
                                 }
                             ]
                         }
@@ -137,7 +140,7 @@
             console.time('Temme');
 
             // Telling Temme to do us the favor.
-            Temme.parse(hierarchy, target, () => {
+            const x = Temme.parse(hierarchy, target, (resultedHierarchy) => {
 
                 // Outputting the results in the console.
                 console.log('%c [TemmeJS]%c All elements were created', 'color: green; font-weight: bold;', 'color: green; font-weight: 300;');
@@ -145,6 +148,10 @@
                 // Displaying the time took.
                 console.log('\nTime took:');
                 console.timeEnd('Temme');
+
+                // Displaying the resulted hierarchy.
+                console.log('The resulted hierarchy object:')
+                console.log(resultedHierarchy);
 
                 // Displaying the DOM element.
                 console.log('\nThe DOM element:')
@@ -161,6 +168,7 @@
             
             console.error(e.name, e.message);
         }
+
 
     </script>
 </body>

@@ -1,18 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function idfy(hierarchy, temmeIds, mode) {
+    if (temmeIds === void 0) { temmeIds = []; }
     if (mode === void 0) { mode = false; }
-    var temmeId = generateTemmeId(mode);
-    hierarchy.temmeIds = temmeIds.concat([temmeId]);
-    if ('childNodes' in hierarchy) {
-        hierarchy.childNodes.forEach(function (child) {
-            idfy(child, hierarchy.temmeIds);
-        });
+    try {
+        var temmeId = generateTemmeId(mode);
+        hierarchy.temmeIds = temmeIds.concat([temmeId]);
+        if ('childNodes' in hierarchy) {
+            hierarchy.childNodes.forEach(function (child) {
+                idfy(child, hierarchy.temmeIds);
+            });
+        }
+        if ('templates' in hierarchy) {
+            hierarchy.templates.forEach(function (template) {
+                idfy(template, hierarchy.temmeIds, true);
+            });
+        }
     }
-    if ('templates' in hierarchy) {
-        hierarchy.templates.forEach(function (template) {
-            idfy(template, hierarchy.temmeIds, true);
-        });
+    catch (e) {
+        throw e;
     }
 }
 exports.idfy = idfy;

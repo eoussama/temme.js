@@ -12,6 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Validator = __importStar(require("./modules/validator"));
 var Sanitizer = __importStar(require("./modules/sanitizer"));
+var Referencer = __importStar(require("./modules/referencer"));
+var Parser = __importStar(require("./modules/parser"));
 var Idfier = __importStar(require("./modules/idfier"));
 var InvalidHierarchyError_1 = __importDefault(require("./modules/errors/InvalidHierarchyError"));
 var InvalidTargetError_1 = __importDefault(require("./modules/errors/InvalidTargetError"));
@@ -25,8 +27,11 @@ function parse(hierarchy, target, endBallback, nodeCallback) {
         }
         Validator.validateOptions(hierarchy);
         Sanitizer.sanitize(hierarchy);
-        Idfier.idfy(hierarchy, []);
-        endBallback();
+        Idfier.idfy(hierarchy);
+        Referencer.process(hierarchy);
+        Parser.parse(hierarchy, nodeCallback);
+        endBallback(hierarchy);
+        return hierarchy;
     }
     catch (e) {
         e.message = "[Temme]: " + e.message + ".";

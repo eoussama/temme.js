@@ -15,6 +15,8 @@
  
 import * as Validator from "./modules/validator";
 import * as Sanitizer from "./modules/sanitizer";
+import * as Referencer from "./modules/referencer";
+import * as Parser from './modules/parser';
 import * as Idfier from "./modules/idfier";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
@@ -22,7 +24,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
 
 
 /**
- * `Parse` is the entry point of Temme, it's what initiates everything
+ * The entry point of Temme, it's what initiates everything
  * from sanitizing, to parsing, like a boss.
  * 
  * @param hierarchy The hierarchy object that maps the HTML skeleton.
@@ -32,7 +34,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * 
  * @throws InvalidTargetError, InvalidHierarchyError
  */
-export function parse(hierarchy: Object, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => {}) {
+export function parse(hierarchy: Object, target: HTMLElement, endBallback: (resultedHierarchy: any) => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => {}) {
 
     try {
 
@@ -56,10 +58,19 @@ export function parse(hierarchy: Object, target: HTMLElement, endBallback: () =>
         Sanitizer.sanitize(hierarchy);
 
         // Assigning temmeIds to the hierarchy object.
-        Idfier.idfy(hierarchy, []);
+        Idfier.idfy(hierarchy);
+
+        // Processing all of the references.
+        Referencer.process(hierarchy);
+
+        // Parsing the hierarchy into an HTML tree.
+        Parser.parse(hierarchy, nodeCallback);
 
         // Executing the end callback.
-        endBallback();
+        endBallback(hierarchy);
+
+        // Returning the resulted hierarchy object.
+        return hierarchy;
     }
     catch (e) {
 

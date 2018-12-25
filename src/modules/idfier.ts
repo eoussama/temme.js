@@ -13,30 +13,37 @@
  * indicating it's a hierarchy object, if it's true, it'll have 4 characters indicating it's
  * a template.
  */
-export function idfy(hierarchy: any, temmeIds: Array<string>, mode: boolean = false) {
+export function idfy(hierarchy: any, temmeIds: Array<string> = [], mode: boolean = false) {
     
-    // Generating a temme Id.
-    const temmeId: string = generateTemmeId(mode);
-    
-    // Assigning a temmeId.
-    hierarchy.temmeIds = [...temmeIds, temmeId];
-    
-    // Checking of the hierarchy object has any children.
-    if ('childNodes' in hierarchy) {
+    try {
+
+        // Generating a temme Id.
+        const temmeId: string = generateTemmeId(mode);
         
-        hierarchy.childNodes.forEach((child: Object) => {
+        // Assigning a temmeId.
+        hierarchy.temmeIds = [...temmeIds, temmeId];
+        
+        // Checking of the hierarchy object has any children.
+        if ('childNodes' in hierarchy) {
             
-            idfy(child, hierarchy.temmeIds);
-        });
+            hierarchy.childNodes.forEach((child: Object) => {
+                
+                idfy(child, hierarchy.temmeIds);
+            });
+        }
+    
+        // Checking of the hierarchy object has any templates.
+        if ('templates' in hierarchy) {
+    
+            hierarchy.templates.forEach((template: Object) => {
+    
+                idfy(template, hierarchy.temmeIds, true);
+            });
+        }
     }
+    catch(e) {
 
-    // Checking of the hierarchy object has any templates.
-    if ('templates' in hierarchy) {
-
-        hierarchy.templates.forEach((template: Object) => {
-
-            idfy(template, hierarchy.temmeIds, true);
-        });
+        throw e;
     }
 }
 
