@@ -162,12 +162,26 @@ export function validateReferences(hierarchy: any, references: Array<ReferenceTy
         // Checking if the “ref” option starts with the “@” symbol.
         if (hierarchy.ref[0] === '@') {
             throw new InvalidReferenceOptionValueError("");
+        } 
+        
+        // Checking if the object is referencing an outer element.
+        if (hierarchy.from.ref[0] === '@') {
+
+            const
+                selector: string = (<string>hierarchy.from.ref).substring(1),
+                element: HTMLElement | null = document.querySelector(selector);
+
+            if (element == null) {
+                throw new InvalidReferenceOptionValueError(`No outer element corresponds to the selector “${selector}”`);
+            }
+        } else {
+
+            // Checking of the reference exists.
+            if (validateReference(hierarchy, references) === false && hierarchy.from.ref !== "") {
+                throw new InvalidReferenceError(hierarchy.from.ref);
+            }
         }
 
-        // Checking of the reference exists.
-        if (validateReference(hierarchy, references) === false && hierarchy.from.ref !== "") {
-            throw new InvalidReferenceError(hierarchy.from.ref);
-        }
 
         // Checking if the hierarchy object has any children.
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {

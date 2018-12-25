@@ -119,6 +119,7 @@ describe('Hierarchy checks.', () => {
     });
 
     describe('Valid hierarchy.', () => {
+        
         test("Checking if invalid hierarchy (object) doesn't throw any error.", () => {
 
             // Arrange.

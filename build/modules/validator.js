@@ -85,8 +85,16 @@ function validateReferences(hierarchy, references) {
         if (hierarchy.ref[0] === '@') {
             throw new InvalidReferenceOptionValueError_1.default("");
         }
-        if (validateReference(hierarchy, references) === false && hierarchy.from.ref !== "") {
-            throw new InvalidReferenceError_1.default(hierarchy.from.ref);
+        if (hierarchy.from.ref[0] === '@') {
+            var selector = hierarchy.from.ref.substring(1), element = document.querySelector(selector);
+            if (element == null) {
+                throw new InvalidReferenceOptionValueError_1.default("No outer element corresponds to the selector \u201C" + selector + "\u201D");
+            }
+        }
+        else {
+            if (validateReference(hierarchy, references) === false && hierarchy.from.ref !== "") {
+                throw new InvalidReferenceError_1.default(hierarchy.from.ref);
+            }
         }
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
             hierarchy.childNodes.forEach(function (child) {
