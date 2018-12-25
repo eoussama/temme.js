@@ -13,9 +13,9 @@
  */
 
  
-import { Hierarchy } from "./modules/models/Hierarchy";
 import * as Validator from "./modules/validator";
 import * as Sanitizer from "./modules/sanitizer";
+import * as Idfier from "./modules/idfier";
 import TemmyError from "./modules/models/TemmyError";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
@@ -32,7 +32,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * 
  * @throws InvalidTargetError, InvalidHierarchyError
  */
-export function parse(hierarchy: Object, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: Hierarchy, depth: number) => {}) {
+export function parse(hierarchy: Object, target: HTMLElement, endBallback: () => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => {}) {
 
     try {
 
@@ -54,6 +54,9 @@ export function parse(hierarchy: Object, target: HTMLElement, endBallback: () =>
 
         // Sanitizing the hierarchy.
         Sanitizer.sanitize(hierarchy);
+
+        // Assigning temmeIds to the hierarchy object.
+        Idfier.idfy(hierarchy, []);
 
         // Executing the end callback.
         endBallback();

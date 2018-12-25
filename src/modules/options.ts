@@ -44,7 +44,7 @@ export const allOptions = getAllOptions();
 /**
  * The options that are not allowed for templates.
  */
-export const forbiddenOptions: Array<string> = ['name', 'childrenNodes', 'templates'];
+export const forbiddenOptions: Array<string> = ['name', 'childNodes', 'templates'];
 
 
 /**

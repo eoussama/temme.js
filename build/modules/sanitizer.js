@@ -16,8 +16,8 @@ function sanitize(hierarchy) {
                 }
             }
         });
-        if ('childrenNodes' in hierarchy && hierarchy.childrenNodes.length > 0) {
-            hierarchy.childrenNodes.forEach(function (child) {
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+            hierarchy.childNodes.forEach(function (child) {
                 sanitize(child);
             });
         }

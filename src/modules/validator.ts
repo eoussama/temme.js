@@ -93,9 +93,9 @@ export function validateOptions(hierarchy: any): void {
         }
 
         // Repeating the same check for the hierarchy's children.
-        if ('childrenNodes' in hierarchy) {
+        if ('childNodes' in hierarchy) {
 
-            hierarchy.childrenNodes.forEach((child: Object) => {
+            hierarchy.childNodes.forEach((child: Object) => {
                 validateOptions(child);
             });
         }

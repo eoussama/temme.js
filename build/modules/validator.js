@@ -46,8 +46,8 @@ function validateOptions(hierarchy) {
                 validateTemplates(template);
             });
         }
-        if ('childrenNodes' in hierarchy) {
-            hierarchy.childrenNodes.forEach(function (child) {
+        if ('childNodes' in hierarchy) {
+            hierarchy.childNodes.forEach(function (child) {
                 validateOptions(child);
             });
         }

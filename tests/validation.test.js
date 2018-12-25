@@ -209,7 +209,7 @@ describe('Option checks.', () => {
                     classes: ['red']
                 }
             ],
-            childrenNodes: [
+            childNodes: [
                 {
                     from: {
                         ref: 'temp-1',

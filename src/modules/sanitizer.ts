@@ -4,7 +4,6 @@
  */
 
 
-import { Hierarchy } from "./models/Hierarchy";
 import Option, { IKeys } from "./models/Option";
 import { options, forbiddenOptions } from "./options";
 
@@ -44,9 +43,9 @@ export function sanitize(hierarchy: any): void {
         });
 
         // Checking if the hierarchy has children.
-        if ('childrenNodes' in hierarchy && hierarchy.childrenNodes.length > 0) {
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
 
-            hierarchy.childrenNodes.forEach((child: any) => {
+            hierarchy.childNodes.forEach((child: any) => {
 
                 sanitize(child);
             });

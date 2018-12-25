@@ -20,7 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var ChildrenNodesOption = (function (_super) {
     __extends(ChildrenNodesOption, _super);
     function ChildrenNodesOption() {
-        return _super.call(this, 'childrenNodes', 'array', [], []) || this;
+        return _super.call(this, 'childNodes', 'array', [], []) || this;
     }
     return ChildrenNodesOption;
 }(Option_1.default));
