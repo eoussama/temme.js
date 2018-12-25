@@ -13,7 +13,11 @@ var InvalidSubOptionNameError_1 = __importDefault(require("./errors/InvalidSubOp
 var InvalidSubOptionTypeError_1 = __importDefault(require("./errors/InvalidSubOptionTypeError"));
 var InvalidSubOptionValueError_1 = __importDefault(require("./errors/InvalidSubOptionValueError"));
 var InvalidReferencingOptionError_1 = __importDefault(require("./errors/InvalidReferencingOptionError"));
+var InvalidReferenceOptionValueError_1 = __importDefault(require("./errors/InvalidReferenceOptionValueError"));
+var InvalidReferenceError_1 = __importDefault(require("./errors/InvalidReferenceError"));
 var InvalidTemplateError_1 = __importDefault(require("./errors/InvalidTemplateError"));
+var idfier_1 = require("./idfier");
+var InvalidTemplateReferencingError_1 = __importDefault(require("./errors/InvalidTemplateReferencingError"));
 exports.isValidHierarchy = function (hierarchy) { return hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy); };
 exports.isValidHTMLElement = function (target) { return target != null && target instanceof HTMLElement; };
 function validateOptions(hierarchy) {
@@ -38,7 +42,7 @@ function validateOptions(hierarchy) {
         for (var option in hierarchy) {
             _loop_1(option);
         }
-        if (validateReferences(hierarchy) === false) {
+        if (validateReferencingOption(hierarchy) === false) {
             throw new InvalidReferencingOptionError_1.default("The “from” option must always have a “ref” sub-option");
         }
         if ('templates' in hierarchy) {
@@ -76,6 +80,53 @@ function validateTemplates(template) {
     }
 }
 exports.validateTemplates = validateTemplates;
+function validateReferences(hierarchy, references) {
+    try {
+        if (hierarchy.ref[0] === '@') {
+            throw new InvalidReferenceOptionValueError_1.default("");
+        }
+        if (validateReference(hierarchy, references) === false && hierarchy.from.ref !== "") {
+            throw new InvalidReferenceError_1.default(hierarchy.from.ref);
+        }
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+            hierarchy.childNodes.forEach(function (child) {
+                validateReferences(child, references);
+            });
+        }
+        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
+            hierarchy.templates.forEach(function (template) {
+                validateReferences(template, references);
+            });
+        }
+    }
+    catch (e) {
+        throw e;
+    }
+}
+exports.validateReferences = validateReferences;
+var validateReference = function (hierarchy, references) { return references.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref && idfier_1.getTemmeId(hierarchy) !== idfier_1.getTemmeId(ref.hierarchy); })[0] != null; };
+function validateTemplateReference(hierarchy, references) {
+    try {
+        var templates = hierarchy.templates;
+        if (templates.length > 0) {
+            templates.forEach(function (template) {
+                if (template.from.ref.length > 0) {
+                    var referencedElement = references.filter(function (ref) { return ref.hierarchy.ref === template.from.ref; })[0], isTemplate = idfier_1.getTemmeId(referencedElement.hierarchy).length === 4;
+                    if (isTemplate === false) {
+                        throw new InvalidTemplateReferencingError_1.default(template.ref, template.from.ref);
+                    }
+                }
+            });
+        }
+        hierarchy.childNodes.forEach(function (child) {
+            validateTemplateReference(child, references);
+        });
+    }
+    catch (e) {
+        throw e;
+    }
+}
+exports.validateTemplateReference = validateTemplateReference;
 function validateSubOptions(optionName, optionValue, subOptions) {
     var _loop_2 = function (subOption) {
         var matchingSubOption = options_1.getSubOptions(optionName).filter(function (subOptions) { return subOptions.label === subOption; })[0], subOptionValue = optionValue[subOption];
@@ -103,7 +154,7 @@ function validateSubOptions(optionName, optionValue, subOptions) {
         _loop_2(subOption);
     }
 }
-function validateReferences(hierarchy) {
+function validateReferencingOption(hierarchy) {
     if ('from' in hierarchy) {
         return 'ref' in hierarchy.from;
     }

@@ -4,7 +4,7 @@
 
 
 import Option, { IKeys } from "./models/Option";
-import { options, forbiddenOptions, getSubOptions} from "./options";
+import { options, forbiddenOptions, getSubOptions } from "./options";
 import InvalidTemplateOptionError from "./errors/InvalidTemplateOptionError";
 import InvalidOptionNameError from "./errors/InvalidOptionNameError";
 import InvalidOptionTypeError from "./errors/InvalidOptionTypeError";
@@ -13,7 +13,14 @@ import InvalidSubOptionNameError from "./errors/InvalidSubOptionNameError";
 import InvalidSubOptionTypeError from "./errors/InvalidSubOptionTypeError";
 import InvalidSubOptionValueError from "./errors/InvalidSubOptionValueError";
 import InvalidReferencingOptionError from "./errors/InvalidReferencingOptionError";
+import InvalidReferenceOptionValueError from "./errors/InvalidReferenceOptionValueError";
+import InvalidReferenceError from "./errors/InvalidReferenceError";
 import InvalidTemplateError from "./errors/InvalidTemplateError";
+import { ReferenceType } from "./referencer";
+import { getTemmeId } from "./idfier";
+import { Hierarchy } from "./models/Hierarchy";
+import { Template } from "./models/Template";
+import InvalidTemplateReferencingError from "./errors/InvalidTemplateReferencingError";
 
 
 /**
@@ -80,7 +87,7 @@ export function validateOptions(hierarchy: any): void {
         }
 
         // Validating references.
-        if (validateReferences(hierarchy) === false) {
+        if (validateReferencingOption(hierarchy) === false) {
             throw new InvalidReferencingOptionError("The “from” option must always have a “ref” sub-option");
         }
 
@@ -141,6 +148,109 @@ export function validateTemplates(template: any): void {
 
 
 /**
+ * Validates the references in the hierarchy object.
+ * 
+ * @param hierarchy The hierarchy object to validate the references for.
+ * @param references The valid refernces.
+ * 
+ * @throws InvalidReferenceError
+ */
+export function validateReferences(hierarchy: any, references: Array<ReferenceType>): void {
+
+    try {
+
+        // Checking if the “ref” option starts with the “@” symbol.
+        if (hierarchy.ref[0] === '@') {
+            throw new InvalidReferenceOptionValueError("");
+        }
+
+        // Checking of the reference exists.
+        if (validateReference(hierarchy, references) === false && hierarchy.from.ref !== "") {
+            throw new InvalidReferenceError(hierarchy.from.ref);
+        }
+
+        // Checking if the hierarchy object has any children.
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+
+            hierarchy.childNodes.forEach((child: Hierarchy) => {
+
+                validateReferences(child, references);
+            });
+        }
+
+        // Checking if the hierarchy object has any templates.
+        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
+
+            hierarchy.templates.forEach((template: any) => {
+
+                validateReferences(template, references);
+            });
+        }
+
+    }
+    catch (e) {
+
+        throw e;
+    }
+}
+
+
+/**
+ * Validates a passed reference.
+ * 
+ * @param reference The reference to validate.
+ * @param references The valid references.
+ */
+const validateReference = (hierarchy: any, references: Array<ReferenceType>): boolean => references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref && getTemmeId(hierarchy) !== getTemmeId(ref.hierarchy))[0] != null;
+
+
+/**
+ * Validates whether templates are referencing non-template element
+ * or not, in which case, an error is thrown.
+ * 
+ * @param hierarchy The hierarchy to validate the template inheritance for.
+ * @param references There valida references.
+ */
+export function validateTemplateReference(hierarchy: any, references: Array<ReferenceType>): void {
+
+    try {
+
+        // Getting the templates.
+        const templates = hierarchy.templates;
+
+        // Checking if there are any valid templates.
+        if (templates.length > 0) {
+
+            templates.forEach((template: any) => {
+
+                // Checking if the template's referencing value is valid.
+                if (template.from.ref.length > 0) {
+
+                    const
+                        referencedElement: any = references.filter((ref: ReferenceType) => (<Hierarchy>ref.hierarchy).ref === template.from.ref)[0],
+                        isTemplate: boolean = getTemmeId(referencedElement.hierarchy).length === 4;
+    
+                    if (isTemplate === false) {
+                       throw new InvalidTemplateReferencingError(template.ref, template.from.ref);
+                    }
+                }
+            });
+        }
+
+        hierarchy.childNodes.forEach((child: any) => {
+
+            validateTemplateReference(child, references);
+        });
+    }
+    catch(e)
+    {
+
+        throw e;
+    }
+}
+
+
+/**
  * Validates the sub-options of another option.
  * @param optionName The name of the option to validate the sub-options for. 
  * @param optionValue The sub-options to validate.
@@ -184,7 +294,7 @@ function validateSubOptions(optionName: string, optionValue: any, subOptions: IK
             }
 
         } else {
-            
+
             throw new InvalidSubOptionNameError(optionName, subOption);
         }
     }
@@ -196,7 +306,7 @@ function validateSubOptions(optionName: string, optionValue: any, subOptions: IK
  * 
  * @param hierarchy The hierarchy object to validate the references for.
  */
-function validateReferences(hierarchy: any): boolean {
+function validateReferencingOption(hierarchy: any): boolean {
 
     if ('from' in hierarchy) {
 

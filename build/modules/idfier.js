@@ -22,6 +22,7 @@ function idfy(hierarchy, temmeIds, mode) {
     }
 }
 exports.idfy = idfy;
+exports.getTemmeId = function (hierarchy) { return hierarchy.temmeIds[hierarchy.temmeIds.length - 1]; };
 function generateTemmeId(mode) {
     if (mode === void 0) { mode = false; }
     var chars = "0123456789abcdefghijklmnopqrstuvwxyz", max = (mode === false) ? 6 : 4;

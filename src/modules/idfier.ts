@@ -4,6 +4,10 @@
  */
 
 
+import { Hierarchy } from "./models/Hierarchy";
+import { Template } from "./models/Template";
+
+
 /**
  * Assigns temmeIds to a hierarchy object.
  * 
@@ -46,6 +50,14 @@ export function idfy(hierarchy: any, temmeIds: Array<string> = [], mode: boolean
         throw e;
     }
 }
+
+
+/**
+ * Gets the temmeId of a hierarchy or template object.
+ * 
+ * @param hierarchy The hierarchy to get the temmeId of.
+ */
+export const getTemmeId = (hierarchy: Hierarchy | Template): string => hierarchy.temmeIds[hierarchy.temmeIds.length - 1];
 
 
 /**

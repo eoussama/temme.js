@@ -34,7 +34,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * 
  * @throws InvalidTargetError, InvalidHierarchyError
  */
-export function parse(hierarchy: Object, target: HTMLElement, endBallback: (resultedHierarchy: any) => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => {}) {
+export function parse(hierarchy: Object, target: HTMLElement, endBallback: (resultedHierarchy: any) => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => {}): Object {
 
     try {
 

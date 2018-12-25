@@ -1,23 +1,23 @@
 /**
  * The error thrown when a 
- * from option is not valid
+ * ref option starts with the symbole “@”.
  */
 
 
 import TemmyError from "../models/TemmyError";
 
 
-export default class InvalidReferencingOptionError extends TemmyError {
+export default class InvalidReferenceOptionValueError extends TemmyError {
 
     /**
      * The name of the error.
      */
-    public name: string = "InvalidReferencingOptionError";
+    public name: string = "InvalidReferenceOptionValueError";
 
     /**
      * The message of the error.
      */
-    public message: string = "A referencing option is not valid";
+    public message: string = "“ref” options must not begin with the “@” symbol";
 
     /**
      * Constructor with parameters.
