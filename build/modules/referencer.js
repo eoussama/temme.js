@@ -6,6 +6,7 @@ function process(hierarchy) {
         var references = getReferences(hierarchy);
         validator_1.validateReferences(hierarchy, references);
         validator_1.validateTemplateReference(hierarchy, references);
+        validator_1.validateParentToChildReference(hierarchy, references);
     }
     catch (e) {
         throw e;
@@ -15,6 +16,7 @@ exports.process = process;
 function getReferences(hierarchy, depth) {
     if (depth === void 0) { depth = 0; }
     var references = [];
+    depth++;
     if (hierarchy.ref !== "") {
         references.push({
             depth: depth,
@@ -28,7 +30,7 @@ function getReferences(hierarchy, depth) {
     }
     if ('templates' in hierarchy && hierarchy.templates.length > 0) {
         hierarchy.templates.forEach(function (template) {
-            references.push.apply(references, getReferences(template, depth));
+            references.push.apply(references, getReferences(template, depth - 1));
         });
     }
     return references;

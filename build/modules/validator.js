@@ -18,6 +18,7 @@ var InvalidReferenceError_1 = __importDefault(require("./errors/InvalidReference
 var InvalidTemplateError_1 = __importDefault(require("./errors/InvalidTemplateError"));
 var idfier_1 = require("./idfier");
 var InvalidTemplateReferencingError_1 = __importDefault(require("./errors/InvalidTemplateReferencingError"));
+var ReferenceOutOfScopeError_1 = __importDefault(require("./errors/ReferenceOutOfScopeError"));
 exports.isValidHierarchy = function (hierarchy) { return hierarchy != null && typeof hierarchy === 'object' && !Array.isArray(hierarchy); };
 exports.isValidHTMLElement = function (target) { return target != null && target instanceof HTMLElement; };
 function validateOptions(hierarchy) {
@@ -135,6 +136,33 @@ function validateTemplateReference(hierarchy, references) {
     }
 }
 exports.validateTemplateReference = validateTemplateReference;
+function validateParentToChildReference(hierarchy, references, depth) {
+    if (depth === void 0) { depth = 0; }
+    try {
+        var ref_1 = hierarchy.from.ref;
+        depth++;
+        if (ref_1 !== "") {
+            var referencedHierarchy = references.filter(function (refObject) { return refObject.hierarchy.ref === ref_1 && depth >= refObject.depth; })[0];
+            if (referencedHierarchy == null) {
+                throw new ReferenceOutOfScopeError_1.default("");
+            }
+        }
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+            hierarchy.childNodes.forEach(function (child) {
+                validateParentToChildReference(child, references, depth);
+            });
+        }
+        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
+            hierarchy.templates.forEach(function (template) {
+                validateParentToChildReference(template, references, depth);
+            });
+        }
+    }
+    catch (e) {
+        throw e;
+    }
+}
+exports.validateParentToChildReference = validateParentToChildReference;
 function validateSubOptions(optionName, optionValue, subOptions) {
     var _loop_2 = function (subOption) {
         var matchingSubOption = options_1.getSubOptions(optionName).filter(function (subOptions) { return subOptions.label === subOption; })[0], subOptionValue = optionValue[subOption];

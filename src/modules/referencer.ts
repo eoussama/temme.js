@@ -5,7 +5,7 @@
 
 import { Hierarchy } from "./models/Hierarchy";
 import { Template } from "./models/Template";
-import { validateReferences, validateTemplateReference } from "./validator";
+import { validateReferences, validateTemplateReference, validateParentToChildReference } from "./validator";
 
 
 /**
@@ -28,10 +28,11 @@ export function process(hierarchy: any): void {
         // Validating all of the refereces.
         validateReferences(hierarchy, references);
         
-        // Check if templates are inheriting hierarchy objects.
+        // Checking if templates are inheriting hierarchy objects.
         validateTemplateReference(hierarchy, references);
 
-        // TODO - Check if object is inheriting their children.
+        // Checking if a parent is trying to reference their childern.
+        validateParentToChildReference(hierarchy, references);
     }
     catch(e) {
 
@@ -49,6 +50,9 @@ export function process(hierarchy: any): void {
 function getReferences(hierarchy: any, depth: number = 0): Array<ReferenceType> {
 
     const references: Array<ReferenceType> = [];
+
+    // Incrementing the depth.
+    depth++;
 
     // Checking if the reference is valid.
     if (hierarchy.ref !== "") {
@@ -73,7 +77,9 @@ function getReferences(hierarchy: any, depth: number = 0): Array<ReferenceType> 
 
         hierarchy.templates.forEach((template: Template) =>  {
             
-            references.push(...getReferences(template, depth));
+            // Substracting 1 to make templates on the same depth level
+            // as their hierarchy parent.
+            references.push(...getReferences(template, depth - 1));
         });
     }
 

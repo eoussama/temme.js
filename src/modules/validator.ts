@@ -21,6 +21,7 @@ import { getTemmeId } from "./idfier";
 import { Hierarchy } from "./models/Hierarchy";
 import { Template } from "./models/Template";
 import InvalidTemplateReferencingError from "./errors/InvalidTemplateReferencingError";
+import ReferenceOutOfRangeError from "./errors/ReferenceOutOfScopeError";
 
 
 /**
@@ -182,7 +183,6 @@ export function validateReferences(hierarchy: any, references: Array<ReferenceTy
             }
         }
 
-
         // Checking if the hierarchy object has any children.
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
 
@@ -200,7 +200,6 @@ export function validateReferences(hierarchy: any, references: Array<ReferenceTy
                 validateReferences(template, references);
             });
         }
-
     }
     catch (e) {
 
@@ -223,7 +222,9 @@ const validateReference = (hierarchy: any, references: Array<ReferenceType>): bo
  * or not, in which case, an error is thrown.
  * 
  * @param hierarchy The hierarchy to validate the template inheritance for.
- * @param references There valida references.
+ * @param references There valid references.
+ * 
+ * @throws InvalidTemplateReferencingError
  */
 export function validateTemplateReference(hierarchy: any, references: Array<ReferenceType>): void {
 
@@ -258,6 +259,59 @@ export function validateTemplateReference(hierarchy: any, references: Array<Refe
     }
     catch(e)
     {
+
+        throw e;
+    }
+}
+
+
+/**
+ * Validates whether a hierarchy object is referencing its child.
+ * 
+ * @param hierarchy The hierarchy to validate.
+ * @param references There valid references.
+ * @param depth The depth of the validation.
+ */
+export function validateParentToChildReference(hierarchy: any, references: Array<ReferenceType>, depth: number = 0): void {
+
+    try {
+
+        const ref: string = hierarchy.from.ref;
+
+        // Incrementing the depth
+        depth++;
+
+        // Checking if the reference is valid.
+        if (ref !== "") {
+
+            // Getting the referenced hierarchy.
+            const referencedHierarchy: ReferenceType = references.filter((refObject: ReferenceType) => (<Hierarchy>refObject.hierarchy).ref === ref && depth >= refObject.depth)[0];
+
+            if (referencedHierarchy == null) {
+                throw new ReferenceOutOfRangeError("");
+            }
+        }
+
+        // Checking if the hierarchy object has any children.
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+
+            hierarchy.childNodes.forEach((child: Hierarchy) => {
+
+                validateParentToChildReference(child, references, depth);
+            });
+        }
+
+        // Checking if the hierarchy object has any templates.
+        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
+
+            hierarchy.templates.forEach((template: any) => {
+
+                validateParentToChildReference(template, references, depth);
+            });
+        }
+        
+    }
+    catch(e) {
 
         throw e;
     }
