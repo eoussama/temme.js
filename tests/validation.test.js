@@ -12,8 +12,9 @@
  */
 
 
-const validator = require('../build/modules/validator');
-const options = require('../build/modules/options').options;
+const 
+    validator = require('../build/modules/validator'),
+    options = require('../build/modules/options').options;
 
 
 describe('Target checks.', () => {

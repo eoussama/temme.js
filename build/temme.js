@@ -17,7 +17,8 @@ var Parser = __importStar(require("./modules/parser"));
 var Idfier = __importStar(require("./modules/idfier"));
 var InvalidHierarchyError_1 = __importDefault(require("./modules/errors/InvalidHierarchyError"));
 var InvalidTargetError_1 = __importDefault(require("./modules/errors/InvalidTargetError"));
-function parse(hierarchy, target, endBallback, nodeCallback) {
+function parse(hierarchy, target, endCallback, nodeCallback) {
+    if (endCallback === void 0) { endCallback = function (hierarchy) { }; }
     try {
         if (!Validator.isValidHTMLElement(target)) {
             throw new InvalidTargetError_1.default("");
@@ -30,7 +31,7 @@ function parse(hierarchy, target, endBallback, nodeCallback) {
         Idfier.idfy(hierarchy);
         Referencer.process(hierarchy);
         Parser.parse(hierarchy, nodeCallback);
-        endBallback(hierarchy);
+        endCallback(hierarchy);
         return hierarchy;
     }
     catch (e) {

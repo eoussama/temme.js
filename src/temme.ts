@@ -29,12 +29,12 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * 
  * @param hierarchy The hierarchy object that maps the HTML skeleton.
  * @param target The HTML element that will host the parsed skeleton.
- * @param endBallback The function that execute when the skeleton has been parsed.
+ * @param endCallback The function that execute when the skeleton has been parsed.
  * @param nodeCallback The function that executes whenever an element has been parsed.
  * 
  * @throws InvalidTargetError, InvalidHierarchyError
  */
-export function parse(hierarchy: Object, target: HTMLElement, endBallback: (resultedHierarchy: any) => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => {}): Object {
+export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resultedHierarchy: any) => void = (hierarchy) => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => void): Object {
 
     try {
 
@@ -67,7 +67,7 @@ export function parse(hierarchy: Object, target: HTMLElement, endBallback: (resu
         Parser.parse(hierarchy, nodeCallback);
 
         // Executing the end callback.
-        endBallback(hierarchy);
+        endCallback(hierarchy);
 
         // Returning the resulted hierarchy object.
         return hierarchy;
