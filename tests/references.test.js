@@ -165,3 +165,42 @@ describe('Validating references.', () => {
         expect(errorName).toBe("ReferenceOutOfScopeError");
     });
 });
+
+describe('References.', () => {
+
+    test("Referencing a template and inheriting it's classes.", () => {
+
+        // Arrange.
+        const 
+            target = document.createElement('div'),
+            hierarchy = {
+                templates: [
+                    {
+                        ref: 'temp',
+                        classes: ['red', 'bold']
+                    }
+                ],
+                childNodes: [
+                    {
+                        from: {
+                            ref: 'temp'
+                        }
+                    }
+                ]
+            };
+
+        // Act.
+        try {
+
+            Temme.parse(hierarchy, target, (h) => {
+
+                // Assert
+                expect(h.childNodes[0].classes).toEqual(['bold', 'red']);
+            });
+        }
+        catch(e) {
+
+            console.error(e.name, e.message);
+        }
+    });
+});

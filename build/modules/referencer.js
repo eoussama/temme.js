@@ -9,7 +9,6 @@ function process(hierarchy) {
         validator_1.validateReferences(hierarchy, references);
         validator_1.validateTemplateReference(hierarchy, references);
         validator_1.validateParentToChildReference(hierarchy, references);
-        console.log(references.filter(function (ref) { return exports.isTemplate(ref.hierarchy); }));
         processTemplates(hierarchy, references.filter(function (ref) { return exports.isTemplate(ref.hierarchy); }));
         processHierarchies(hierarchy, references);
     }

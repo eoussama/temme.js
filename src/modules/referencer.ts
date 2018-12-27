@@ -37,7 +37,6 @@ export function process(hierarchy: any): void {
         // Checking if a parent is trying to reference their childern.
         validateParentToChildReference(hierarchy, references);
 
-        console.log(references.filter((ref: ReferenceType) => isTemplate(ref.hierarchy)));
         // Processing template references.
         processTemplates(hierarchy, references.filter((ref: ReferenceType) => isTemplate(ref.hierarchy)));
 
