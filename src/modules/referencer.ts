@@ -37,6 +37,7 @@ export function process(hierarchy: any): void {
         // Checking if a parent is trying to reference their childern.
         validateParentToChildReference(hierarchy, references);
 
+        console.log(references.filter((ref: ReferenceType) => isTemplate(ref.hierarchy)));
         // Processing template references.
         processTemplates(hierarchy, references.filter((ref: ReferenceType) => isTemplate(ref.hierarchy)));
 
@@ -62,20 +63,11 @@ export const isTemplate = (hierarchy: any): boolean => getTemmeId(hierarchy).len
  * Processes all of the references for template hierarchies.
  * 
  * @param hierarchy The hierarchy that contain templates to reference.
- * @param reference The valida references.
+ * @param references The valid references.
  */
-function processTemplates(hierarchy: any, reference: Array<ReferenceType>): void {
+function processTemplates(hierarchy: any, references: Array<ReferenceType>): void {
 
     try {
-
-        // Checking if the hierarchy object has any children.
-        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
-
-            hierarchy.childNodes.forEach((child: Hierarchy) => {
-
-                processTemplates(child, reference);
-            });
-        }
 
         // Checking if the hierarchy object has any templates.
         if ('templates' in hierarchy && hierarchy.templates.length > 0) {
@@ -89,12 +81,21 @@ function processTemplates(hierarchy: any, reference: Array<ReferenceType>): void
                         // Getting the proper option.
                         const
                             option: any = options.filter((opt: Option) => opt.label === key)[0],
-                            referencedHierarchy: ReferenceType = reference.filter((ref: ReferenceType) => ref.hierarchy.ref === template.from.ref)[0];
+                            referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === template.from.ref)[0];
             
                         // Inheriting the value.
                         option.inherit(template, referencedHierarchy.hierarchy[key]);
                     }
                 }
+            });
+        }
+
+        // Checking if the hierarchy object has any children.
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+
+            hierarchy.childNodes.forEach((child: Hierarchy) => {
+
+                processTemplates(child, references);
             });
         }
     }
@@ -111,7 +112,7 @@ function processTemplates(hierarchy: any, reference: Array<ReferenceType>): void
  * @param hierarchy The hierarchies to reference.
  * @param reference The valid references.
  */
-function processHierarchies(hierarchy: any, reference: Array<ReferenceType>): void {
+function processHierarchies(hierarchy: any, references: Array<ReferenceType>): void {
 
     try {
 
@@ -122,7 +123,7 @@ function processHierarchies(hierarchy: any, reference: Array<ReferenceType>): vo
                 // Getting the proper option.
                 const
                     option: any = options.filter((opt: Option) => opt.label === key)[0],
-                    referencedHierarchy: ReferenceType = reference.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0];
+                    referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0];
     
                 // Inheriting the value.
                 option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
@@ -134,7 +135,7 @@ function processHierarchies(hierarchy: any, reference: Array<ReferenceType>): vo
 
             hierarchy.childNodes.forEach((child: Hierarchy) => {
 
-                processHierarchies(child, reference);
+                processHierarchies(child, references);
             });
         }
     }

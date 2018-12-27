@@ -72,21 +72,35 @@
 
         // Testing up the hierarchy object.
         const hierarchy = {
-            childNodes: [
+            templates: [
                 {
-                    ref: 'ff',
-                    classes: ['blue'],
-                    childNodes: [
-                        {
-                            name: 'span'
-                        }
-                    ]
+                    ref: 'temp-1',
+                    classes: ['red']
                 },
                 {
+                    ref: 'temp-2',
+                    classes: ['blue'],
                     from: {
-                        ref: 'ff'
-                    },
-                    classes: ['red']
+                       ref: "temp-1"
+                    }
+                }
+            ],
+            childNodes: [
+                {
+                    ref: 'ele',
+                    templates: [
+                        {
+                            ref: 'temp-3',
+                            classes: ['orange'],
+                            from: {
+                                ref: 'temp-2'
+                            }
+                        }
+                    ],
+                    classes: ['green'],
+                    from: {
+                        ref: 'temp-3'
+                    }
                 }
             ]
         };

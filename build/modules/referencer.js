@@ -9,6 +9,7 @@ function process(hierarchy) {
         validator_1.validateReferences(hierarchy, references);
         validator_1.validateTemplateReference(hierarchy, references);
         validator_1.validateParentToChildReference(hierarchy, references);
+        console.log(references.filter(function (ref) { return exports.isTemplate(ref.hierarchy); }));
         processTemplates(hierarchy, references.filter(function (ref) { return exports.isTemplate(ref.hierarchy); }));
         processHierarchies(hierarchy, references);
     }
@@ -18,18 +19,13 @@ function process(hierarchy) {
 }
 exports.process = process;
 exports.isTemplate = function (hierarchy) { return idfier_1.getTemmeId(hierarchy).length === 4; };
-function processTemplates(hierarchy, reference) {
+function processTemplates(hierarchy, references) {
     try {
-        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
-            hierarchy.childNodes.forEach(function (child) {
-                processTemplates(child, reference);
-            });
-        }
         if ('templates' in hierarchy && hierarchy.templates.length > 0) {
             hierarchy.templates.forEach(function (template) {
                 if (template.from.ref !== "") {
                     var _loop_1 = function (key) {
-                        var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], referencedHierarchy = reference.filter(function (ref) { return ref.hierarchy.ref === template.from.ref; })[0];
+                        var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], referencedHierarchy = references.filter(function (ref) { return ref.hierarchy.ref === template.from.ref; })[0];
                         option.inherit(template, referencedHierarchy.hierarchy[key]);
                     };
                     for (var key in template) {
@@ -38,16 +34,21 @@ function processTemplates(hierarchy, reference) {
                 }
             });
         }
+        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
+            hierarchy.childNodes.forEach(function (child) {
+                processTemplates(child, references);
+            });
+        }
     }
     catch (e) {
         throw e;
     }
 }
-function processHierarchies(hierarchy, reference) {
+function processHierarchies(hierarchy, references) {
     try {
         if (hierarchy.from.ref !== "") {
             var _loop_2 = function (key) {
-                var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], referencedHierarchy = reference.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref; })[0];
+                var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], referencedHierarchy = references.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref; })[0];
                 option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
             };
             for (var key in hierarchy) {
@@ -56,7 +57,7 @@ function processHierarchies(hierarchy, reference) {
         }
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
             hierarchy.childNodes.forEach(function (child) {
-                processHierarchies(child, reference);
+                processHierarchies(child, references);
             });
         }
     }
