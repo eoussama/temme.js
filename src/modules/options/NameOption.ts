@@ -15,4 +15,15 @@ export default class NameOption extends Option {
 
         super('name', 'string', [], 'div');
     }
+
+    /**
+     * Performs inheritance process on an option.
+     * 
+     * @param hierarchy The hierarchy object that inherits.
+     * @param name The name to inherit.
+     */
+    public inherit(hierarchy: any, name: any): void {
+        
+        hierarchy.name = name;
+    }
 }

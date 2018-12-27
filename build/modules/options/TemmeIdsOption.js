@@ -22,6 +22,7 @@ var TemmeIdsOption = (function (_super) {
     function TemmeIdsOption() {
         return _super.call(this, 'temmeIds', 'array', [], []) || this;
     }
+    TemmeIdsOption.prototype.inherit = function (hierarchy, temmeIds) { };
     return TemmeIdsOption;
 }(Option_1.default));
 exports.default = TemmeIdsOption;

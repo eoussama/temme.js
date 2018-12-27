@@ -16,6 +16,8 @@ function sanitize(hierarchy) {
                 }
             }
         });
+        hierarchy.classes = hierarchy.classes.filter(function (cls, index) { return hierarchy.classes.indexOf(cls) === index; });
+        hierarchy.classes.sort();
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
             hierarchy.childNodes.forEach(function (child) {
                 sanitize(child);

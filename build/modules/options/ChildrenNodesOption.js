@@ -17,12 +17,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Option_1 = __importDefault(require("../models/Option"));
-var ChildrenNodesOption = (function (_super) {
-    __extends(ChildrenNodesOption, _super);
-    function ChildrenNodesOption() {
+var ChildNodesOption = (function (_super) {
+    __extends(ChildNodesOption, _super);
+    function ChildNodesOption() {
         return _super.call(this, 'childNodes', 'array', [], []) || this;
     }
-    return ChildrenNodesOption;
+    ChildNodesOption.prototype.inherit = function (hierarchy, childNodes) {
+        if (hierarchy.from.children.allow === true) {
+            if (hierarchy.from.mode === 'append') {
+                if (hierarchy.from.children.placement === 'before') {
+                    hierarchy.childNodes.shift(childNodes);
+                }
+                else {
+                    hierarchy.childNodes.push(childNodes);
+                }
+            }
+            else {
+                hierarchy.childNodes = childNodes;
+            }
+        }
+    };
+    return ChildNodesOption;
 }(Option_1.default));
-exports.default = ChildrenNodesOption;
+exports.default = ChildNodesOption;
 //# sourceMappingURL=ChildrenNodesOption.js.map

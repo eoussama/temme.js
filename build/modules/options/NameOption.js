@@ -22,6 +22,9 @@ var NameOption = (function (_super) {
     function NameOption() {
         return _super.call(this, 'name', 'string', [], 'div') || this;
     }
+    NameOption.prototype.inherit = function (hierarchy, name) {
+        hierarchy.name = name;
+    };
     return NameOption;
 }(Option_1.default));
 exports.default = NameOption;

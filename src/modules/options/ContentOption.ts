@@ -31,6 +31,23 @@ export default class ContentOption extends Option implements IKeys {
             value: (new ValueSubOption()).default
         });
     }
+
+    /**
+     * Performs inheritance process on an option.
+     * 
+     * @param hierarchy The hierarchy object that inherits.
+     * @param content The content to inherit.
+     */
+    public inherit(hierarchy: any, content: any): void {
+        
+        if (hierarchy.from.mode === 'append') {
+
+            hierarchy.content.value += ` ${content.value}`;
+        } else {
+
+            hierarchy.content = content;
+        }
+    }
 }
 
 

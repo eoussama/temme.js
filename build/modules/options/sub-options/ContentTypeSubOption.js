@@ -22,6 +22,7 @@ var ContentTypeSubOption = (function (_super) {
     function ContentTypeSubOption() {
         return _super.call(this, 'type', 'string', ['text', 'html'], 'text') || this;
     }
+    ContentTypeSubOption.prototype.inherit = function (hierarchy, value) { };
     return ContentTypeSubOption;
 }(Option_1.default));
 exports.default = ContentTypeSubOption;

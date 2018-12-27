@@ -22,6 +22,7 @@ var ChildrenAllowSubOption = (function (_super) {
     function ChildrenAllowSubOption() {
         return _super.call(this, 'allow', 'boolean', [], false) || this;
     }
+    ChildrenAllowSubOption.prototype.inherit = function (hierarchy, value) { };
     return ChildrenAllowSubOption;
 }(Option_1.default));
 exports.default = ChildrenAllowSubOption;

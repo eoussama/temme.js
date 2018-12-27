@@ -15,4 +15,12 @@ export default class TemplatesOption extends Option {
 
         super('templates', 'array', [], []);
     }
+
+    /**
+     * Performs inheritance process on an option.
+     * 
+     * @param hierarchy The hierarchy object that inherits.
+     * @param templates The templates to inherit.
+     */
+    public inherit(hierarchy: any, templates: any): void { }
 }

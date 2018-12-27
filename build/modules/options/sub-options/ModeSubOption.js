@@ -22,6 +22,7 @@ var ModeSubOption = (function (_super) {
     function ModeSubOption() {
         return _super.call(this, 'mode', 'string', ['append', 'override'], 'append') || this;
     }
+    ModeSubOption.prototype.inherit = function (hierarchy, value) { };
     return ModeSubOption;
 }(Option_1.default));
 exports.default = ModeSubOption;

@@ -42,6 +42,12 @@ export function sanitize(hierarchy: any): void {
 
         });
 
+        // Removing duplicates.
+        hierarchy.classes = hierarchy.classes.filter((cls: string, index: number) => hierarchy.classes.indexOf(cls) === index);
+
+        // Sorting the classes.
+        hierarchy.classes.sort();
+
         // Checking if the hierarchy has children.
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
 

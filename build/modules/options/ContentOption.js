@@ -32,6 +32,14 @@ var ContentOption = (function (_super) {
         };
         return _this;
     }
+    ContentOption.prototype.inherit = function (hierarchy, content) {
+        if (hierarchy.from.mode === 'append') {
+            hierarchy.content.value += " " + content.value;
+        }
+        else {
+            hierarchy.content = content;
+        }
+    };
     return ContentOption;
 }(Option_1.default));
 exports.default = ContentOption;

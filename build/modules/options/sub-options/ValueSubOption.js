@@ -22,6 +22,7 @@ var ValueSubOption = (function (_super) {
     function ValueSubOption() {
         return _super.call(this, 'value', 'string', [], '') || this;
     }
+    ValueSubOption.prototype.inherit = function (hierarchy, value) { };
     return ValueSubOption;
 }(Option_1.default));
 exports.default = ValueSubOption;

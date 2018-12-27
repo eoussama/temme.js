@@ -22,6 +22,17 @@ var ClassesOption = (function (_super) {
     function ClassesOption() {
         return _super.call(this, 'classes', 'array', [], []) || this;
     }
+    ClassesOption.prototype.inherit = function (hierarchy, classes) {
+        var _a;
+        if (hierarchy.from.mode === 'append') {
+            (_a = hierarchy.classes).push.apply(_a, classes);
+        }
+        else {
+            hierarchy.classes = classes;
+        }
+        hierarchy.classes = hierarchy.classes.filter(function (cls, index) { return hierarchy.classes.indexOf(cls) === index; });
+        hierarchy.classes.sort();
+    };
     return ClassesOption;
 }(Option_1.default));
 exports.default = ClassesOption;

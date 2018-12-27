@@ -22,6 +22,7 @@ var PlacementSubOption = (function (_super) {
     function PlacementSubOption() {
         return _super.call(this, 'placement', 'string', ['after', 'before'], 'after') || this;
     }
+    PlacementSubOption.prototype.inherit = function (hierarchy, value) { };
     return PlacementSubOption;
 }(Option_1.default));
 exports.default = PlacementSubOption;

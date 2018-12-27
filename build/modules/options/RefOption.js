@@ -22,6 +22,7 @@ var RefOption = (function (_super) {
     function RefOption() {
         return _super.call(this, 'ref', 'string', [], '') || this;
     }
+    RefOption.prototype.inherit = function (hierarchy, ref) { };
     return RefOption;
 }(Option_1.default));
 exports.default = RefOption;

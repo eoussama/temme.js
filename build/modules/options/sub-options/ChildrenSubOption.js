@@ -32,6 +32,7 @@ var ChildrenSubOption = (function (_super) {
         };
         return _this;
     }
+    ChildrenSubOption.prototype.inherit = function (hierarchy, value) { };
     return ChildrenSubOption;
 }(Option_1.default));
 exports.default = ChildrenSubOption;

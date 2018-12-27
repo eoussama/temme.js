@@ -11,7 +11,7 @@ import ContentOption from "./options/ContentOption";
 import TemmeIdsOption from "./options/TemmeIdsOption";
 import TemplatesOption from "./options/TemplatesOption";
 import ClassesOption from "./options/ClassesOption";
-import ChildrenNodesOption from "./options/ChildrenNodesOption";
+import ChildNodesOption from "./options/ChildrenNodesOption";
 import AttributesOption from "./options/AttributesOption";
 import DatasetOption from "./options/DatasetOption";
 import FromOption from "./options/FromOption";
@@ -28,7 +28,7 @@ export const options: Array<Option> = [
     new TemmeIdsOption(),
     new TemplatesOption(),
     new ClassesOption(),
-    new ChildrenNodesOption(),
+    new ChildNodesOption(),
     new AttributesOption(),
     new DatasetOption(),
     new FromOption()

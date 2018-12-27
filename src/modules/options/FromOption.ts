@@ -32,6 +32,14 @@ export default class FromOption extends Option implements IKeys {
             children: (new ChildrenSubOption()).default
         });
     }
+
+    /**
+     * Performs inheritance process on an option.
+     * 
+     * @param hierarchy The hierarchy object that inherits.
+     * @param from The from to inherit.
+     */
+    public inherit(hierarchy: any, from: any): void { }
 }
 
 

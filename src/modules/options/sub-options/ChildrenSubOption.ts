@@ -32,6 +32,14 @@ export default class ChildrenSubOption extends Option implements IKeys {
             placement: (new PlacementSubOption()).default
         });
     }
+
+    /**
+     * Performs inheritance process on an option.
+     * 
+     * @param hierarchy The hierarchy object that inherits.
+     * @param value The value to inherit.
+     */
+    public inherit(hierarchy: any, value: any): void { }
 }
 
 

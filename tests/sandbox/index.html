@@ -72,73 +72,27 @@
 
         // Testing up the hierarchy object.
         const hierarchy = {
-            templates: [
-                {
-                    ref: 'temp-1',
-                    attributes: {
-                        visible: true
-                    },
-                    classes: ['bold', 'italic']
-                },
-                {
-                    ref: 'temp-2',
-                    from: {
-                        ref: 'temp-1'
-                    },
-                    dataset: {
-                        id: 100
-                    },
-                    classes: ['yellow']
-                },
-                {
-                    ref: 'abcd'
-                }
-            ],
             childNodes: [
                 {
-                    templates: [
-                        {
-                            ref: 'temp-3',
-                            from: {
-                                ref: 'temp-2'
-                            },
-                            classes: ['magenta']
-                        }
-                    ],
-                    ref: 't',
-                    from: {
-                        ref: 'temp-3',
-                        children: {
-                            allow: true
-                        }
-                    },
-                    name: 'h1',
-                    content: {
-                        type: 'html',
-                        value: "<i>Italic</i>"
-                    },
-                    classes: ['red'],
+                    ref: 'ff',
+                    classes: ['blue'],
                     childNodes: [
                         {
-                            childNodes: [
-                                {
-                                    ref: 'a'
-                                },
-                                {
-                                    name: 'span',
-                                    content: {
-                                        value: '<i>Italic content</i>'
-                                    }
-                                }
-                            ]
+                            name: 'span'
                         }
                     ]
+                },
+                {
+                    from: {
+                        ref: 'ff'
+                    },
+                    classes: ['red']
                 }
             ]
         };
 
         try {
-            
+
             // Starting a timer.
             console.time('Temme');
 
@@ -147,7 +101,7 @@
 
                 // Outputting the results in the console.
                 console.log('%c [TemmeJS]%c All elements were created', 'color: green; font-weight: bold;', 'color: green; font-weight: 300;');
-                
+
                 // Displaying the time took.
                 console.log('\nTime took:');
                 console.timeEnd('Temme');
@@ -168,7 +122,7 @@
             });
         }
         catch (e) {
-            
+
             console.error(e.name, e.message);
         }
 

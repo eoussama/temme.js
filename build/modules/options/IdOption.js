@@ -22,6 +22,9 @@ var IdOption = (function (_super) {
     function IdOption() {
         return _super.call(this, 'id', 'string', [], '') || this;
     }
+    IdOption.prototype.inherit = function (hierarchy, id) {
+        hierarchy.id = id;
+    };
     return IdOption;
 }(Option_1.default));
 exports.default = IdOption;

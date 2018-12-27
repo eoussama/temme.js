@@ -35,6 +35,7 @@ var FromOption = (function (_super) {
         };
         return _this;
     }
+    FromOption.prototype.inherit = function (hierarchy, from) { };
     return FromOption;
 }(Option_1.default));
 exports.default = FromOption;

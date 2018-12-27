@@ -22,6 +22,20 @@ var DatasetOption = (function (_super) {
     function DatasetOption() {
         return _super.call(this, 'dataset', 'object', [], {}) || this;
     }
+    DatasetOption.prototype.inherit = function (hierarchy, dataset) {
+        if (hierarchy.from.mode === 'append') {
+            for (var key in dataset) {
+                if (!(key in hierarchy.dataset)) {
+                    hierarchy.dataset[key] = dataset[key];
+                }
+            }
+        }
+        else {
+            for (var key in dataset) {
+                hierarchy.dataset[key] = dataset[key];
+            }
+        }
+    };
     return DatasetOption;
 }(Option_1.default));
 exports.default = DatasetOption;

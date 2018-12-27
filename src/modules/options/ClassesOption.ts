@@ -15,4 +15,27 @@ export default class ClassesOption extends Option {
 
         super('classes', 'array', [], []);
     }
+
+    /**
+     * Performs inheritance process on an option.
+     * 
+     * @param hierarchy The hierarchy object that inherits.
+     * @param classes The classes to inherit.
+     */
+    public inherit(hierarchy: any, classes: any): void {
+        
+        if (hierarchy.from.mode === 'append') {
+
+            hierarchy.classes.push(...classes);
+        } else {
+
+            hierarchy.classes = classes;
+        }
+        
+        // Removing duplicates.
+        hierarchy.classes = hierarchy.classes.filter((cls: string, index: number) => hierarchy.classes.indexOf(cls) === index);
+
+        // Sorting the classes.
+        hierarchy.classes.sort();
+    }
 }

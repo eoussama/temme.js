@@ -22,6 +22,7 @@ var TemplatesOption = (function (_super) {
     function TemplatesOption() {
         return _super.call(this, 'templates', 'array', [], []) || this;
     }
+    TemplatesOption.prototype.inherit = function (hierarchy, templates) { };
     return TemplatesOption;
 }(Option_1.default));
 exports.default = TemplatesOption;

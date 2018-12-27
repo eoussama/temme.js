@@ -22,6 +22,20 @@ var AttributesOption = (function (_super) {
     function AttributesOption() {
         return _super.call(this, 'attributes', 'object', [], {}) || this;
     }
+    AttributesOption.prototype.inherit = function (hierarchy, attributes) {
+        if (hierarchy.from.mode === 'append') {
+            for (var key in attributes) {
+                if (!(key in hierarchy.attributes)) {
+                    hierarchy.attributes[key] = attributes[key];
+                }
+            }
+        }
+        else {
+            for (var key in attributes) {
+                hierarchy.attributes[key] = attributes[key];
+            }
+        }
+    };
     return AttributesOption;
 }(Option_1.default));
 exports.default = AttributesOption;

@@ -57,6 +57,12 @@ export default abstract class Option {
 
 
     /**
+     * Performs inheritance process on an option.
+     */
+    public abstract inherit (hierarchy: any, value: any): void
+
+
+    /**
      * Validates the option's name.
      * 
      * @param matchingOption The option object with the matching name.
