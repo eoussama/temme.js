@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../models/Option"));
 var RefOption = (function (_super) {
     __extends(RefOption, _super);
     function RefOption() {
-        return _super.call(this, 'ref', 'string', [], '') || this;
+        var _this = _super.call(this, 'ref', 'string', [], '') || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     RefOption.prototype.inherit = function (hierarchy, ref) { };
     return RefOption;

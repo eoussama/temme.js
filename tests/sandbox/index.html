@@ -57,6 +57,10 @@
         <h1>Temme JS Sandbox</h1>
         <hr>
 
+        <div id="element" class="red red blue" data-id="1000" data-name="alfredo" visible=true>
+            <i>Hello there.</i>
+        </div>
+
         <!-- The main target element. -->
         <div id="target"></div>
     </main>
@@ -72,35 +76,16 @@
 
         // Testing up the hierarchy object.
         const hierarchy = {
-            templates: [
-                {
-                    ref: 'temp-1',
-                    classes: ['red']
-                },
-                {
-                    ref: 'temp-2',
-                    classes: ['blue'],
-                    from: {
-                       ref: "temp-1"
-                    }
-                }
-            ],
+            ref: 'ele-1',
             childNodes: [
                 {
-                    ref: 'ele',
-                    templates: [
-                        {
-                            ref: 'temp-3',
-                            classes: ['orange'],
-                            from: {
-                                ref: 'temp-2'
-                            }
-                        }
-                    ],
-                    classes: ['green'],
+                    ref: 'ele-2',
                     from: {
-                        ref: 'temp-3'
+                        ref: '@#element'
                     }
+                },
+                {
+
                 }
             ]
         };

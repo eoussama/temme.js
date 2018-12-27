@@ -8,7 +8,7 @@ import { isTemplate } from "../referencer";
 
 
 export default class AttributesOption extends Option {
-    
+        
     /**
      * Parameterless constructor.
      */
@@ -17,7 +17,7 @@ export default class AttributesOption extends Option {
         super('attributes', 'object', [], {});
     }
     
-    
+
     /**
      * Performs inheritance process on an option.
      * 
@@ -25,7 +25,7 @@ export default class AttributesOption extends Option {
      * @param attributes The attributes to inherit.
      */
     public inherit(hierarchy: any, attributes: any): void {
-        
+
         if (hierarchy.from.mode === 'append') {
 
             for (const key in attributes) {
@@ -42,5 +42,26 @@ export default class AttributesOption extends Option {
                 hierarchy.attributes[key] = attributes[key];
             }
         }
+    }
+
+
+    /**
+     * Gets attributes from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement(element: HTMLElement): any {
+        
+        let attributes: any = {};
+
+        for (const attrKey in element.attributes) {
+
+            if (!isNaN(parseInt(attrKey)) && ['id', 'class'].indexOf(element.attributes[attrKey].nodeName) === -1 && element.attributes[attrKey].nodeName.substring(0, 5) !== 'data-') {
+                
+                attributes[element.attributes[attrKey].nodeName] = element.attributes[attrKey].nodeValue;
+            }
+        }
+
+        return attributes;
     }
 }

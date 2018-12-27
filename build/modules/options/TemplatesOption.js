@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../models/Option"));
 var TemplatesOption = (function (_super) {
     __extends(TemplatesOption, _super);
     function TemplatesOption() {
-        return _super.call(this, 'templates', 'array', [], []) || this;
+        var _this = _super.call(this, 'templates', 'array', [], []) || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     TemplatesOption.prototype.inherit = function (hierarchy, templates) { };
     return TemplatesOption;

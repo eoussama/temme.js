@@ -63,6 +63,12 @@ export default abstract class Option {
 
 
     /**
+     * Get an option value from an existing HTML element.
+     */
+    public abstract getKeyFromElement (element: HTMLElement): any
+
+
+    /**
      * Validates the option's name.
      * 
      * @param matchingOption The option object with the matching name.

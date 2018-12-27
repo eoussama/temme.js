@@ -40,6 +40,13 @@ var ContentOption = (function (_super) {
             hierarchy.content = content;
         }
     };
+    ContentOption.prototype.getKeyFromElement = function (element) {
+        return {
+            type: "html",
+            value: element.innerHTML
+        };
+    };
+    ;
     return ContentOption;
 }(Option_1.default));
 exports.default = ContentOption;

@@ -36,6 +36,15 @@ var AttributesOption = (function (_super) {
             }
         }
     };
+    AttributesOption.prototype.getKeyFromElement = function (element) {
+        var attributes = {};
+        for (var attrKey in element.attributes) {
+            if (!isNaN(parseInt(attrKey)) && ['id', 'class'].indexOf(element.attributes[attrKey].nodeName) === -1 && element.attributes[attrKey].nodeName.substring(0, 5) !== 'data-') {
+                attributes[element.attributes[attrKey].nodeName] = element.attributes[attrKey].nodeValue;
+            }
+        }
+        return attributes;
+    };
     return AttributesOption;
 }(Option_1.default));
 exports.default = AttributesOption;

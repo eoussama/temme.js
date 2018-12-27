@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var ValueSubOption = (function (_super) {
     __extends(ValueSubOption, _super);
     function ValueSubOption() {
-        return _super.call(this, 'value', 'string', [], '') || this;
+        var _this = _super.call(this, 'value', 'string', [], '') || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     ValueSubOption.prototype.inherit = function (hierarchy, value) { };
     return ValueSubOption;

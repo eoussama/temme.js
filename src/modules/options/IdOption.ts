@@ -16,6 +16,7 @@ export default class IdOption extends Option {
         super('id', 'string', [], '');
     }
 
+
     /**
      * Performs inheritance process on an option.
      * 
@@ -26,4 +27,12 @@ export default class IdOption extends Option {
         
         hierarchy.id = id;
     }
+
+
+    /**
+     * Gets the id from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => element.id;
 }

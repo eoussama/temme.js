@@ -33,6 +33,12 @@ var ClassesOption = (function (_super) {
         hierarchy.classes = hierarchy.classes.filter(function (cls, index) { return hierarchy.classes.indexOf(cls) === index; });
         hierarchy.classes.sort();
     };
+    ClassesOption.prototype.getKeyFromElement = function (element) {
+        var classes = [];
+        element.classList.forEach(function (cls) { return classes.push(cls); });
+        return classes;
+    };
+    ;
     return ClassesOption;
 }(Option_1.default));
 exports.default = ClassesOption;

@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var ContentTypeSubOption = (function (_super) {
     __extends(ContentTypeSubOption, _super);
     function ContentTypeSubOption() {
-        return _super.call(this, 'type', 'string', ['text', 'html'], 'text') || this;
+        var _this = _super.call(this, 'type', 'string', ['text', 'html'], 'text') || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     ContentTypeSubOption.prototype.inherit = function (hierarchy, value) { };
     return ContentTypeSubOption;

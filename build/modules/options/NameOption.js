@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../models/Option"));
 var NameOption = (function (_super) {
     __extends(NameOption, _super);
     function NameOption() {
-        return _super.call(this, 'name', 'string', [], 'div') || this;
+        var _this = _super.call(this, 'name', 'string', [], 'div') || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     NameOption.prototype.inherit = function (hierarchy, name) {
         hierarchy.name = name;

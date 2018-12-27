@@ -32,6 +32,7 @@ export default class ContentOption extends Option implements IKeys {
         });
     }
 
+
     /**
      * Performs inheritance process on an option.
      * 
@@ -48,6 +49,20 @@ export default class ContentOption extends Option implements IKeys {
             hierarchy.content = content;
         }
     }
+
+
+    /**
+     * Gets content from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement(element: HTMLElement): any { 
+
+        return {
+            type: "html",
+            value: element.innerHTML
+        }
+    };
 }
 
 

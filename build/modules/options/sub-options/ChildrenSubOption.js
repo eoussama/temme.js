@@ -30,6 +30,7 @@ var ChildrenSubOption = (function (_super) {
             allow: new ChildrenAllowSubOption_1.default(),
             placement: new PlacementSubOption_1.default()
         };
+        _this.getKeyFromElement = function (element) { return null; };
         return _this;
     }
     ChildrenSubOption.prototype.inherit = function (hierarchy, value) { };

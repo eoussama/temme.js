@@ -76,12 +76,12 @@ function processTemplates(hierarchy: any, references: Array<ReferenceType>): voi
                 if (template.from.ref !== "") {
 
                     for (const key in template) {
-            
+
                         // Getting the proper option.
                         const
                             option: any = options.filter((opt: Option) => opt.label === key)[0],
                             referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === template.from.ref)[0];
-            
+
                         // Inheriting the value.
                         option.inherit(template, referencedHierarchy.hierarchy[key]);
                     }
@@ -115,20 +115,6 @@ function processHierarchies(hierarchy: any, references: Array<ReferenceType>): v
 
     try {
 
-        if (hierarchy.from.ref !== "") {
-
-            for (const key in hierarchy) {
-    
-                // Getting the proper option.
-                const
-                    option: any = options.filter((opt: Option) => opt.label === key)[0],
-                    referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0];
-    
-                // Inheriting the value.
-                option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
-            }
-        }
-        
         // Checking if the hierarchy object has any children.
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
 
@@ -136,6 +122,43 @@ function processHierarchies(hierarchy: any, references: Array<ReferenceType>): v
 
                 processHierarchies(child, references);
             });
+        }
+
+        if (hierarchy.from.ref !== "") {
+
+            // If an outer element is referenced.
+            if (hierarchy.from.ref[0] === "@") {
+
+                const
+                    selector = hierarchy.from.ref.substring(1),
+                    element = document.querySelector(selector);
+
+                for (const key in hierarchy) {
+
+                    // Getting the proper option.
+                    const
+                        option: any = options.filter((opt: Option) => opt.label === key)[0],
+                        value = option.getKeyFromElement(element);
+
+                    if (value != null && key === 'attributes') {
+
+                        // Inheriting the value.
+                        option.inherit(hierarchy, value);
+                    }
+                }
+            } else {
+
+                const referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0];
+
+                for (const key in hierarchy) {
+
+                    // Getting the proper option.
+                    const option: Option = options.filter((opt: Option) => opt.label === key)[0];
+
+                    // Inheriting the value.
+                    option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
+                }
+            }
         }
     }
     catch (e) {

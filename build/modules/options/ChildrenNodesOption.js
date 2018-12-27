@@ -20,16 +20,19 @@ var Option_1 = __importDefault(require("../models/Option"));
 var ChildNodesOption = (function (_super) {
     __extends(ChildNodesOption, _super);
     function ChildNodesOption() {
-        return _super.call(this, 'childNodes', 'array', [], []) || this;
+        var _this = _super.call(this, 'childNodes', 'array', [], []) || this;
+        _this.getKeyFromElement = function (element) { return element.innerHTML; };
+        return _this;
     }
     ChildNodesOption.prototype.inherit = function (hierarchy, childNodes) {
+        var _a, _b;
         if (hierarchy.from.children.allow === true) {
             if (hierarchy.from.mode === 'append') {
                 if (hierarchy.from.children.placement === 'before') {
-                    hierarchy.childNodes.shift(childNodes);
+                    (_a = hierarchy.childNodes).unshift.apply(_a, childNodes);
                 }
                 else {
-                    hierarchy.childNodes.push(childNodes);
+                    (_b = hierarchy.childNodes).push.apply(_b, childNodes);
                 }
             }
             else {

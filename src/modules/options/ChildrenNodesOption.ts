@@ -27,18 +27,26 @@ export default class ChildNodesOption extends Option {
         if (hierarchy.from.children.allow === true) {
 
             if (hierarchy.from.mode === 'append') {
-    
+
                 if (hierarchy.from.children.placement === 'before') {
 
-                    hierarchy.childNodes.shift(childNodes);
+                    hierarchy.childNodes.unshift(...childNodes);
                 } else {
-                    
-                    hierarchy.childNodes.push(childNodes);
+
+                    hierarchy.childNodes.push(...childNodes);
                 }
             } else {
-    
+
                 hierarchy.childNodes = childNodes;
             }
         }
     }
+
+
+    /**
+     * Gets children from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => element.innerHTML;
 }

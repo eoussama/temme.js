@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var ModeSubOption = (function (_super) {
     __extends(ModeSubOption, _super);
     function ModeSubOption() {
-        return _super.call(this, 'mode', 'string', ['append', 'override'], 'append') || this;
+        var _this = _super.call(this, 'mode', 'string', ['append', 'override'], 'append') || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     ModeSubOption.prototype.inherit = function (hierarchy, value) { };
     return ModeSubOption;

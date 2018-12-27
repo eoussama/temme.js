@@ -36,6 +36,13 @@ var DatasetOption = (function (_super) {
             }
         }
     };
+    DatasetOption.prototype.getKeyFromElement = function (element) {
+        var dataset = {};
+        for (var dataKey in element.dataset) {
+            dataset[dataKey] = element.dataset[dataKey];
+        }
+        return dataset;
+    };
     return DatasetOption;
 }(Option_1.default));
 exports.default = DatasetOption;

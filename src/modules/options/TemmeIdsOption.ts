@@ -16,6 +16,7 @@ export default class TemmeIdsOption extends Option {
         super('temmeIds', 'array', [], []);
     }
 
+
     /**
      * Performs inheritance process on an option.
      * 
@@ -23,4 +24,12 @@ export default class TemmeIdsOption extends Option {
      * @param temmeIds The temmeIds to inherit.
      */
     public inherit(hierarchy: any, temmeIds: any): void { }
+
+
+    /**
+     * Gets nothing from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => null;
 }

@@ -40,6 +40,14 @@ export default class FromOption extends Option implements IKeys {
      * @param from The from to inherit.
      */
     public inherit(hierarchy: any, from: any): void { }
+
+
+    /**
+     * Gets nothing from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => null;
 }
 
 

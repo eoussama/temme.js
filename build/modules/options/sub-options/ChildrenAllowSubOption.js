@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../../models/Option"));
 var ChildrenAllowSubOption = (function (_super) {
     __extends(ChildrenAllowSubOption, _super);
     function ChildrenAllowSubOption() {
-        return _super.call(this, 'allow', 'boolean', [], false) || this;
+        var _this = _super.call(this, 'allow', 'boolean', [], false) || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     ChildrenAllowSubOption.prototype.inherit = function (hierarchy, value) { };
     return ChildrenAllowSubOption;

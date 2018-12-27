@@ -45,19 +45,34 @@ function processTemplates(hierarchy, references) {
 }
 function processHierarchies(hierarchy, references) {
     try {
-        if (hierarchy.from.ref !== "") {
-            var _loop_2 = function (key) {
-                var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], referencedHierarchy = references.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref; })[0];
-                option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
-            };
-            for (var key in hierarchy) {
-                _loop_2(key);
-            }
-        }
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
             hierarchy.childNodes.forEach(function (child) {
                 processHierarchies(child, references);
             });
+        }
+        if (hierarchy.from.ref !== "") {
+            if (hierarchy.from.ref[0] === "@") {
+                var selector = hierarchy.from.ref.substring(1), element = document.querySelector(selector);
+                var _loop_2 = function (key) {
+                    var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], value = option.getKeyFromElement(element);
+                    if (value != null && key === 'attributes') {
+                        option.inherit(hierarchy, value);
+                    }
+                };
+                for (var key in hierarchy) {
+                    _loop_2(key);
+                }
+            }
+            else {
+                var referencedHierarchy = references.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref; })[0];
+                var _loop_3 = function (key) {
+                    var option = options_1.options.filter(function (opt) { return opt.label === key; })[0];
+                    option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
+                };
+                for (var key in hierarchy) {
+                    _loop_3(key);
+                }
+            }
         }
     }
     catch (e) {

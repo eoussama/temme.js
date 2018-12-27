@@ -141,7 +141,7 @@ function validateParentToChildReference(hierarchy, references, depth) {
     try {
         var ref_1 = hierarchy.from.ref;
         depth++;
-        if (ref_1 !== "") {
+        if (ref_1 !== "" && ref_1[0] !== '@') {
             var referencedHierarchy = references.filter(function (refObject) { return refObject.hierarchy.ref === ref_1 && depth >= refObject.depth; })[0];
             if (referencedHierarchy == null) {
                 throw new ReferenceOutOfScopeError_1.default("");

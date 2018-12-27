@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../models/Option"));
 var IdOption = (function (_super) {
     __extends(IdOption, _super);
     function IdOption() {
-        return _super.call(this, 'id', 'string', [], '') || this;
+        var _this = _super.call(this, 'id', 'string', [], '') || this;
+        _this.getKeyFromElement = function (element) { return element.id; };
+        return _this;
     }
     IdOption.prototype.inherit = function (hierarchy, id) {
         hierarchy.id = id;

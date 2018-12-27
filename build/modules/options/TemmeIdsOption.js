@@ -20,7 +20,9 @@ var Option_1 = __importDefault(require("../models/Option"));
 var TemmeIdsOption = (function (_super) {
     __extends(TemmeIdsOption, _super);
     function TemmeIdsOption() {
-        return _super.call(this, 'temmeIds', 'array', [], []) || this;
+        var _this = _super.call(this, 'temmeIds', 'array', [], []) || this;
+        _this.getKeyFromElement = function (element) { return null; };
+        return _this;
     }
     TemmeIdsOption.prototype.inherit = function (hierarchy, temmeIds) { };
     return TemmeIdsOption;

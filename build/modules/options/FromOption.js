@@ -33,6 +33,7 @@ var FromOption = (function (_super) {
             mode: new ModeSubOption_1.default(),
             children: new ChildrenSubOption_1.default()
         };
+        _this.getKeyFromElement = function (element) { return null; };
         return _this;
     }
     FromOption.prototype.inherit = function (hierarchy, from) { };

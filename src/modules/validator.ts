@@ -19,7 +19,6 @@ import InvalidTemplateError from "./errors/InvalidTemplateError";
 import { ReferenceType } from "./referencer";
 import { getTemmeId } from "./idfier";
 import { Hierarchy } from "./models/Hierarchy";
-import { Template } from "./models/Template";
 import InvalidTemplateReferencingError from "./errors/InvalidTemplateReferencingError";
 import ReferenceOutOfRangeError from "./errors/ReferenceOutOfScopeError";
 
@@ -282,7 +281,7 @@ export function validateParentToChildReference(hierarchy: any, references: Array
         depth++;
 
         // Checking if the reference is valid.
-        if (ref !== "") {
+        if (ref !== "" && ref[0] !== '@') {
 
             // Getting the referenced hierarchy.
             const referencedHierarchy: ReferenceType = references.filter((refObject: ReferenceType) => (<Hierarchy>refObject.hierarchy).ref === ref && depth >= refObject.depth)[0];

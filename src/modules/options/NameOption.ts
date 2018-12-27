@@ -26,4 +26,12 @@ export default class NameOption extends Option {
         
         hierarchy.name = name;
     }
+
+
+    /**
+     * Gets the nothing from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => null;
 }

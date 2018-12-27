@@ -41,4 +41,22 @@ export default class DatasetOption extends Option {
             }
         }
     }
+
+
+    /**
+     * Gets datatset from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement(element: HTMLElement): any {
+
+        let dataset: any = {};
+
+        for (const dataKey in element.dataset) {
+
+            dataset[dataKey] = element.dataset[dataKey];
+        }
+
+        return dataset;
+    }
 }

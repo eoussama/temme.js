@@ -16,6 +16,7 @@ export default class ContentTypeSubOption extends Option {
         super('type', 'string', ['text', 'html'], 'text');
     }
 
+
     /**
      * Performs inheritance process on an option.
      * 
@@ -23,4 +24,12 @@ export default class ContentTypeSubOption extends Option {
      * @param value The value to inherit.
      */
     public inherit(hierarchy: any, value: any): void { }
+
+
+    /**
+     * Gets nothing from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => null;
 }

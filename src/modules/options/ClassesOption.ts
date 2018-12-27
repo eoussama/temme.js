@@ -38,4 +38,19 @@ export default class ClassesOption extends Option {
         // Sorting the classes.
         hierarchy.classes.sort();
     }
+
+
+    /**
+     * Gets classes from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement(element: HTMLElement): any {
+      
+        let classes: Array<string> = [];
+
+        element.classList.forEach((cls: string) => classes.push(cls));
+
+        return classes;
+    };
 }

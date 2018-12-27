@@ -23,4 +23,12 @@ export default class TemplatesOption extends Option {
      * @param templates The templates to inherit.
      */
     public inherit(hierarchy: any, templates: any): void { }
+
+
+    /**
+     * Gets nothing from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => null;
 }

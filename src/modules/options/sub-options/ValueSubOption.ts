@@ -23,4 +23,12 @@ export default class ValueSubOption extends Option {
      * @param value The value to inherit.
      */
     public inherit(hierarchy: any, value: any): void { }
+
+
+    /**
+     * Gets nothing from a given HTML element.
+     * 
+     * @param element The HTML element to target. 
+     */
+    public getKeyFromElement = (element: HTMLElement): any => null;
 }
