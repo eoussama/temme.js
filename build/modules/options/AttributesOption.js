@@ -23,18 +23,20 @@ var AttributesOption = (function (_super) {
         return _super.call(this, 'attributes', 'object', [], {}) || this;
     }
     AttributesOption.prototype.inherit = function (hierarchy, attributes) {
+        var attr = attributes;
         if (hierarchy.from.mode === 'append') {
-            for (var key in attributes) {
-                if (!(key in hierarchy.attributes)) {
-                    hierarchy.attributes[key] = attributes[key];
-                }
+            for (var key in hierarchy.attributes) {
+                attr[key] = hierarchy.attributes[key];
             }
         }
         else {
-            for (var key in attributes) {
-                hierarchy.attributes[key] = attributes[key];
+            for (var key in hierarchy.attributes) {
+                if (!(key in attr)) {
+                    attr[key] = hierarchy.attributes[key];
+                }
             }
         }
+        hierarchy.attributes = attr;
     };
     AttributesOption.prototype.getKeyFromElement = function (element) {
         var attributes = {};

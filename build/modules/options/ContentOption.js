@@ -33,12 +33,11 @@ var ContentOption = (function (_super) {
         return _this;
     }
     ContentOption.prototype.inherit = function (hierarchy, content) {
+        var ct = content;
         if (hierarchy.from.mode === 'append') {
-            hierarchy.content.value += " " + content.value;
+            ct.value = hierarchy.content.value + " " + ct.value;
         }
-        else {
-            hierarchy.content = content;
-        }
+        hierarchy.content = ct;
     };
     ContentOption.prototype.getKeyFromElement = function (element) {
         return {

@@ -4,11 +4,10 @@
 
 
 import Option from "../models/Option";
-import { isTemplate } from "../referencer";
 
 
 export default class AttributesOption extends Option {
-        
+
     /**
      * Parameterless constructor.
      */
@@ -16,7 +15,7 @@ export default class AttributesOption extends Option {
 
         super('attributes', 'object', [], {});
     }
-    
+
 
     /**
      * Performs inheritance process on an option.
@@ -26,22 +25,26 @@ export default class AttributesOption extends Option {
      */
     public inherit(hierarchy: any, attributes: any): void {
 
+        const attr: any = attributes;
+
         if (hierarchy.from.mode === 'append') {
 
-            for (const key in attributes) {
+            for (const key in hierarchy.attributes) {
 
-                if (!(key in hierarchy.attributes)) {
-
-                    hierarchy.attributes[key] = attributes[key];
-                }
+                attr[key] = hierarchy.attributes[key];
             }
         } else {
 
-            for (const key in attributes) {
+            for (const key in hierarchy.attributes) {
 
-                hierarchy.attributes[key] = attributes[key];
+                if (!(key in attr)) {
+
+                    attr[key] = hierarchy.attributes[key];
+                }
             }
         }
+
+        hierarchy.attributes = attr;
     }
 
 
@@ -51,13 +54,13 @@ export default class AttributesOption extends Option {
      * @param element The HTML element to target. 
      */
     public getKeyFromElement(element: HTMLElement): any {
-        
+
         let attributes: any = {};
 
         for (const attrKey in element.attributes) {
 
             if (!isNaN(parseInt(attrKey)) && ['id', 'class'].indexOf(element.attributes[attrKey].nodeName) === -1 && element.attributes[attrKey].nodeName.substring(0, 5) !== 'data-') {
-                
+
                 attributes[element.attributes[attrKey].nodeName] = element.attributes[attrKey].nodeValue;
             }
         }

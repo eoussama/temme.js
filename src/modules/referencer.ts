@@ -140,7 +140,7 @@ function processHierarchies(hierarchy: any, references: Array<ReferenceType>): v
                         option: any = options.filter((opt: Option) => opt.label === key)[0],
                         value = option.getKeyFromElement(element);
 
-                    if (value != null && key === 'attributes') {
+                    if (value != null) {
 
                         // Inheriting the value.
                         option.inherit(hierarchy, value);

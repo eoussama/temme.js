@@ -55,7 +55,7 @@ function processHierarchies(hierarchy, references) {
                 var selector = hierarchy.from.ref.substring(1), element = document.querySelector(selector);
                 var _loop_2 = function (key) {
                     var option = options_1.options.filter(function (opt) { return opt.label === key; })[0], value = option.getKeyFromElement(element);
-                    if (value != null && key === 'attributes') {
+                    if (value != null) {
                         option.inherit(hierarchy, value);
                     }
                 };

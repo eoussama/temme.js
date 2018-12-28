@@ -81,7 +81,19 @@
                 {
                     ref: 'ele-2',
                     from: {
-                        ref: '@#element'
+                        ref: '@#element',
+                        mode: 'append'
+                    },
+                    attributes: {
+                        bluffing: 13,
+                        visible: false
+                    },
+                    dataset: {
+                        label: false,
+                        id: 250
+                    },
+                    content: {
+                        value: 'Hello'
                     }
                 },
                 {
@@ -124,7 +136,6 @@
 
             console.error(e.name, e.message);
         }
-
 
     </script>
 </body>

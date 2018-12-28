@@ -23,23 +23,27 @@ export default class DatasetOption extends Option {
      * @param dataset The dataset to inherit.
      */
     public inherit(hierarchy: any, dataset: any): void {
-        
+
+        const dt: any = dataset;
+
         if (hierarchy.from.mode === 'append') {
 
-            for (const key in dataset) {
+            for (const key in hierarchy.dataset) {
 
-                if (!(key in hierarchy.dataset)) {
-
-                    hierarchy.dataset[key] = dataset[key];
-                }
+                dt[key] = hierarchy.dataset[key];
             }
         } else {
 
-            for (const key in dataset) {
+            for (const key in hierarchy.dataset) {
 
-                hierarchy.dataset[key] = dataset[key];
+                if (!(key in dt)) {
+
+                    dt[key] = hierarchy.dataset[key];
+                }
             }
         }
+
+        hierarchy.dataset = dt;
     }
 
 

@@ -23,18 +23,20 @@ var DatasetOption = (function (_super) {
         return _super.call(this, 'dataset', 'object', [], {}) || this;
     }
     DatasetOption.prototype.inherit = function (hierarchy, dataset) {
+        var dt = dataset;
         if (hierarchy.from.mode === 'append') {
-            for (var key in dataset) {
-                if (!(key in hierarchy.dataset)) {
-                    hierarchy.dataset[key] = dataset[key];
-                }
+            for (var key in hierarchy.dataset) {
+                dt[key] = hierarchy.dataset[key];
             }
         }
         else {
-            for (var key in dataset) {
-                hierarchy.dataset[key] = dataset[key];
+            for (var key in hierarchy.dataset) {
+                if (!(key in dt)) {
+                    dt[key] = hierarchy.dataset[key];
+                }
             }
         }
+        hierarchy.dataset = dt;
     };
     DatasetOption.prototype.getKeyFromElement = function (element) {
         var dataset = {};

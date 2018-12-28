@@ -41,13 +41,14 @@ export default class ContentOption extends Option implements IKeys {
      */
     public inherit(hierarchy: any, content: any): void {
         
+        const ct: any = content;
+
         if (hierarchy.from.mode === 'append') {
 
-            hierarchy.content.value += ` ${content.value}`;
-        } else {
-
-            hierarchy.content = content;
+            ct.value = `${hierarchy.content.value} ${ct.value}`;
         }
+
+        hierarchy.content = ct;
     }
 
 
