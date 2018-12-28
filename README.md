@@ -2,19 +2,44 @@
 
 Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too.
 
+
 # Build
 
-Building Temme JS is fairly easy, simply run `npm install` to install all the development dependencies, and then run `npm run build` to get the production files under the `dist` folder.
+Building Temme JS is fairly easy, simply run `npm install` to install all the development dependencies, and then run `npm run prod` to get the production files under the `dist` folder.
+
+
+# Testing
+
+In order to test Temme, simply run `npm run test`.
+Other test cases are available at `tests/sandbox/index.html`.
+
+
+# Package walkthrough
+
+A number of npm scripts are available to use in order to ease up basic developement and testing purposes.
+
+| Command   | Description                                     |
+|-----------|-------------------------------------------------|
+| clean     | Deletes the `dist` and `build` folders.         |
+| build     | Compiles the typescript code into es6 modules.  |
+| bundle    | Bundles the source code for production.         |
+| docs      | Updates the temme.js file of the documentation. |
+| prod      | Executes all of the above.                      |
+| test      | Runs the unit tests                             |
+
+
 
 # Usage
 
 As we've come to know, Emmet converts a select of instructions that are plain text to its logical dom skeleton, Temme does that differently, by working with javascript objects instead of plain text, and seeing how this is a javascript library it kind of makes sense.
 In order for Temme to do its magic, it requires a hierarchy blueprint as a javascript object and an HTML element to append the skeleton to.
 
+
 # Syntax
 ```js
-Temme(hierarchy: object, target: HTMLElement);
+Temme.parse(hierarchy: Object, target: HTMLElement);
 ```
+
 
 # Example
 
@@ -85,6 +110,7 @@ Simply that, giving Temme a target element and a skeleton object, it will render
 ```
 
 More on how to use Temme can be found [here](https://eoussama.github.io/temmejs/).
+
 
 # Credits
 
