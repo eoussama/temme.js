@@ -203,4 +203,35 @@ describe('References.', () => {
             console.error(e.name, e.message);
         }
     });
+
+    test("Referencing an outer element.", () => {
+
+        // Arrange.
+        const 
+            target = document.createElement('div'),
+            outer = document.createElement('div'),
+            hierarchy = {
+                from: {
+                    ref: '@#outer-element'
+                }
+            };
+        
+        outer.id = "outer-element";
+        outer.classList.add('bold', 'red', 'yellow');
+        document.body.appendChild(outer);
+
+        // Act.
+        try {
+
+            Temme.parse(hierarchy, target, (h) => {
+
+                // Assert
+                expect(h.classes).toEqual(['bold', 'red', 'yellow']);
+            });
+        }
+        catch(e) {
+
+            console.error(e.name, e.message);
+        }
+    });
 });
