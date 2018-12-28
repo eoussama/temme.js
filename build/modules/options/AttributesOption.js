@@ -47,6 +47,11 @@ var AttributesOption = (function (_super) {
         }
         return attributes;
     };
+    AttributesOption.prototype.parse = function (element, hierarchy) {
+        for (var dataKey in hierarchy.attributes) {
+            element.setAttribute(dataKey, hierarchy.attributes[dataKey]);
+        }
+    };
     return AttributesOption;
 }(Option_1.default));
 exports.default = AttributesOption;

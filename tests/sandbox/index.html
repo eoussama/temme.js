@@ -57,10 +57,6 @@
         <h1>Temme JS Sandbox</h1>
         <hr>
 
-        <div id="element" class="red red blue" data-id="1000" data-name="alfredo" visible=true>
-            <i>Hello there.</i>
-        </div>
-
         <!-- The main target element. -->
         <div id="target"></div>
     </main>
@@ -76,28 +72,49 @@
 
         // Testing up the hierarchy object.
         const hierarchy = {
-            ref: 'ele-1',
-            childNodes: [
+            templates: [
                 {
-                    ref: 'ele-2',
-                    from: {
-                        ref: '@#element',
-                        mode: 'append'
-                    },
+                    ref: 'temp-1',
                     attributes: {
-                        bluffing: 13,
-                        visible: false
+                        visible: true
                     },
-                    dataset: {
-                        label: false,
-                        id: 250
-                    },
-                    content: {
-                        value: 'Hello'
-                    }
+                    classes: ['bold', 'italic']
                 },
                 {
-
+                    ref: 'temp-2',
+                    from: {
+                        ref: 'temp-1'
+                    },
+                    classes: ['yellow'],
+                    dataset: {
+                        id: 100
+                    }
+                }
+            ],
+            childNodes: [
+                {
+                    
+                },
+                {
+                    templates: [
+                        {
+                            ref: 'temp-3',
+                            from: {
+                                ref: 'temp-2'
+                            },
+                            classes: ['magenta']
+                        }
+                    ],
+                    ref: 't',
+                    from: {
+                        ref: 'temp-3'
+                    },
+                    name: 'h1',
+                    content: {
+                        type: 'html',
+                        value: '<i>Italic</i>'
+                    },
+                    classes: ['red']
                 }
             ]
         };
@@ -125,11 +142,10 @@
                 console.log('\nThe DOM element:');
                 console.info(target);
 
-            }, (id, h, depth) => {
+            }, (id, h) => {
 
                 // Outputting information about each object being created.
-                console.log(`Element ID: %c${id}`, 'font-weight: bold;');
-                console.log(`Element depth: %c${depth}`, 'font-weight: bold;');
+                console.log(`Element ID: %c${id} %ccreated!`, 'font-weight: bold;', 'font-weight: normal;');
             });
         }
         catch (e) {

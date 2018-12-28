@@ -3,10 +3,11 @@
  */
 
 
-import Option from "../models/Option";
+import Option, { IParser } from "../models/Option";
+import { Hierarchy } from "../models/Hierarchy";
 
 
-export default class AttributesOption extends Option {
+export default class AttributesOption extends Option implements IParser {
 
     /**
      * Parameterless constructor.
@@ -66,5 +67,19 @@ export default class AttributesOption extends Option {
         }
 
         return attributes;
+    }
+
+
+    /**
+     * Sets the attributes for an HTML element.
+     * 
+     * @param element The HTML element to set the attributes for
+     */
+    public parse (element: HTMLElement, hierarchy: Hierarchy) {
+
+        for (const dataKey in hierarchy.attributes) {
+            
+            element.setAttribute(dataKey, (<any>hierarchy).attributes[dataKey]);
+        }
     }
 }

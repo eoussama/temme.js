@@ -45,6 +45,11 @@ var DatasetOption = (function (_super) {
         }
         return dataset;
     };
+    DatasetOption.prototype.parse = function (element, hierarchy) {
+        for (var dataKey in hierarchy.dataset) {
+            element.dataset[dataKey] = hierarchy.dataset[dataKey];
+        }
+    };
     return DatasetOption;
 }(Option_1.default));
 exports.default = DatasetOption;

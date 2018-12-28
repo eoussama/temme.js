@@ -27,6 +27,11 @@ var IdOption = (function (_super) {
     IdOption.prototype.inherit = function (hierarchy, id) {
         hierarchy.id = id;
     };
+    IdOption.prototype.parse = function (element, hierarchy) {
+        if (hierarchy.id != "") {
+            element.id = hierarchy.id;
+        }
+    };
     return IdOption;
 }(Option_1.default));
 exports.default = IdOption;

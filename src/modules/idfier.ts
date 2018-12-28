@@ -57,7 +57,9 @@ export function idfy(hierarchy: any, temmeIds: Array<string> = [], mode: boolean
  * 
  * @param hierarchy The hierarchy to get the temmeId of.
  */
-export const getTemmeId = (hierarchy: Hierarchy | Template): string => hierarchy.temmeIds[hierarchy.temmeIds.length - 1];
+export function getTemmeId (hierarchy: Hierarchy | Template): string {
+    return hierarchy.temmeIds[hierarchy.temmeIds.length - 1];
+}
 
 
 /**

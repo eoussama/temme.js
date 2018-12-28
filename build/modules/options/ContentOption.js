@@ -33,11 +33,14 @@ var ContentOption = (function (_super) {
         return _this;
     }
     ContentOption.prototype.inherit = function (hierarchy, content) {
-        var ct = content;
+        var ct = content.value;
         if (hierarchy.from.mode === 'append') {
-            ct.value = hierarchy.content.value + " " + ct.value;
+            ct = "" + hierarchy.content.value + (ct.length > 0 ? ' ' : '') + ct;
         }
-        hierarchy.content = ct;
+        else {
+            hierarchy.content = content;
+        }
+        hierarchy.content.value = ct;
     };
     ContentOption.prototype.getKeyFromElement = function (element) {
         return {
@@ -46,6 +49,16 @@ var ContentOption = (function (_super) {
         };
     };
     ;
+    ContentOption.prototype.parse = function (element, hierarchy) {
+        if (hierarchy.content.value != "") {
+            if (hierarchy.content.type === 'text') {
+                element.textContent = hierarchy.content.value;
+            }
+            else {
+                element.innerHTML = hierarchy.content.value;
+            }
+        }
+    };
     return ContentOption;
 }(Option_1.default));
 exports.default = ContentOption;

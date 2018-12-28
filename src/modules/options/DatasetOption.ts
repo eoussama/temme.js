@@ -3,10 +3,11 @@
  */
 
 
-import Option from "../models/Option";
+import Option, { IParser } from "../models/Option";
+import { Hierarchy } from '../models/Hierarchy';
 
 
-export default class DatasetOption extends Option {
+export default class DatasetOption extends Option implements IParser {
 
     /**
      * Parameterless constructor.
@@ -62,5 +63,19 @@ export default class DatasetOption extends Option {
         }
 
         return dataset;
+    }
+
+
+    /**
+     * Sets the dataset for an HTML element.
+     * 
+     * @param element The HTML element to set the dataset for
+     */
+    public parse (element: HTMLElement, hierarchy: Hierarchy) {
+
+        for (const dataKey in hierarchy.dataset) {
+
+            element.dataset[dataKey] = (<any>hierarchy).dataset[dataKey];
+        }
     }
 }

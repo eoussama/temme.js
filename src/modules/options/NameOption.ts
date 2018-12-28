@@ -24,7 +24,10 @@ export default class NameOption extends Option {
      */
     public inherit(hierarchy: any, name: any): void {
         
-        hierarchy.name = name;
+        if (name != null) {
+            
+            hierarchy.name = name;
+        }
     }
 
 

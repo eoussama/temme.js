@@ -34,7 +34,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * 
  * @throws InvalidTargetError, InvalidHierarchyError
  */
-export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resultedHierarchy: any) => void = (hierarchy) => {}, nodeCallback: (temmeId: string, currentHierarchy: any, depth: number) => void): Object {
+export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resultedHierarchy: any) => void = (hierarchy) => {}, nodeCallback: (temmeId: string, currentHierarchy: any) => void = () => {}): Object {
 
     try {
 
@@ -64,7 +64,7 @@ export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resu
         Referencer.process(hierarchy);
 
         // Parsing the hierarchy into an HTML tree.
-        Parser.parse(hierarchy, nodeCallback);
+        Parser.parse(hierarchy, target, nodeCallback);
 
         // Executing the end callback.
         endCallback(hierarchy);

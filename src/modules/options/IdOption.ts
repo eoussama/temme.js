@@ -3,10 +3,11 @@
  */
 
 
-import Option from "../models/Option";
+import Option, { IParser } from "../models/Option";
+import { Hierarchy } from "../models/Hierarchy";
 
 
-export default class IdOption extends Option {
+export default class IdOption extends Option implements IParser {
 
     /**
      * Parameterless constructor.
@@ -24,7 +25,7 @@ export default class IdOption extends Option {
      * @param id The id to inherit.
      */
     public inherit(hierarchy: any, id: any): void {
-        
+
         hierarchy.id = id;
     }
 
@@ -35,4 +36,18 @@ export default class IdOption extends Option {
      * @param element The HTML element to target. 
      */
     public getKeyFromElement = (element: HTMLElement): any => element.id;
+
+
+    /**
+     * Sets the id for an HTML element.
+     * 
+     * @param element The HTML element to set the id for
+     */
+    public parse (element: HTMLElement, hierarchy: Hierarchy) {
+
+        if (hierarchy.id != "") {
+
+            element.id = hierarchy.id;
+        }
+    }
 }

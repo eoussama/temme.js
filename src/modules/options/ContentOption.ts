@@ -3,7 +3,8 @@
  */
 
 
-import Option, { IKeys } from "../models/Option";
+import Option, { IKeys, IParser } from "../models/Option";
+import { Hierarchy } from '../models/Hierarchy';
 import ValueSubOption from "./sub-options/ValueSubOption";
 import ContentTypeSubOption from "./sub-options/ContentTypeSubOption";
 
@@ -11,7 +12,7 @@ import ContentTypeSubOption from "./sub-options/ContentTypeSubOption";
 /**
  * The content option class.
  */
-export default class ContentOption extends Option implements IKeys {
+export default class ContentOption extends Option implements IKeys, IParser {
 
     /**
      * The keys of the `content` option.
@@ -41,14 +42,17 @@ export default class ContentOption extends Option implements IKeys {
      */
     public inherit(hierarchy: any, content: any): void {
         
-        const ct: any = content;
+        let ct: string = content.value;
 
         if (hierarchy.from.mode === 'append') {
 
-            ct.value = `${hierarchy.content.value} ${ct.value}`;
+            ct = `${hierarchy.content.value}${ct.length > 0 ? ' ' : ''}${ct}`;
+        } else {
+
+            hierarchy.content = content;
         }
 
-        hierarchy.content = ct;
+        hierarchy.content.value = ct;
     }
 
 
@@ -64,6 +68,26 @@ export default class ContentOption extends Option implements IKeys {
             value: element.innerHTML
         }
     };
+
+
+    /**
+     * Sets the content for an HTML element.
+     * 
+     * @param element The HTML element to set the content for
+     */
+    public parse (element: HTMLElement, hierarchy: Hierarchy) {
+
+        if ((<any>hierarchy).content.value != "") {
+
+            if ((<any>hierarchy).content.type === 'text') {
+
+                element.textContent = (<any>hierarchy).content.value;
+            } else {
+
+                element.innerHTML = (<any>hierarchy).content.value;
+            }
+        }
+    }
 }
 
 

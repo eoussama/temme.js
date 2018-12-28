@@ -25,7 +25,9 @@ var NameOption = (function (_super) {
         return _this;
     }
     NameOption.prototype.inherit = function (hierarchy, name) {
-        hierarchy.name = name;
+        if (name != null) {
+            hierarchy.name = name;
+        }
     };
     return NameOption;
 }(Option_1.default));

@@ -4,6 +4,9 @@
  */
 
 
+ import { Hierarchy } from "./Hierarchy";
+
+
 /**
  * The interface that indicates
  * sub-options.
@@ -11,6 +14,16 @@
 export interface IKeys {
 
     keys: any;
+}
+
+
+/**
+ * The interface for options that have to parse their
+ * respective values into a specific HTML element.
+ */
+export interface IParser {
+
+    parse: (element: HTMLElement, hierarchy: Hierarchy) => void
 }
 
 

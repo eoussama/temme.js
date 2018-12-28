@@ -39,6 +39,12 @@ var ClassesOption = (function (_super) {
         return classes;
     };
     ;
+    ClassesOption.prototype.parse = function (element, hierarchy) {
+        var _a;
+        if (hierarchy.classes.length > 0) {
+            (_a = element.classList).add.apply(_a, hierarchy.classes);
+        }
+    };
     return ClassesOption;
 }(Option_1.default));
 exports.default = ClassesOption;

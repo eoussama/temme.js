@@ -3,10 +3,11 @@
  */
 
 
-import Option from "../models/Option";
+import Option, { IParser } from "../models/Option";
+import { Hierarchy } from '../models/Hierarchy';
 
 
-export default class ClassesOption extends Option {
+export default class ClassesOption extends Option implements IParser {
 
     /**
      * Parameterless constructor.
@@ -53,4 +54,18 @@ export default class ClassesOption extends Option {
 
         return classes;
     };
+
+
+    /**
+     * Sets the classes for an HTML element.
+     * 
+     * @param element The HTML element to set the classes for
+     */
+    public parse (element: HTMLElement, hierarchy: Hierarchy) {
+
+        if (hierarchy.classes.length > 0) {
+
+            element.classList.add(...hierarchy.classes);
+        }
+    }
 }
