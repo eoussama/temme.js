@@ -78,7 +78,7 @@
                     attributes: {
                         visible: true
                     },
-                    classes: ['bold', 'italic']
+                    classes: ['bold', 'red', 'italic']
                 },
                 {
                     ref: 'temp-2',
@@ -107,14 +107,19 @@
                     ],
                     ref: 't',
                     from: {
-                        ref: 'temp-3'
+                        ref: 'temp-3',
+                        mode: 'override'
                     },
                     name: 'h1',
                     content: {
                         type: 'html',
                         value: '<i>Italic</i>'
                     },
-                    classes: ['red']
+                    classes: ['red'],
+                    dataset: {
+                        name: 'ffff',
+                        id: '1649'
+                    }
                 }
             ]
         };

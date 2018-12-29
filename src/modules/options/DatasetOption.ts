@@ -25,21 +25,21 @@ export default class DatasetOption extends Option implements IParser {
      */
     public inherit(hierarchy: any, dataset: any): void {
 
-        const dt: any = dataset;
+        const dt: any = { ...dataset };
 
         if (hierarchy.from.mode === 'append') {
 
-            for (const key in hierarchy.dataset) {
+            for (const dataKey in hierarchy.dataset) {
 
-                dt[key] = hierarchy.dataset[key];
+                dt[dataKey] = hierarchy.dataset[dataKey];
             }
         } else {
 
-            for (const key in hierarchy.dataset) {
+            for (const dataKey in hierarchy.dataset) {
 
-                if (!(key in dt)) {
+                if (!(dataKey in dt)) {
 
-                    dt[key] = hierarchy.dataset[key];
+                    dt[dataKey] = hierarchy.dataset[dataKey];
                 }
             }
         }

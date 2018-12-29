@@ -30,17 +30,17 @@ export default class AttributesOption extends Option implements IParser {
 
         if (hierarchy.from.mode === 'append') {
 
-            for (const key in hierarchy.attributes) {
+            for (const attrKey in hierarchy.attributes) {
 
-                attr[key] = hierarchy.attributes[key];
+                attr[attrKey] = hierarchy.attributes[attrKey];
             }
         } else {
 
-            for (const key in hierarchy.attributes) {
+            for (const attrKey in hierarchy.attributes) {
 
-                if (!(key in attr)) {
+                if (!(attrKey in attr)) {
 
-                    attr[key] = hierarchy.attributes[key];
+                    attr[attrKey] = hierarchy.attributes[attrKey];
                 }
             }
         }

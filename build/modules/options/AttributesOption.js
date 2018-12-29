@@ -25,14 +25,14 @@ var AttributesOption = (function (_super) {
     AttributesOption.prototype.inherit = function (hierarchy, attributes) {
         var attr = attributes;
         if (hierarchy.from.mode === 'append') {
-            for (var key in hierarchy.attributes) {
-                attr[key] = hierarchy.attributes[key];
+            for (var attrKey in hierarchy.attributes) {
+                attr[attrKey] = hierarchy.attributes[attrKey];
             }
         }
         else {
-            for (var key in hierarchy.attributes) {
-                if (!(key in attr)) {
-                    attr[key] = hierarchy.attributes[key];
+            for (var attrKey in hierarchy.attributes) {
+                if (!(attrKey in attr)) {
+                    attr[attrKey] = hierarchy.attributes[attrKey];
                 }
             }
         }
