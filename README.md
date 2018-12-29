@@ -1,47 +1,32 @@
-# Temme JS
+<p align="center">
+    <img src="docs/assets/img/logo.svg" width=150 />
+    <h1 align="center">Temme JS</h1>
+</p>
+
 
 Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too.
 
 
-# Build
+## Build
 
-Building Temme JS is fairly easy, simply run `npm install` to install all the development dependencies, and then run `npm run prod` to get the production files under the `dist` folder.
+Building Temme JS is fairly easy, simply run `npm install` to install all the development dependencies, and then run `npm run prod` to get the production files under the `dist` folder. More information about this process can be found [here](https://github.com/EOussama/temmejs/wiki/Temme-build).
 
-
-# Testing
-
-In order to test Temme, simply run `npm run test`.
-Other test cases are available at `tests/sandbox/index.html`.
+As for testing, [this guide](https://github.com/EOussama/temmejs/wiki/Temme-tests) highlights how simple it is.
 
 
-# Package walkthrough
-
-A number of npm scripts are available to use in order to ease up basic developement and testing purposes.
-
-| Command   | Description                                     |
-|-----------|-------------------------------------------------|
-| clean     | Deletes the `dist` and `build` folders.         |
-| build     | Compiles the typescript code into es6 modules.  |
-| bundle    | Bundles the source code for production.         |
-| docs      | Updates the temme.js file of the documentation. |
-| prod      | Executes all of the above.                      |
-| test      | Runs the unit tests                             |
-
-
-
-# Usage
+## Usage
 
 As we've come to know, Emmet converts a select of instructions that are plain text to its logical dom skeleton, Temme does that differently, by working with javascript objects instead of plain text, and seeing how this is a javascript library it kind of makes sense.
-In order for Temme to do its magic, it requires a hierarchy blueprint as a javascript object and an HTML element to append the skeleton to.
+In order for Temme to do its magic, it requires a hierarchy blueprint as a javascript object and an HTML element to append the skeleton too.
 
 
-# Syntax
+## Syntax
 ```js
 Temme.parse(hierarchy: Object, target: HTMLElement, endCallback: (hierarchy: Hierarchy) => void, nodeCallback: (temmeId: string, hierarchy: Hierarchy) => void);
 ```
 
 
-# Example
+## Example for the browser
 
 Given the following code snippet:
 ```html
@@ -114,7 +99,42 @@ Simply that, giving Temme a target element and a skeleton object, it will render
 </div>
 ```
 
-More on how to use Temme can be found [here](https://eoussama.github.io/temmejs/).
+### Example for a node environment.
+
+As simple and straightforward as we saw on the browser's side of things, the only difference is how we access Temme, and that's by requiring it.
+
+```js
+// es5
+var Temme = require('path/to/temme');
+
+// es6
+import Temme from 'path/to/temme';
+```
+
+As for the usages, it remains just as in the browser.
+
+```js
+
+// The host element.
+var target = document.createEelement('div');
+
+// The hierarchy.
+var hierarchy = {
+    classes: ['red']
+}
+
+// Telling Temme to do its thing.
+try {
+
+    Temme.parse(hierarchy, target);
+}
+catch (e) {
+
+    console.error(e.name, e.message);
+}
+```
+
+More on how to use Temme can be found [at the documentation web page](https://eoussama.github.io/temmejs/) and even more in-depth [in the wiki](https://github.com/EOussama/temmejs/wiki).
 
 
 # Credits

@@ -105,6 +105,13 @@ window.addEventListener('load', async () => {
                                     content: {
                                         value: "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too"
                                     }
+                                },
+                                {
+                                    name: 'p',
+                                    content: {
+                                        type: 'html',
+                                        value: "A more in-depth documentation can be found <a href=\"https://github.com/EOussama/temmejs/wiki\">at the wiki</a>."
+                                    }
                                 }
                             ]
                         },
