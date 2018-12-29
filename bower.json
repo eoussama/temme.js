@@ -24,6 +24,7 @@
     "build",
     ".vscode",
     "webpack.config.js",
+    "tsconfig.json",
     ".npmignore"
   ]
 }

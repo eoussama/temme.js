@@ -20,5 +20,8 @@ gulpfile.js
 .gitignore
 .gitattributes
 
+# Ignoring typescript specific files.
+tsconfig.json
+
 # Ignoring webpack configurations.
 webpack.config.js
