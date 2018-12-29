@@ -77,34 +77,43 @@
 
     <!-- The main javascript code. -->
     <script>
+
         const
             target = document.getElementById('target'),
             hierarchy = {
                 classes: ['container'],
-                children: [
+                childNodes: [
                     {
                         ref: 'card-ref',
                         classes: ['card'],
-                        children: [
+                        childNodes: [
                             {
                                 classes: ['card-header'],
-                                children: [
+                                childNodes: [
                                     {
                                         name: 'h3',
-                                        text: 'Card header'
+                                        content: {
+                                            value: 'Card header'
+                                        }
                                     }
                                 ]
                             },
                             {
                                 classes: ['card-body'],
-                                children: [
+                                childNodes: [
                                     {
                                         name: 'p',
-                                        html: "This is a dummy paragraph. Generated completed using <b>Temme JS</b>."
+                                        content: {
+                                            type: 'html',
+                                            value: 'This is a dummy paragraph. Generated completed using <b>Temme JS</b>.'
+                                        }
                                     },
                                     {
                                         name: 'p',
-                                        html: "And all that follows are duplicates if this one."
+                                        content: {
+                                            type: 'html',
+                                            value: 'And all that follows are duplicates if this one.'
+                                        }
                                     }
                                 ]
                             }
@@ -150,13 +159,13 @@
             };
 
         try {
-            Temme(hierarchy, target);
+
+            Temme.parse(hierarchy, target, console.log);
         }
         catch (e) {
+
             console.error(e.name, e.message);
         }
-
-        console.log(target);
     </script>
 </body>
 

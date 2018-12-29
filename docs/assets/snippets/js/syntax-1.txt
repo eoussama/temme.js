@@ -1,1 +1,1 @@
-Temme(hierarchy: object, target: HTMLElement);
+Temme.parse(hierarchy: Object, target: HTMLElement, endCallback: (hierarchy: Hierarchy) => void, nodeCallback: (temmeId: string, hierarchy: Hierarchy) => void);

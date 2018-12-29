@@ -1,9 +1,11 @@
 {
-    children: [
+    childNodes: [
         {
             name: 'h1',
             classes: ['heading-1', 'bold'],
-            text: 'Interesting title.'
+            content: {
+                value: 'Interesting title.'
+            }
         },
         {
             name: 'hr'
@@ -11,10 +13,12 @@
         {
             name: 'div',
             classes: ['container'],
-            children: [
+            childNodes: [
                 {
                     name: 'p',
-                    text: 'Some random text'
+                    content: {
+                        value: 'Some random text.'
+                    }
                 }
             ]
         },

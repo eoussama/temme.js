@@ -4,11 +4,13 @@ const
 
     // The javascript object describing the skeleton.
     hierarchy = {
-        children: [
+        childNodes: [
             {
                 name: 'h1',
                 classes: ['heading-1', 'bold'],
-                text: 'Interesting title.'
+                content: {
+                    value: 'Interesting title.'
+                }
             },
             {
                 name: 'hr'
@@ -16,10 +18,12 @@ const
             {
                 name: 'div',
                 classes: ['container'],
-                children: [
+                childNodes: [
                     {
                         name: 'p',
-                        text: 'Some random text'
+                        content: {
+                            value: 'Some random text.'
+                        }
                     }
                 ]
             },
@@ -30,4 +34,4 @@ const
     };
 
 // Temme, go for it.
-Temme(hierarchy, target);
+Temme.parse(hierarchy, target);

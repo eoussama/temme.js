@@ -13,9 +13,11 @@
 "use strict";
 
 window.addEventListener('load', async () => {
+
     const
         // The host element.
         target = document.getElementById('target'),
+
         // The snippets object.
         snippets = {
             html: {},
@@ -29,15 +31,15 @@ window.addEventListener('load', async () => {
     await fetch('assets/snippets/js/syntax-1.txt').then(response => response.text()).then(snippet => snippets['js']['syntax-1'] = snippet);
     await fetch('assets/snippets/js/usage-1.txt').then(response => response.text()).then(snippet => snippets['js']['usage-1'] = snippet);
     await fetch('assets/snippets/js/usage-2.txt').then(response => response.text()).then(snippet => snippets['js']['usage-2'] = snippet);
-        
+
     // Creating the DOM tree.
     try {
-        Temme({
-            children: [
+        Temme.parse({
+            childNodes: [
                 {
                     name: 'header',
                     classes: ['row-container'],
-                    children: [
+                    childNodes: [
                         {
                             name: 'img',
                             classes: ['logo'],
@@ -47,18 +49,21 @@ window.addEventListener('load', async () => {
                         },
                         {
                             name: 'h1',
-                            text: 'Temme JS',
+                            content: {
+                                value: 'Temme JS'
+                            },
                             classes: ['title']
                         },
                         {
                             name: 'h4',
-                            text: 'From JSON to HTML',
+                            content: {
+                                value: 'From JSON to HTML'
+                            },
                             classes: ['subtitle']
                         },
                         {
-                            name: 'div',
                             classes: ['column-container'],
-                            children: [
+                            childNodes: [
                                 {
                                     ref: 'github-btn',
                                     name: 'iframe',
@@ -75,7 +80,6 @@ window.addEventListener('load', async () => {
                                         ref: 'github-btn',
                                         mode: 'append'
                                     },
-                                    name: 'iframe',
                                     attributes: {
                                         src: 'https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=fork&size=large'
                                     }
@@ -86,150 +90,206 @@ window.addEventListener('load', async () => {
                 },
                 {
                     name: 'main',
-                    children: [
+                    childNodes: [
                         {
                             name: 'section',
-                            children: [
+                            childNodes: [
                                 {
                                     name: 'h3',
-                                    text: 'Description'
+                                    content: {
+                                        value: 'Description'
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too"
+                                    content: {
+                                        value: "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too"
+                                    }
                                 }
                             ]
                         },
                         {
                             name: 'section',
-                            children: [
+                            childNodes: [
                                 {
                                     name: 'h3',
-                                    text: 'How does it work?'
+                                    content: {
+                                        value: 'How does it work?'
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "With Temme, manipulating the DOM, specifically creating simple to complex HTML skeletons has never been simpler."
+                                    content: {
+                                        value: "With Temme, manipulating the DOM, specifically creating simple to complex HTML skeletons has never been simpler."
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "With javascript objects as the blueprint and you as the engineer, you can produce skyscrapers even, you only need to provide a concise hierarchy for your HTML wonder and let Temme take care of the rest. In fact, this whole web page is completely generated using Temme."
+                                    content: {
+                                        value: "With javascript objects as the blueprint and you as the engineer, you can produce skyscrapers even, you only need to provide a concise hierarchy for your HTML wonder and let Temme take care of the rest. In fact, this whole web page is completely generated using Temme."
+                                    }
                                 }
                             ]
                         },
                         {
                             name: 'section',
-                            children: [
+                            childNodes: [
                                 {
                                     name: 'h3',
-                                    text: 'Syntax'
+                                    content: {
+                                        value: 'Syntax'
+                                    }
                                 },
                                 {
                                     name: 'pre',
-                                    children: [
+                                    childNodes: [
                                         {
                                             name: 'code',
                                             classes: ['javascript'],
-                                            text: snippets['js']['syntax-1']
+                                            content: {
+                                                value: snippets['js']['syntax-1']
+                                            }
                                         }
                                     ]
                                 },
                                 {
                                     name: 'p',
-                                    html: "Where <code>hierarchy</code> is a valid javascript object that represents your HTML skeleton, and <code>target</code> is a valid HTML element that will host the skeleton as its parent."
+                                    content: {
+                                        type: 'html',
+                                        value: "Where <code>hierarchy</code> is a valid javascript object that represents your HTML skeleton, and <code>target</code> is a valid HTML element that will host the skeleton as its parent."
+                                    }
+                                },
+                                {
+                                    name: 'p',
+                                    content: {
+                                        type: 'html',
+                                        value: "<code>endCallback</code> is the optional function that's executed when Temme has done doing its thing, and <code>nodeCallback</code> is a function executed whenever a hierarchy object (or sub-object) has been parsed."
+                                    }
                                 }
                             ]
                         },
                         {
                             name: 'section',
-                            children: [
+                            childNodes: [
                                 {
                                     name: 'h3',
-                                    text: 'Usage'
+                                    content: {
+                                        value: 'Usage'
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "Like any other library, Temme is just as shy and needs to be invited to your project first."
+                                    content: {
+                                        value: "Like any other library, Temme is just as shy and needs to be invited to your project first."
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    html: "After adding the <code>temme.js</code> or <code>temme.min.js</code> to your source files, simply visualize an HTML skeleton in your head and describe it as a javascript object."
+                                    content: {
+                                        type: 'html',
+                                        value: "After adding the <code>temme.js</code> or <code>temme.min.js</code> to your source files, simply visualize an HTML skeleton in your head and describe it as a javascript object."
+                                    }
                                 },
                                 {
                                     name: 'h4',
-                                    text: 'Example'
+                                    content: {
+                                        value: 'Example'
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "Let's take the following HTML snippet as a starting point:"
+                                    content: {
+                                        value: "Let's take the following HTML snippet as a starting point:"
+                                    }
                                 },
                                 {
                                     name: 'pre',
-                                    children: [
+                                    childNodes: [
                                         {
                                             name: 'code',
                                             classes: ['html'],
-                                            text: snippets['html']['usage-1']
+                                            content: {
+                                                value: snippets['html']['usage-1']
+                                            }
                                         }
                                     ]
                                 },
                                 {
                                     name: 'p',
-                                    html: "Say, we want to output the same as Emmet would if given the following instructions: <code>(h1.heading-1.bold>({Interesting title.}))+(hr)+(div.container>(p{Some random text}))+hr</code>"
+                                    content: {
+                                        type: 'html',
+                                        value: "Say, we want to output the same as Emmet would if given the following instructions: <code>(h1.heading-1.bold>({Interesting title.}))+(hr)+(div.container>(p{Some random text}))+hr</code>"
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: 'Theoretically, that should output the following HTML skeleton:'
+                                    content: {
+                                        value: 'Theoretically, that should output the following HTML skeleton:'
+                                    }
                                 },
                                 {
                                     name: 'pre',
-                                    children: [
+                                    childNodes: [
                                         {
                                             name: 'code',
                                             classes: ['html'],
-                                            text: snippets['html']['usage-2']
+                                            content: {
+                                                value: snippets['html']['usage-2']
+                                            }
                                         }
                                     ]
                                 },
                                 {
                                     name: 'p',
-                                    text: "Temme's equivalence of that would be:"
+                                    content: {
+                                        value: "Temme's equivalence of that would be:"
+                                    }
                                 },
                                 {
                                     name: 'pre',
-                                    children: [
+                                    childNodes: [
                                         {
                                             name: 'code',
                                             classes: ['javascript'],
-                                            text: snippets['js']['usage-1']
+                                            content: {
+                                                value: snippets['js']['usage-1']
+                                            }
                                         }
                                     ]
                                 },
                                 {
                                     name: 'p',
-                                    text: "Now that you've managed to describe the skeleton as a javascript object, simple tell Temme to do its thing."
+                                    content: {
+                                        value: "Now that you've managed to describe the skeleton as a javascript object, simple tell Temme to do its thing."
+                                    }
                                 },
                                 {
                                     name: 'pre',
-                                    children: [
+                                    childNodes: [
                                         {
                                             name: 'code',
                                             classes: ['javascript'],
-                                            text: snippets['js']['usage-2']
+                                            content: {
+                                                value: snippets['js']['usage-2']
+                                            }
                                         }
                                     ]
                                 },
                                 {
                                     name: 'p',
-                                    text: "And simply, just like that, the resulting HTML is the following:"
+                                    content: {
+                                        value: "And simply, just like that, the resulting HTML is the following:"
+                                    }
                                 },
                                 {
                                     name: 'pre',
-                                    children: [
+                                    childNodes: [
                                         {
                                             name: 'code',
                                             classes: ['html'],
-                                            text: snippets['html']['usage-3']
+                                            content: {
+                                                value: snippets['html']['usage-3']
+                                            }
                                         }
                                     ]
                                 }
@@ -237,26 +297,37 @@ window.addEventListener('load', async () => {
                         },
                         {
                             name: 'section',
-                            children: [
+                            childNodes: [
                                 {
                                     name: 'h3',
-                                    text: 'Advantages'
+                                    content: {
+                                        value: 'Advantages'
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "You might have be wondering, yeah cool, but why though?"
+                                    content: {
+                                        value: "You might have be wondering, yeah cool, but why though?"
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet blows Temme away in terms of swiftness, you just hit up short instructions in plain text, and then boom."
+                                    content: {
+                                        value: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet blows Temme away in terms of swiftness, you just hit up short instructions in plain text, and then boom."
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    html: "Temme focuses on the data structure more, it's much better than manually working with <code>createElement</code> and prettier than direct HTML embed <code>innerHTML</code>."
+                                    content: {
+                                        type: 'html',
+                                        value: "Temme focuses on the data structure more, it's much better than manually working with <code>createElement</code> and prettier than direct HTML embed <code>innerHTML</code>."
+                                    }
                                 },
                                 {
                                     name: 'p',
-                                    text: "One other strong point that Temme has going on is it being javascript-object oriented, meaning, it can easily be parsed into JSON and vice versa."
+                                    content: {
+                                        value: "One other strong point that Temme has going on is it being javascript-object oriented, meaning, it can easily be parsed into JSON and vice versa."
+                                    }
                                 }
                             ]
                         },
@@ -267,7 +338,7 @@ window.addEventListener('load', async () => {
             document.body.classList.remove('loader');
         });
     }
-    catch(e) {
+    catch (e) {
         console.error(e.name, e.message);
     }
 

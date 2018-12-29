@@ -37,7 +37,7 @@ In order for Temme to do its magic, it requires a hierarchy blueprint as a javas
 
 # Syntax
 ```js
-Temme.parse(hierarchy: Object, target: HTMLElement);
+Temme.parse(hierarchy: Object, target: HTMLElement, endCallback: (hierarchy: Hierarchy) => void, nodeCallback: (temmeId: string, hierarchy: Hierarchy) => void);
 ```
 
 
@@ -55,20 +55,20 @@ Given the following code snippet:
 <script>
     const target = document.getElementById('target');
 
-    Temme({
+    Temme.parse({
         classes: ['card', 'card-dark'],
-        children: [
+        childNodes: [
             {
                 name: 'div',
                 classes: ['card-header'],
-                children: [
+                childNodes: [
                     {
                         name: 'h2',
-                        text: 'Card header',
+                        content: {
+                            value: 'Card header'
+                        },
                         classes: ['title', 'txt-gray', 'txt-bold'],
-                        attributes: [
-                            { contenteditable: true }
-                        ]
+                        attributes: [ { contenteditable: true } ]
                     }
                 ]
             },
@@ -79,14 +79,19 @@ Given the following code snippet:
                     source: 'www.somelink.com',
                     id: 536
                 },
-                children: [
+                childNodes: [
                     {
                         name: 'p',
-                        text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores aspernatur deserunt assumenda in officiis dolore, perspiciatis nam soluta iste odit?'
+                        content: {
+                            value: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores aspernatur deserunt assumenda in officiis dolore, perspiciatis nam soluta iste odit?',
+                        }
                     },
                     {
                         name: 'p',
-                        html: 'Lorem ipsum <b>dolor sit amet consectetur <u>adipisicing</u></b> elit. Dolores aspernatur <span class="link">deserunt</span> assumenda in officiis dolore, <mark>perspiciatis</mark> nam soluta iste odit?'
+                        content: {
+                            type: 'html',
+                            value: 'Lorem ipsum <b>dolor sit amet consectetur <u>adipisicing</u></b> elit. Dolores aspernatur <span class="link">deserunt</span> assumenda in officiis dolore, <mark>perspiciatis</mark> nam soluta iste odit?',
+                        }
                     },
                 ]
             }
