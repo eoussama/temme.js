@@ -13,7 +13,7 @@ export default class ChildNodesOption extends Option {
      */
     constructor() {
 
-        super('childNodes', 'array', [], []);
+        super('childNodes', 'array', [], [], true);
     }
 
     /**

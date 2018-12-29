@@ -20,7 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var ClassesOption = (function (_super) {
     __extends(ClassesOption, _super);
     function ClassesOption() {
-        return _super.call(this, 'classes', 'array', [], []) || this;
+        return _super.call(this, 'classes', 'array', [], [], true) || this;
     }
     ClassesOption.prototype.inherit = function (hierarchy, classes) {
         var _a;

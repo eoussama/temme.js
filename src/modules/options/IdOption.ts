@@ -14,7 +14,7 @@ export default class IdOption extends Option implements IParser {
      */
     constructor() {
 
-        super('id', 'string', [], '');
+        super('id', 'string', [], '', true);
     }
 
 

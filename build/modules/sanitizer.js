@@ -39,6 +39,10 @@ function sanitizeOption(hierarchy, option) {
         if (!(option.label in hierarchy)) {
             hierarchy[option.label] = option.default;
         }
+        else if (option.label === 'include' || option.label === 'exclude') {
+            hierarchy[option.label] = hierarchy[option.label].filter(function (opt, index) { return hierarchy[option.label].indexOf(opt) === index; });
+            hierarchy[option.label].sort();
+        }
         if ('keys' in option) {
             for (var key in option.keys) {
                 var subHierarchy = hierarchy[option.label], subOption = option.keys[key];

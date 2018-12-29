@@ -53,6 +53,12 @@ export default abstract class Option {
     public default: any;
 
     /**
+     * Whether or not an option is inherited.
+     */
+    public inherited: boolean;
+    
+
+    /**
      * Constructor with parameters.
      * 
      * @param label The name of the option.
@@ -60,12 +66,13 @@ export default abstract class Option {
      * @param defaultValue The default value of the option.
      * @param values The possible values of the option.
      */
-    constructor(label: string, type: string, values: Array<any>, defaultValue: any) {
+    constructor(label: string, type: string, values: Array<any>, defaultValue: any, inherited: boolean = false) {
 
         this.label = label;
         this.type = type;
         this.values = values;
         this.default = defaultValue;
+        this.inherited = inherited;
     }
 
 
@@ -127,8 +134,20 @@ export default abstract class Option {
         // Checking if the matching object is valid.
         if (matchingOption != null && matchingOption.values.length > 0) {
             
-            // Checking if the value is not a valid one.
-            return matchingOption.values.indexOf(value) !== -1;
+
+            if (matchingOption.label === 'include' || matchingOption.label === 'exclude') {
+
+                for (const val of value) {
+                    
+                    if (matchingOption.values.indexOf(val) === -1) {
+                        return false;
+                    }
+                }
+            } else {
+
+                // Checking if the value is not a valid one.
+                return matchingOption.values.indexOf(value) !== -1;
+            }
         }
 
         return true;

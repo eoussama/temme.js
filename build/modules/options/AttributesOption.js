@@ -31,7 +31,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var AttributesOption = (function (_super) {
     __extends(AttributesOption, _super);
     function AttributesOption() {
-        return _super.call(this, 'attributes', 'object', [], {}) || this;
+        return _super.call(this, 'attributes', 'object', [], {}, true) || this;
     }
     AttributesOption.prototype.inherit = function (hierarchy, attributes) {
         var attr = __assign({}, attributes);

@@ -25,7 +25,7 @@ var ContentOption = (function (_super) {
         var _this = _super.call(this, 'content', 'object', [], {
             type: (new ContentTypeSubOption_1.default()).default,
             value: (new ValueSubOption_1.default()).default
-        }) || this;
+        }, true) || this;
         _this.keys = {
             type: new ContentTypeSubOption_1.default(),
             value: new ValueSubOption_1.default()
