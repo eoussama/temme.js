@@ -31,7 +31,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var DatasetOption = (function (_super) {
     __extends(DatasetOption, _super);
     function DatasetOption() {
-        return _super.call(this, 'dataset', 'object', [], {}) || this;
+        return _super.call(this, 'dataset', 'object', [], {}, true) || this;
     }
     DatasetOption.prototype.inherit = function (hierarchy, dataset) {
         var dt = __assign({}, dataset);

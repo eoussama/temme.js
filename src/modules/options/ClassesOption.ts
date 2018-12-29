@@ -14,7 +14,7 @@ export default class ClassesOption extends Option implements IParser {
      */
     constructor() {
 
-        super('classes', 'array', [], []);
+        super('classes', 'array', [], [], true);
     }
 
     /**

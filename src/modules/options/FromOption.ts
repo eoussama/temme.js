@@ -8,6 +8,8 @@ import Option, { IKeys } from "../models/Option";
 import RefOption from "./RefOption";
 import ModeSubOption from "./sub-options/ModeSubOption";
 import ChildrenSubOption from "./sub-options/ChildrenSubOption";
+import IncludeSubOption from "./sub-options/IncludeSubOption";
+import ExcludeSubOption from "./sub-options/ExcludeSubOption";
 
 
 export default class FromOption extends Option implements IKeys {
@@ -18,7 +20,9 @@ export default class FromOption extends Option implements IKeys {
     public keys: FromKeys = {
         ref: new RefOption(),
         mode: new ModeSubOption(),
-        children: new ChildrenSubOption()
+        children: new ChildrenSubOption(),
+        include: new IncludeSubOption(),
+        exclude: new ExcludeSubOption()
     };
 
     /**
@@ -29,7 +33,9 @@ export default class FromOption extends Option implements IKeys {
         super('from', 'object', [], {
             ref: (new RefOption()).default,
             mode: (new ModeSubOption()).default,
-            children: (new ChildrenSubOption()).default
+            children: (new ChildrenSubOption()).default,
+            include: (new IncludeSubOption()).default,
+            exclude: (new ExcludeSubOption()).default
         });
     }
 
@@ -70,4 +76,16 @@ type FromKeys = {
      * The inheritance mode.
      */
     children: ChildrenSubOption;
+
+
+    /**
+     * What options to inherite.
+     */
+    include: IncludeSubOption;
+
+
+    /**
+     * What options not to inherit.
+     */
+    exclude: ExcludeSubOption;
 }

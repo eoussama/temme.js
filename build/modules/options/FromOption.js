@@ -20,18 +20,24 @@ var Option_1 = __importDefault(require("../models/Option"));
 var RefOption_1 = __importDefault(require("./RefOption"));
 var ModeSubOption_1 = __importDefault(require("./sub-options/ModeSubOption"));
 var ChildrenSubOption_1 = __importDefault(require("./sub-options/ChildrenSubOption"));
+var IncludeSubOption_1 = __importDefault(require("./sub-options/IncludeSubOption"));
+var ExcludeSubOption_1 = __importDefault(require("./sub-options/ExcludeSubOption"));
 var FromOption = (function (_super) {
     __extends(FromOption, _super);
     function FromOption() {
         var _this = _super.call(this, 'from', 'object', [], {
             ref: (new RefOption_1.default()).default,
             mode: (new ModeSubOption_1.default()).default,
-            children: (new ChildrenSubOption_1.default()).default
+            children: (new ChildrenSubOption_1.default()).default,
+            include: (new IncludeSubOption_1.default()).default,
+            exclude: (new ExcludeSubOption_1.default()).default
         }) || this;
         _this.keys = {
             ref: new RefOption_1.default(),
             mode: new ModeSubOption_1.default(),
-            children: new ChildrenSubOption_1.default()
+            children: new ChildrenSubOption_1.default(),
+            include: new IncludeSubOption_1.default(),
+            exclude: new ExcludeSubOption_1.default()
         };
         _this.getKeyFromElement = function (element) { return null; };
         return _this;

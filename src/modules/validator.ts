@@ -91,6 +91,10 @@ export function validateOptions(hierarchy: any): void {
             throw new InvalidReferencingOptionError("The “from” option must always have a “ref” sub-option");
         }
 
+        if (validateReferencingRange(hierarchy) === false) {
+            throw new InvalidReferencingOptionError("The “from” option can't have both the “include” and “exclude” sub-options at the same time");
+        }
+
         // Checking if the hierarchy object contains any templates.
         if ('templates' in hierarchy) {
 
@@ -378,6 +382,22 @@ function validateReferencingOption(hierarchy: any): boolean {
     if ('from' in hierarchy) {
 
         return 'ref' in hierarchy.from;
+    }
+
+    return true;
+}
+
+
+/**
+ * Validates the references in a hierarchy object.
+ * 
+ * @param hierarchy The hierarchy object to validate the references for.
+ */
+function validateReferencingRange(hierarchy: any): boolean {
+
+    if ('from' in hierarchy) {
+
+        return !('include' in hierarchy.from && 'exclude' in hierarchy.from);
     }
 
     return true;

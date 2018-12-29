@@ -14,7 +14,7 @@ export default class AttributesOption extends Option implements IParser {
      */
     constructor() {
 
-        super('attributes', 'object', [], {});
+        super('attributes', 'object', [], {}, true);
     }
 
 

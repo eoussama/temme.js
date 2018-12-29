@@ -64,14 +64,11 @@ function processHierarchies(hierarchy, references) {
                 }
             }
             else {
-                var referencedHierarchy = references.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref; })[0];
-                var _loop_3 = function (key) {
-                    var option = options_1.options.filter(function (opt) { return opt.label === key; })[0];
-                    option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
-                };
-                for (var key in hierarchy) {
-                    _loop_3(key);
-                }
+                var referencedHierarchy_1 = references.filter(function (ref) { return ref.hierarchy.ref === hierarchy.from.ref; })[0], toInherit = hierarchy.from.include.filter(function (opt) { return hierarchy.from.exclude.indexOf(opt) === -1; });
+                toInherit.forEach(function (optName) {
+                    var option = options_1.options.filter(function (opt) { return opt.label === optName; })[0];
+                    option.inherit(hierarchy, referencedHierarchy_1.hierarchy[optName]);
+                });
             }
         }
     }

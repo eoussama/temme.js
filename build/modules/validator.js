@@ -46,6 +46,9 @@ function validateOptions(hierarchy) {
         if (validateReferencingOption(hierarchy) === false) {
             throw new InvalidReferencingOptionError_1.default("The “from” option must always have a “ref” sub-option");
         }
+        if (validateReferencingRange(hierarchy) === false) {
+            throw new InvalidReferencingOptionError_1.default("The “from” option can't have both the “include” and “exclude” sub-options at the same time");
+        }
         if ('templates' in hierarchy) {
             hierarchy.templates.forEach(function (template) {
                 validateTemplates(template);
@@ -193,6 +196,12 @@ function validateSubOptions(optionName, optionValue, subOptions) {
 function validateReferencingOption(hierarchy) {
     if ('from' in hierarchy) {
         return 'ref' in hierarchy.from;
+    }
+    return true;
+}
+function validateReferencingRange(hierarchy) {
+    if ('from' in hierarchy) {
+        return !('include' in hierarchy.from && 'exclude' in hierarchy.from);
     }
     return true;
 }

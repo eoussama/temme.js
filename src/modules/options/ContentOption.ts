@@ -30,7 +30,7 @@ export default class ContentOption extends Option implements IKeys, IParser {
         super('content', 'object', [], {
             type: (new ContentTypeSubOption()).default,
             value: (new ValueSubOption()).default
-        });
+        }, true);
     }
 
 

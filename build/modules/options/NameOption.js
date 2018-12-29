@@ -20,7 +20,7 @@ var Option_1 = __importDefault(require("../models/Option"));
 var NameOption = (function (_super) {
     __extends(NameOption, _super);
     function NameOption() {
-        var _this = _super.call(this, 'name', 'string', [], 'div') || this;
+        var _this = _super.call(this, 'name', 'string', [], 'div', true) || this;
         _this.getKeyFromElement = function (element) { return null; };
         return _this;
     }

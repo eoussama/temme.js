@@ -14,7 +14,7 @@ export default class DatasetOption extends Option implements IParser {
      */
     constructor() {
 
-        super('dataset', 'object', [], {});
+        super('dataset', 'object', [], {}, true);
     }
 
     /**

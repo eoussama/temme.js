@@ -86,6 +86,13 @@ function sanitizeOption(hierarchy: any, option: Option): void {
         if (!(option.label in hierarchy)) {
 
             hierarchy[option.label] = option.default;
+        } else if (option.label === 'include' || option.label === 'exclude') {
+
+            // Removing duplicates from the “include” and “exclude” sub-option.
+            hierarchy[option.label] = hierarchy[option.label].filter((opt: string, index: number) => hierarchy[option.label].indexOf(opt) === index);
+        
+            // Sorting the values.
+            hierarchy[option.label].sort();
         }
 
         if ('keys' in option) {

@@ -94,6 +94,7 @@ describe('Parsing simple hierarchies.', () => {
     });
 });
 
+
 describe('Element to element reference.', () => {
 
     test('Children on the same depth level reference.', () => {
@@ -193,7 +194,172 @@ describe('Element to element reference.', () => {
         // Assert.
         expect(target).toEqual(result);
     });
+
+    test('Inheriting children.', () => {
+
+        // Arrange.
+        const
+            target = document.createElement('div'),
+            result = document.createElement('div'),
+            hierarchy = {
+                templates: [
+                    {
+                        ref: 'temp-1',
+                        attributes: { visible: true }
+                    }
+                ],
+                childNodes: [
+                    {
+                        templates: [
+                            {
+                                ref: 'temp-2',
+                                classes: ['red'],
+                                from: {
+                                    ref: 'temp-1'
+                                }
+                            },
+                            {
+                                ref: 'temp-3',
+                                classes: ['bold'],
+                                dataset: { id: 100 },
+                                from: {
+                                    ref: 'temp-2'
+                                }
+                            }
+                        ],
+                        ref: 'ele',
+                        from: {
+                            ref: 'temp-3'
+                        },
+                        childNodes: [
+                            {
+                                name: 'span',
+                                content: {
+                                    value: 'Hello, world!'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        from: {
+                            ref: 'ele',
+                            children: {
+                                allow: true
+                            }
+                        }
+                    }
+                ]
+            };
+
+        const 
+            div1 = document.createElement('div'),
+            div2 = document.createElement('div'),
+            span1 = document.createElement('span'),
+            span2 = document.createElement('span');
+            
+        span1.textContent = 'Hello, world!';
+        span2.textContent = 'Hello, world!';
+        
+        div1.classList.add('bold', 'red');
+        div1.dataset.id = 100;
+        div1.setAttribute('visible', true);
+
+        div2.classList.add('bold', 'red');
+        div2.dataset.id = 100;
+        div2.setAttribute('visible', true);
+
+        div1.appendChild(span1);
+        div2.appendChild(span2);
+        result.appendChild(div1);
+        result.appendChild(div2);
+        
+        // Act.
+        try {
+
+            Temme.parse(hierarchy, target);
+        }
+        catch (e) {
+
+            console.log(e.name, e.message);
+        }
+
+        // Assert.
+        expect(target).toEqual(result);
+    });
+
+    test('Inheritance range (include).', () => {
+
+        // Arrange.
+        const
+            target = document.createElement('div'),
+            result = document.createElement('div'),
+            hierarchy = {
+                templates: [
+                    {
+                        ref: 'temp',
+                        classes: ['red', 'yellow'],
+                        attributes: { visible: true }
+                    }
+                ],
+                from: {
+                    ref: 'temp',
+                    include: ['classes']
+                }
+            };
+
+        result.classList.add('red', 'yellow');
+        
+        // Act.
+        try {
+
+            Temme.parse(hierarchy, target);
+        }
+        catch (e) {
+
+            console.log(e.name, e.message);
+        }
+
+        // Assert.
+        expect(target).toEqual(result);
+    });
+
+    test('Inheritance range (exclude).', () => {
+
+        // Arrange.
+        const
+            target = document.createElement('div'),
+            result = document.createElement('div'),
+            hierarchy = {
+                templates: [
+                    {
+                        ref: 'temp',
+                        classes: ['red', 'yellow'],
+                        attributes: { visible: true }
+                    }
+                ],
+                from: {
+                    ref: 'temp',
+                    exclude: ['classes']
+                }
+            };
+
+        result.setAttribute('visible', true);
+        
+        // Act.
+        try {
+
+            Temme.parse(hierarchy, target);
+        }
+        catch (e) {
+
+            console.log(e.name, e.message);
+        }
+
+        // Assert.
+        expect(target).toEqual(result);
+    });
 });
+
 
 describe('Template to element reference.', () => {
 
@@ -283,98 +449,6 @@ describe('Template to element reference.', () => {
         button.dataset.id = 100;
         button.setAttribute('visible', true);
         result.appendChild(button);
-        
-        // Act.
-        try {
-
-            Temme.parse(hierarchy, target);
-        }
-        catch (e) {
-
-            console.log(e.name, e.message);
-        }
-
-        // Assert.
-        expect(target).toEqual(result);
-    });
-
-    test('Inheriting children.', () => {
-
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            result = document.createElement('div'),
-            hierarchy = {
-                templates: [
-                    {
-                        ref: 'temp-1',
-                        attributes: { visible: true }
-                    }
-                ],
-                childNodes: [
-                    {
-                        templates: [
-                            {
-                                ref: 'temp-2',
-                                classes: ['red'],
-                                from: {
-                                    ref: 'temp-1'
-                                }
-                            },
-                            {
-                                ref: 'temp-3',
-                                classes: ['bold'],
-                                dataset: { id: 100 },
-                                from: {
-                                    ref: 'temp-2'
-                                }
-                            }
-                        ],
-                        ref: 'ele',
-                        from: {
-                            ref: 'temp-3'
-                        },
-                        childNodes: [
-                            {
-                                name: 'span',
-                                content: {
-                                    value: 'Hello, world!'
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        from: {
-                            ref: 'ele',
-                            children: {
-                                allow: true
-                            }
-                        }
-                    }
-                ]
-            };
-
-        const 
-            div1 = document.createElement('div'),
-            div2 = document.createElement('div'),
-            span1 = document.createElement('span'),
-            span2 = document.createElement('span');
-            
-        span1.textContent = 'Hello, world!';
-        span2.textContent = 'Hello, world!';
-        
-        div1.classList.add('bold', 'red');
-        div1.dataset.id = 100;
-        div1.setAttribute('visible', true);
-
-        div2.classList.add('bold', 'red');
-        div2.dataset.id = 100;
-        div2.setAttribute('visible', true);
-
-        div1.appendChild(span1);
-        div2.appendChild(span2);
-        result.appendChild(div1);
-        result.appendChild(div2);
         
         // Act.
         try {

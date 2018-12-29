@@ -257,6 +257,32 @@ describe('Option checks.', () => {
         // Assert.
         expect(errorName).toBe("InvalidReferencingOptionError");
     });
+
+    test("“InvalidReferencingOptionError” should be thrown if both the “include” and “exclude” sub-options are used at the same time.", () => {
+        
+        // Arrange.
+        const hierarchy = { 
+            from: {
+                ref: 'some-ref',
+                include: [],
+                exclude: []
+            } 
+        };
+        let errorName = "";
+
+        // Act.
+        try {
+
+            validator.validateOptions(hierarchy);
+        }
+        catch(e) {
+
+            errorName = e.name;
+        }
+        
+        // Assert.
+        expect(errorName).toBe("InvalidReferencingOptionError");
+    });
 });
 
 

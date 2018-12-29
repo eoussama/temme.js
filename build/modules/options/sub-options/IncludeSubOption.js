@@ -16,23 +16,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Option_1 = __importDefault(require("../models/Option"));
-var IdOption = (function (_super) {
-    __extends(IdOption, _super);
-    function IdOption() {
-        var _this = _super.call(this, 'id', 'string', [], '', true) || this;
-        _this.getKeyFromElement = function (element) { return element.id; };
+var Option_1 = __importDefault(require("../../models/Option"));
+var IncludeSubOption = (function (_super) {
+    __extends(IncludeSubOption, _super);
+    function IncludeSubOption() {
+        var _this = _super.call(this, 'include', 'array', ['name', 'id', 'classes', 'attributes', 'dataset', 'content', 'childNodes'], ['name', 'id', 'classes', 'attributes', 'dataset', 'content', 'childNodes']) || this;
+        _this.getKeyFromElement = function (element) { return null; };
         return _this;
     }
-    IdOption.prototype.inherit = function (hierarchy, id) {
-        hierarchy.id = id;
-    };
-    IdOption.prototype.parse = function (element, hierarchy) {
-        if (hierarchy.id != "") {
-            element.id = hierarchy.id;
-        }
-    };
-    return IdOption;
+    IncludeSubOption.prototype.inherit = function (hierarchy, value) { };
+    return IncludeSubOption;
 }(Option_1.default));
-exports.default = IdOption;
-//# sourceMappingURL=IdOption.js.map
+exports.default = IncludeSubOption;
+//# sourceMappingURL=IncludeSubOption.js.map

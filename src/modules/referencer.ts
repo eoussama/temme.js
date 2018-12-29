@@ -148,16 +148,18 @@ function processHierarchies(hierarchy: any, references: Array<ReferenceType>): v
                 }
             } else {
 
-                const referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0];
+                const
+                    referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0],
+                    toInherit: Array<string> = hierarchy.from.include.filter((opt: string) => hierarchy.from.exclude.indexOf(opt) === -1);
 
-                for (const key in hierarchy) {
+                toInherit.forEach((optName: string) => {
 
                     // Getting the proper option.
-                    const option: Option = options.filter((opt: Option) => opt.label === key)[0];
+                    const option: Option = options.filter((opt: Option) => opt.label === optName)[0];
 
                     // Inheriting the value.
-                    option.inherit(hierarchy, referencedHierarchy.hierarchy[key]);
-                }
+                    option.inherit(hierarchy, referencedHierarchy.hierarchy[optName]);
+                });
             }
         }
     }
