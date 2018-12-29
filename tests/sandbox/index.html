@@ -72,69 +72,35 @@
 
         // Testing up the hierarchy object.
         const hierarchy = {
-            templates: [
-                {
-                    ref: 'temp-1',
-                    attributes: {
-                        visible: true
-                    },
-                    classes: ['bold', 'red', 'italic']
-                },
-                {
-                    ref: 'temp-2',
-                    from: {
-                        ref: 'temp-1'
-                    },
-                    classes: ['yellow'],
-                    dataset: {
-                        id: 100
-                    }
-                }
-            ],
-            classes: ['red', 'blue'],
-            attributes: {
-                unvisible: 'volm'
-            },
-            content: {
-                type: 'html',
-                value: '<b>hhhhhh</b>'
-            },
-            dataset: {
-                id: '3333'
-            },
-            from: {
-                ref: 'temp-1'
-            },
+            ref: 'ele-0',
+            classes: ['ribbinds'],
             childNodes: [
                 {
+                    ref: 'ele-1',
+                    childNodes: [
+                        {
+                            name: 'span',
+                            childNodes: [
+                                {
+                                    name: 'b',
+                                    content: {
+                                        value: 'bold'
+                                    }
+                                }
+                            ]
+                        }
+                    ],
                     from: {
-                        ref: 'temp-2'
+                        ref: 'ele-0'
                     }
                 },
                 {
-                    templates: [
-                        {
-                            ref: 'temp-3',
-                            from: {
-                                ref: 'temp-2'
-                            },
-                            classes: ['magenta']
-                        }
-                    ],
-                    ref: 't',
                     from: {
-                        ref: 'temp-3',
-                        mode: 'override'
-                    },
-                    name: 'h1',
-                    content: {
-                        type: 'html',
-                        value: '<i>Italic</i>'
-                    },
-                    classes: ['red'],
-                    dataset: {
-                        name: 'ffff',
-                        id: '1649'
+                        ref: 'ele-1',
+                        mode: 'append',
+                        children: {
+                            allow: true,
+                        }
                     }
                 }
             ]

@@ -25,20 +25,21 @@ var ChildNodesOption = (function (_super) {
         return _this;
     }
     ChildNodesOption.prototype.inherit = function (hierarchy, childNodes) {
-        var _a, _b;
+        var children = hierarchy.childNodes.slice();
         if (hierarchy.from.children.allow === true) {
             if (hierarchy.from.mode === 'append') {
                 if (hierarchy.from.children.placement === 'before') {
-                    (_a = hierarchy.childNodes).unshift.apply(_a, childNodes);
+                    children.unshift.apply(children, childNodes);
                 }
                 else {
-                    (_b = hierarchy.childNodes).push.apply(_b, childNodes);
+                    children.push.apply(children, childNodes);
                 }
             }
             else {
-                hierarchy.childNodes = childNodes;
+                children = childNodes;
             }
         }
+        hierarchy.childNodes = children;
     };
     return ChildNodesOption;
 }(Option_1.default));

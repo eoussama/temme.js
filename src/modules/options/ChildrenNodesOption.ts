@@ -24,22 +24,26 @@ export default class ChildNodesOption extends Option {
      */
     public inherit(hierarchy: any, childNodes: any): void {
 
+        let children: any = [ ...hierarchy.childNodes ];
+
         if (hierarchy.from.children.allow === true) {
-
+            
             if (hierarchy.from.mode === 'append') {
-
+                
                 if (hierarchy.from.children.placement === 'before') {
-
-                    hierarchy.childNodes.unshift(...childNodes);
+                    
+                    children.unshift(...childNodes);
                 } else {
 
-                    hierarchy.childNodes.push(...childNodes);
+                    children.push(...childNodes);
                 }
             } else {
 
-                hierarchy.childNodes = childNodes;
+                children = childNodes;
             }
         }
+
+        hierarchy.childNodes = children;
     }
 
 
