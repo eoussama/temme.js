@@ -15,13 +15,14 @@ import Option, { IParser } from './models/Option';
  * @param hierarchy The hierarchy object to parse.
  * @param parent The HTML element to host the parsed element.
  * @param nodeCallback The callback that executes whenever an HTML element has been created.
+ * @param topParent Whether or not we're parsing the top parent.
  */
-export function parse(hierarchy: any, parent: HTMLElement, nodeCallback: (temmeId: string, currentHierarchy: any) => void): void {
+export function parse(hierarchy: any, parent: HTMLElement, nodeCallback: (temmeId: string, currentHierarchy: any) => void, topParent: boolean = false): void {
 
     try {
 
         // Parsing the element.
-        const element: HTMLElement = parseElement(hierarchy, parent);
+        const element: HTMLElement = parseElement(hierarchy, parent, topParent);
 
         // Executing the node callback.
         nodeCallback(getTemmeId(hierarchy), hierarchy);
@@ -47,13 +48,14 @@ export function parse(hierarchy: any, parent: HTMLElement, nodeCallback: (temmeI
  * 
  * @param hierarchy The hierarchy to parse.
  * @param parent The HTML element to host the parsed hierarchy.
+ * @param topParent Whether or not the parsed element is the top parent.
  */
-function parseElement(hierarchy: Hierarchy, parent: HTMLElement): HTMLElement {
+function parseElement(hierarchy: Hierarchy, parent: HTMLElement, topParent: boolean = false): HTMLElement {
 
     try {
 
         // Creating an HTML tag out of the hierarchy.
-        const element: HTMLElement = document.createElement(hierarchy.name);
+        const element: HTMLElement = (topParent === true) ? parent : document.createElement(hierarchy.name);
 
         // Appending the appropriate values.
         options.forEach((opt: Option | IParser) => {
@@ -65,7 +67,9 @@ function parseElement(hierarchy: Hierarchy, parent: HTMLElement): HTMLElement {
         });        
 
         // Appending the created element.
-        parent.appendChild(element);
+        if (topParent === false) {
+            parent.appendChild(element);
+        }
 
         // Returning the parsed element.
         return element;

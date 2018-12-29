@@ -26,7 +26,7 @@ export default class AttributesOption extends Option implements IParser {
      */
     public inherit(hierarchy: any, attributes: any): void {
 
-        const attr: any = attributes;
+        const attr: any = { ...attributes };
 
         if (hierarchy.from.mode === 'append') {
 

@@ -31,7 +31,7 @@ function parse(hierarchy, target, endCallback, nodeCallback) {
         Sanitizer.sanitize(hierarchy);
         Idfier.idfy(hierarchy);
         Referencer.process(hierarchy);
-        Parser.parse(hierarchy, target, nodeCallback);
+        Parser.parse(hierarchy, target, nodeCallback, true);
         endCallback(hierarchy);
         return hierarchy;
     }

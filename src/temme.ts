@@ -64,7 +64,7 @@ export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resu
         Referencer.process(hierarchy);
 
         // Parsing the hierarchy into an HTML tree.
-        Parser.parse(hierarchy, target, nodeCallback);
+        Parser.parse(hierarchy, target, nodeCallback, true);
 
         // Executing the end callback.
         endCallback(hierarchy);

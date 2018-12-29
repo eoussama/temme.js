@@ -44,15 +44,18 @@ export default class ContentOption extends Option implements IKeys, IParser {
         
         let ct: string = content.value;
 
-        if (hierarchy.from.mode === 'append') {
+        if (content.value !== "") {
 
-            ct = `${hierarchy.content.value}${ct.length > 0 ? ' ' : ''}${ct}`;
-        } else {
-
-            hierarchy.content = content;
+            if (hierarchy.from.mode === 'append') {
+    
+                ct = `${hierarchy.content.value}${ct.length > 0 ? ' ' : ''}${ct}`;
+            } else {
+    
+                hierarchy.content = content;
+            }
+    
+            hierarchy.content.value = ct;
         }
-
-        hierarchy.content.value = ct;
     }
 
 

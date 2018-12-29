@@ -34,13 +34,15 @@ var ContentOption = (function (_super) {
     }
     ContentOption.prototype.inherit = function (hierarchy, content) {
         var ct = content.value;
-        if (hierarchy.from.mode === 'append') {
-            ct = "" + hierarchy.content.value + (ct.length > 0 ? ' ' : '') + ct;
+        if (content.value !== "") {
+            if (hierarchy.from.mode === 'append') {
+                ct = "" + hierarchy.content.value + (ct.length > 0 ? ' ' : '') + ct;
+            }
+            else {
+                hierarchy.content = content;
+            }
+            hierarchy.content.value = ct;
         }
-        else {
-            hierarchy.content = content;
-        }
-        hierarchy.content.value = ct;
     };
     ContentOption.prototype.getKeyFromElement = function (element) {
         return {

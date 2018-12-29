@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var idfier_1 = require("./idfier");
 var options_1 = require("./options");
-function parse(hierarchy, parent, nodeCallback) {
+function parse(hierarchy, parent, nodeCallback, topParent) {
+    if (topParent === void 0) { topParent = false; }
     try {
-        var element_1 = parseElement(hierarchy, parent);
+        var element_1 = parseElement(hierarchy, parent, topParent);
         nodeCallback(idfier_1.getTemmeId(hierarchy), hierarchy);
         if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
             hierarchy.childNodes.forEach(function (child) {
@@ -17,15 +18,18 @@ function parse(hierarchy, parent, nodeCallback) {
     }
 }
 exports.parse = parse;
-function parseElement(hierarchy, parent) {
+function parseElement(hierarchy, parent, topParent) {
+    if (topParent === void 0) { topParent = false; }
     try {
-        var element_2 = document.createElement(hierarchy.name);
+        var element_2 = (topParent === true) ? parent : document.createElement(hierarchy.name);
         options_1.options.forEach(function (opt) {
             if (typeof opt.parse === 'function') {
                 opt.parse(element_2, hierarchy);
             }
         });
-        parent.appendChild(element_2);
+        if (topParent === false) {
+            parent.appendChild(element_2);
+        }
         return element_2;
     }
     catch (e) {
