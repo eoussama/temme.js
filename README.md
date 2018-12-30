@@ -1,7 +1,16 @@
 <p align="center">
     <img src="docs/assets/img/logo.svg" width=150 />
     <h1 align="center">Temme JS</h1>
+    <p align="center">
+        <img align="center" src="https://img.shields.io/npm/v/temmejs.svg" alt="NPM package version.">
+        <img align="center" src="https://img.shields.io/github/release/EOussama/temmejs.svg" alt="Latest github release.">
+        <img align="center" src="https://img.shields.io/travis/com/EOussama/temmejs.svg" alt="Tarvis CI build.">
+        <img align="center" src="https://img.shields.io/npm/dt/temmejs.svg" alt="NPM downloads.">
+        <img align="center" src="https://img.shields.io/github/size/EOussama/temmejs/dist/temme.js.svg" alt="TemmeJS size.">
+        <img align="center" src="https://img.shields.io/github/license/EOussama/temmejs.svg" alt="TemmeJS license.">
+    </p>
 </p>
+
 
 
 Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too.
