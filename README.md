@@ -7,6 +7,11 @@
 Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, it's about time Javascript had the same quirk too.
 
 
+## Install
+
+You can get TemmeJS following either steps from [this guide](https://github.com/EOussama/temmejs/wiki/Temme-install).
+
+
 ## Build
 
 Building Temme JS is fairly easy, simply run `npm install` to install all the development dependencies, and then run `npm run prod` to get the production files under the `dist` folder. More information about this process can be found [here](https://github.com/EOussama/temmejs/wiki/Temme-build).
@@ -137,6 +142,6 @@ catch (e) {
 More on how to use Temme can be found [at the documentation web page](https://eoussama.github.io/temmejs/) and even more in-depth [in the wiki](https://github.com/EOussama/temmejs/wiki).
 
 
-# Credits
+## Credits
 
 Icon made by [Freepik](https://www.freepik.com/) from [Flaticon](https://www.flaticon.com) and licensed by [Creative Commons BY 3.0](http://creativecommons.org/licenses/by/3.0/).
