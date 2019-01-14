@@ -76,32 +76,18 @@
             classes: ['ribbinds'],
             childNodes: [
                 {
+                    name: 'figure',
                     ref: 'ele-1',
-                    childNodes: [
-                        {
-                            name: 'span',
-                            childNodes: [
-                                {
-                                    name: 'b',
-                                    content: {
-                                        value: 'bold'
-                                    }
-                                }
-                            ]
-                        }
-                    ],
+                    classes: ['red'],
                     from: {
-                        ref: 'ele-0'
+                        ref: 'ele-0',
+                        mode: 'append'
                     }
                 },
                 {
+                    id: 'ff',
                     from: {
-                        ref: 'ele-1',
-                        mode: 'append',
-                        exclude: ['childNodes'],
-                        children: {
-                            allow: true,
-                        }
+                        ref: 'ele-1'
                     }
                 }
             ]

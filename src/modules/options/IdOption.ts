@@ -26,7 +26,19 @@ export default class IdOption extends Option implements IParser {
      */
     public inherit(hierarchy: any, id: any): void {
 
-        hierarchy.id = id;
+        if (id !== '') {
+
+            if (hierarchy.from.mode === 'append') {
+
+                if (hierarchy.id === '') {
+
+                    hierarchy.id = id;
+                }
+            } else {
+
+                hierarchy.id = id;
+            }
+        }
     }
 
 
@@ -43,7 +55,7 @@ export default class IdOption extends Option implements IParser {
      * 
      * @param element The HTML element to set the id for
      */
-    public parse (element: HTMLElement, hierarchy: Hierarchy) {
+    public parse(element: HTMLElement, hierarchy: Hierarchy) {
 
         if (hierarchy.id != "") {
 

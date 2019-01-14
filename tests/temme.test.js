@@ -120,14 +120,14 @@ describe('Element to element reference.', () => {
             };
 
         const 
-            div1 = document.createElement('div'),
-            div2 = document.createElement('div');
+            div = document.createElement('div'),
+            h1 = document.createElement('h1');
         
-        div1.classList.add('red'),
-        div2.classList.add('green', 'red'),
+        div.classList.add('red'),
+        h1.classList.add('green', 'red'),
         
-        result.appendChild(div1);
-        result.appendChild(div2);
+        result.appendChild(div);
+        result.appendChild(h1);
         
         // Act.
         try {
@@ -171,15 +171,15 @@ describe('Element to element reference.', () => {
             };
 
         const 
-            div1 = document.createElement('div'),
-            div2 = document.createElement('div');
+            div = document.createElement('div'),
+            h1 = document.createElement('h1');
         
         result.classList.add('yellow');
-        div1.classList.add('red', 'yellow'),
-        div2.classList.add('green', 'red', 'yellow'),
+        div.classList.add('red', 'yellow'),
+        h1.classList.add('green', 'red', 'yellow'),
         
-        result.appendChild(div1);
-        result.appendChild(div2);
+        result.appendChild(div);
+        result.appendChild(h1);
         
         // Act.
         try {

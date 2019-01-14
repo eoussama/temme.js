@@ -26,7 +26,9 @@ var NameOption = (function (_super) {
     }
     NameOption.prototype.inherit = function (hierarchy, name) {
         if (name != null) {
-            hierarchy.name = name;
+            if (hierarchy.from.mode === 'override') {
+                hierarchy.name = name;
+            }
         }
     };
     return NameOption;

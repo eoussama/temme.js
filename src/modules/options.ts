@@ -60,7 +60,7 @@ export function getSubOptions(option: string): Array<Option> {
     allOptions.forEach((opt: Option) => {
 
         if ('keys' in opt && (<Option>opt).label === option) {
-            
+
             for (const key in (<IKeys>opt).keys) {
 
                 // Getting the sub-option.

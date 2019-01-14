@@ -25,7 +25,16 @@ var IdOption = (function (_super) {
         return _this;
     }
     IdOption.prototype.inherit = function (hierarchy, id) {
-        hierarchy.id = id;
+        if (id !== '') {
+            if (hierarchy.from.mode === 'append') {
+                if (hierarchy.id === '') {
+                    hierarchy.id = id;
+                }
+            }
+            else {
+                hierarchy.id = id;
+            }
+        }
     };
     IdOption.prototype.parse = function (element, hierarchy) {
         if (hierarchy.id != "") {

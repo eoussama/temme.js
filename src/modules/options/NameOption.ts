@@ -23,10 +23,13 @@ export default class NameOption extends Option {
      * @param name The name to inherit.
      */
     public inherit(hierarchy: any, name: any): void {
-        
+
         if (name != null) {
-            
-            hierarchy.name = name;
+
+            if (hierarchy.from.mode === 'override') {
+
+                hierarchy.name = name;
+            }
         }
     }
 
