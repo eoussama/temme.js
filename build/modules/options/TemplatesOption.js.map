@@ -1,0 +1,1 @@
+{"version":3,"file":"TemplatesOption.js","sourceRoot":"./src/","sources":["modules/options/TemplatesOption.ts"],"names":[],"mappings":";;;;;AAKA,8DAAsC;AAGtC,MAAqB,eAAgB,SAAQ,gBAAM;IAK/C;QAEI,KAAK,CAAC,WAAW,EAAE,OAAO,EAAE,EAAE,EAAE,EAAE,CAAC,CAAC;QAiBjC,sBAAiB,GAAG,CAAC,OAAoB,EAAO,EAAE,CAAC,IAAI,CAAC;IAhB/D,CAAC;IAQM,OAAO,CAAC,SAAc,EAAE,SAAc,IAAU,CAAC;CAS3D;AAzBD,kCAyBC"}

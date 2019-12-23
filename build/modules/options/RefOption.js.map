@@ -1,0 +1,1 @@
+{"version":3,"file":"RefOption.js","sourceRoot":"./src/","sources":["modules/options/RefOption.ts"],"names":[],"mappings":";;;;;AAKA,8DAAsC;AAGtC,MAAqB,SAAU,SAAQ,gBAAM;IAKzC;QAEI,KAAK,CAAC,KAAK,EAAE,QAAQ,EAAE,EAAE,EAAE,EAAE,CAAC,CAAC;QAkB5B,sBAAiB,GAAG,CAAC,OAAoB,EAAO,EAAE,CAAC,IAAI,CAAC;IAjB/D,CAAC;IASM,OAAO,CAAC,SAAc,EAAE,GAAQ,IAAU,CAAC;CASrD;AA1BD,4BA0BC"}
