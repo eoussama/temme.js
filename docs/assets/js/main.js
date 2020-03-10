@@ -320,20 +320,20 @@ window.addEventListener('load', async () => {
                                 {
                                     name: 'p',
                                     content: {
-                                        value: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet blows Temme away in terms of swiftness, you just hit up short instructions in plain text, and then boom."
+                                        value: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet is more on the swift side,, you just hit up short instructions in plain text, and then boom."
                                     }
                                 },
                                 {
                                     name: 'p',
                                     content: {
                                         type: 'html',
-                                        value: "Temme focuses on the data structure more, it's much better than manually working with <code>createElement</code> and prettier than direct HTML embed <code>innerHTML</code>."
+                                        value: "Temme focuses on the data structure more, it's much better than manually working with native DOM manipulation methods and prettier than forcefully injecting HTML directly."
                                     }
                                 },
                                 {
                                     name: 'p',
                                     content: {
-                                        value: "One other strong point that Temme has going on is it being javascript-object oriented, meaning, it can easily be parsed into JSON and vice versa."
+                                        value: "One other point of strength Temme has going for is it being javascript-object oriented, meaning, it can easily be parsed into JSON and vice versa."
                                     }
                                 }
                             ]
