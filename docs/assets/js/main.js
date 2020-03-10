@@ -314,13 +314,13 @@ window.addEventListener('load', async () => {
                                 {
                                     name: 'p',
                                     content: {
-                                        value: "You might have be wondering, yeah cool, but why though?"
+                                        value: "You might have been wondering, yeah cool, but why though?"
                                     }
                                 },
                                 {
                                     name: 'p',
                                     content: {
-                                        value: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet is more on the swift side,, you just hit up short instructions in plain text, and then boom."
+                                        value: "Comparing both Temme's and Emmet's syntaxes, it's clearly apparent that Emmet is more on the swift side, you just hit up short instructions in plain text, and then boom."
                                     }
                                 },
                                 {
