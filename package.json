@@ -34,6 +34,7 @@
 	},
 	"homepage": "https://github.com/EOussama/temmejs#readme",
 	"devDependencies": {
+		"@types/node": "^14.11.8",
 		"jest": "^24.8.0",
 		"ts-loader": "^5.3.1",
 		"typescript": "^3.2.2",

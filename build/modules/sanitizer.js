@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.sanitize = void 0;
 const options_1 = require("./options");
 function sanitize(hierarchy) {
     try {

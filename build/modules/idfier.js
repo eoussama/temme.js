@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getTemmeId = exports.idfy = void 0;
 function idfy(hierarchy, temmeIds = [], mode = false) {
     try {
         const temmeId = generateTemmeId(mode);

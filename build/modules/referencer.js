@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.isTemplate = exports.process = void 0;
 const validator_1 = require("./validator");
 const idfier_1 = require("./idfier");
 const options_1 = require("./options");

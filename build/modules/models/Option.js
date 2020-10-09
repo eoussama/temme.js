@@ -37,6 +37,6 @@ class Option {
         return true;
     }
 }
-Option.validateOptionName = (matchingOption) => matchingOption != null;
 exports.default = Option;
+Option.validateOptionName = (matchingOption) => matchingOption != null;
 //# sourceMappingURL=Option.js.map

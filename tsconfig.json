@@ -8,6 +8,7 @@
 		"removeComments": true,
 		"esModuleInterop": true,
 		"strict": true,
-		"sourceMap": true
+		"sourceMap": true,
+		"typeRoots": ["./node_modules/@types"]
 	}
 }

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parse = void 0;
 const idfier_1 = require("./idfier");
 const options_1 = require("./options");
 function parse(hierarchy, parent, nodeCallback, topParent = false) {
