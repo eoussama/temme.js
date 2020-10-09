@@ -12,7 +12,7 @@
  * 
  */
 
- 
+
 import * as Validator from "./modules/validator";
 import * as Sanitizer from "./modules/sanitizer";
 import * as Referencer from "./modules/referencer";
@@ -34,7 +34,7 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  * 
  * @throws InvalidTargetError, InvalidHierarchyError
  */
-export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resultedHierarchy: any) => void = (hierarchy) => {}, nodeCallback: (temmeId: string, currentHierarchy: any) => void = () => {}): Object {
+export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resultedHierarchy: any) => void = (hierarchy) => { }, nodeCallback: (temmeId: string, currentHierarchy: any) => void = () => { }): Object {
 
     try {
 
@@ -79,5 +79,32 @@ export function parse(hierarchy: Object, target: HTMLElement, endCallback: (resu
 
         // Throwing the error.
         throw e;
+    }
+}
+
+/**
+ * Validates the hierarchy object
+ *
+ * @param hierarchy The hierarchy object that maps the HTML skeleton.
+ * @throws InvalidHierarchyError
+ */
+export function validate(hierarchy: Object): Object {
+    try {
+
+        // Validate options
+        Validator.validateOptions(hierarchy);
+
+        // Returns a valid object
+        return {
+            valid: true,
+            error: null
+        };
+    } catch (err) {
+
+        // Returns an invalid object
+        return {
+            valid: false,
+            error: err
+        }
     }
 }

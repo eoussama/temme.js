@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parse = void 0;
+exports.validate = exports.parse = void 0;
 const Validator = __importStar(require("./modules/validator"));
 const Sanitizer = __importStar(require("./modules/sanitizer"));
 const Referencer = __importStar(require("./modules/referencer"));
@@ -52,4 +52,20 @@ function parse(hierarchy, target, endCallback = (hierarchy) => { }, nodeCallback
     }
 }
 exports.parse = parse;
+function validate(hierarchy) {
+    try {
+        Validator.validateOptions(hierarchy);
+        return {
+            valid: true,
+            error: null
+        };
+    }
+    catch (err) {
+        return {
+            valid: false,
+            error: err
+        };
+    }
+}
+exports.validate = validate;
 //# sourceMappingURL=temme.js.map
