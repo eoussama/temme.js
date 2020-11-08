@@ -33,6 +33,7 @@
 		"url": "https://github.com/EOussama/temmejs/issues"
 	},
 	"homepage": "https://github.com/EOussama/temmejs#readme",
+	"publishConfig": { "registry": "https://npm.pkg.github.com/" },
 	"devDependencies": {
 		"@types/node": "^14.11.8",
 		"jest": "^24.8.0",
