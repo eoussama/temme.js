@@ -5,7 +5,7 @@
     @author:     EOussama
     @license     MIT
     @source:     https://github.com/EOussama/temmejs
-    
+
     Example of how to use Temme on a browser environment.
 
 -->
@@ -72,11 +72,9 @@
     <!-- The main content. -->
     <div id="target"></div>
 
-    <!-- Temme JS. -->
-    <script src="../dist/temme.js"></script>
-
-    <!-- The main javascript code. -->
-    <script>
+    <!-- The main javascript code (ESM module). -->
+    <script type="module">
+        import { parse } from '../dist/temme.js';
 
         const
             target = document.getElementById('target'),
@@ -105,14 +103,14 @@
                                         name: 'p',
                                         content: {
                                             type: 'html',
-                                            value: 'This is a dummy paragraph. Generated completed using <b>Temme JS</b>.'
+                                            value: 'This is a dummy paragraph. Generated completely using <b>Temme JS</b>.'
                                         }
                                     },
                                     {
                                         name: 'p',
                                         content: {
                                             type: 'html',
-                                            value: 'And all that follows are duplicates if this one.'
+                                            value: 'And all that follows are duplicates of this one.'
                                         }
                                     }
                                 ]
@@ -159,11 +157,9 @@
             };
 
         try {
-
-            Temme.parse(hierarchy, target, console.log);
+            parse(hierarchy, target, console.log);
         }
         catch (e) {
-
             console.error(e.name, e.message);
         }
     </script>

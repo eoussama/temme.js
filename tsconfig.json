@@ -1,14 +1,17 @@
 {
-	"compilerOptions": {
-		"module": "es6",
-		"target": "es6",
-		"rootDir": "./src/",
-		"sourceRoot": "./src/",
-		"noImplicitAny": true,
-		"removeComments": true,
-		"esModuleInterop": true,
-		"strict": true,
-		"sourceMap": true,
-		"typeRoots": ["./node_modules/@types"]
-	}
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": ["src/**/*", "tsup.config.ts"],
+  "exclude": ["node_modules", "dist", "build"]
 }
