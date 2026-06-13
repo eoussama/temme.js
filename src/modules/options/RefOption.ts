@@ -1,18 +1,24 @@
 /**
- * The reference option model.
+ * @description
+ * The "ref" option model — stores the reference key of a hierarchy element.
  */
 
 
+import type { Hierarchy } from "../models/Hierarchy";
 import Option from "../models/Option";
 
 
 
 /**
- *
+ * @description
+ * Defines the `ref` option, which identifies a hierarchy element for later referencing.
  */
 export default class RefOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a RefOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("ref", "string", [], "");
@@ -20,18 +26,22 @@ export default class RefOption extends Option {
 
 
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * No-op — the reference key is not inherited from other elements.
    *
-   * @param hierarchy The hierarchy object that inherits.
-   * @param ref The ref to inherit.
+   * @param _hierarchy The hierarchy object that inherits.
+   * @param _ref The ref value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, ref: any): void { }
+  public inherit(_hierarchy: Hierarchy, _ref: unknown): void {}
 
 
   /**
-   * Gets nothing from a given HTML element.
+   * @description
+   * Not applicable — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }

@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../models/Option"));
 class RefOption extends Option_1.default {
     constructor() {
-        super('ref', 'string', [], '');
-        this.getKeyFromElement = (element) => null;
+        super("ref", "string", [], "");
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, ref) { }
+    inherit(_hierarchy, _ref) { }
 }
 exports.default = RefOption;

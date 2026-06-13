@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../../models/Option"));
 class ContentTypeSubOption extends Option_1.default {
     constructor() {
-        super('type', 'string', ['text', 'html'], 'text');
-        this.getKeyFromElement = (element) => null;
+        super("type", "string", ["text", "html"], "text");
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, value) { }
+    inherit(_hierarchy, _value) { }
 }
 exports.default = ContentTypeSubOption;

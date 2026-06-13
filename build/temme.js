@@ -39,13 +39,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.parse = parse;
 exports.validate = validate;
 const core_1 = require("@eoussama/core");
+const InvalidHierarchyError_1 = __importDefault(require("./modules/errors/InvalidHierarchyError"));
+const InvalidTargetError_1 = __importDefault(require("./modules/errors/InvalidTargetError"));
 const Idfier = __importStar(require("./modules/idfier"));
 const Parser = __importStar(require("./modules/parser"));
 const Referencer = __importStar(require("./modules/referencer"));
 const Sanitizer = __importStar(require("./modules/sanitizer"));
 const Validator = __importStar(require("./modules/validator"));
-const InvalidHierarchyError_1 = __importDefault(require("./modules/errors/InvalidHierarchyError"));
-const InvalidTargetError_1 = __importDefault(require("./modules/errors/InvalidTargetError"));
 function parse(hierarchy, target, endCallback = () => { }, nodeCallback = () => { }) {
     try {
         if (!Validator.isValidHTMLElement(target)) {
@@ -54,18 +54,19 @@ function parse(hierarchy, target, endCallback = () => { }, nodeCallback = () => 
         if (!Validator.isValidHierarchy(hierarchy)) {
             throw new InvalidHierarchyError_1.default("");
         }
-        Validator.validateOptions(hierarchy);
-        Sanitizer.sanitize(hierarchy);
-        Idfier.idfy(hierarchy);
-        Referencer.process(hierarchy);
-        Parser.parse(hierarchy, target, nodeCallback, true);
-        const cbResult = endCallback(hierarchy);
+        const h = hierarchy;
+        Validator.validateOptions(h);
+        Sanitizer.sanitize(h);
+        Idfier.idfy(h);
+        Referencer.process(h);
+        Parser.parse(h, target, nodeCallback, true);
+        const cbResult = endCallback(h);
         if ((0, core_1.isPromise)(cbResult)) {
             cbResult.catch((e) => {
                 console.warn("[Temme]: async end-callback rejected:", e);
             });
         }
-        return hierarchy;
+        return h;
     }
     catch (e) {
         e.message = `[Temme]: ${e.message}.`;
@@ -75,15 +76,9 @@ function parse(hierarchy, target, endCallback = () => { }, nodeCallback = () => 
 function validate(hierarchy) {
     try {
         Validator.validateOptions(hierarchy);
-        return {
-            valid: true,
-            error: null,
-        };
+        return { valid: true, error: null };
     }
     catch (err) {
-        return {
-            valid: false,
-            error: err,
-        };
+        return { valid: false, error: err };
     }
 }

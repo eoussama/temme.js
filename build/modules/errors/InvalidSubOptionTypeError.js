@@ -9,7 +9,7 @@ class InvalidSubOptionTypeError extends TemmyError_1.default {
         super("");
         this.name = "InvalidSubOptionTypeError";
         this.message = "A sub-option doesn't have a valid value type";
-        const message = `The “${subOption}” sub-option doesn't accept values of type “${type}”`;
+        const message = `The "${subOption}" sub-option doesn't accept values of type "${type}"`;
         this.message = subOption.length > 0 || type.length > 0 ? message : this.message;
     }
 }

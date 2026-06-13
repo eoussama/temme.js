@@ -1,5 +1,6 @@
 /**
- * The dataset option model.
+ * @description
+ * The "dataset" option model — manages the data-* attributes of a hierarchy element.
  */
 
 
@@ -10,52 +11,63 @@ import Option from "../models/Option";
 
 
 /**
- *
+ * @description
+ * Defines the `dataset` option, which sets or inherits an element's data-* attribute map.
  */
 export default class DatasetOption extends Option implements IParser {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a DatasetOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("dataset", "object", [], {}, true);
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * Inherits data-* entries from a referenced hierarchy.
+   * In "append" mode existing entries take precedence; otherwise incoming ones do.
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param dataset The dataset to inherit.
+   * @param dataset The dataset map to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, dataset: any): void {
-    const dt: any = { ...dataset };
+  public inherit(hierarchy: Hierarchy, dataset: unknown): void {
+    const incoming = dataset as Record<string, string>;
+    const merged: Record<string, string> = { ...incoming };
 
     if (hierarchy.from.mode === "append") {
       for (const dataKey in hierarchy.dataset) {
-        dt[dataKey] = hierarchy.dataset[dataKey];
+        merged[dataKey] = hierarchy.dataset[dataKey];
       }
     }
     else {
       for (const dataKey in hierarchy.dataset) {
-        if (!(dataKey in dt)) {
-          dt[dataKey] = hierarchy.dataset[dataKey];
+        if (!(dataKey in merged)) {
+          merged[dataKey] = hierarchy.dataset[dataKey];
         }
       }
     }
 
-    hierarchy.dataset = dt;
+    hierarchy.dataset = merged;
   }
 
 
   /**
-   * Gets datatset from a given HTML element.
+   * @description
+   * Extracts the data-* map from an existing HTML element.
    *
-   * @param element The HTML element to target.
+   * @param element The HTML element to read dataset entries from.
+   * @returns {Record<string, string>} A map of data key names to their values.
    */
-  public getKeyFromElement(element: HTMLElement): any {
-    const dataset: any = {};
+  public getKeyFromElement(element: HTMLElement): unknown {
+    const dataset: Record<string, string> = {};
 
     for (const dataKey in element.dataset) {
-      dataset[dataKey] = element.dataset[dataKey];
+      dataset[dataKey] = element.dataset[dataKey] ?? "";
     }
 
     return dataset;
@@ -63,14 +75,16 @@ export default class DatasetOption extends Option implements IParser {
 
 
   /**
-   * Sets the dataset for an HTML element.
+   * @description
+   * Applies the dataset map to the target HTML element.
    *
-   * @param element The HTML element to set the dataset for
-   * @param hierarchy
+   * @param element The HTML element to set data-* attributes on.
+   * @param hierarchy The hierarchy object supplying the dataset.
+   * @returns {void}
    */
-  public parse(element: HTMLElement, hierarchy: Hierarchy) {
+  public parse(element: HTMLElement, hierarchy: Hierarchy): void {
     for (const dataKey in hierarchy.dataset) {
-      element.dataset[dataKey] = (<any>hierarchy).dataset[dataKey];
+      element.dataset[dataKey] = hierarchy.dataset[dataKey];
     }
   }
 }

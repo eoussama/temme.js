@@ -1,42 +1,53 @@
 /**
- * The name option model.
+ * @description
+ * The "name" option model — defines the HTML tag name of a hierarchy element.
  */
 
 
+import type { Hierarchy } from "../models/Hierarchy";
 import Option from "../models/Option";
 
 
 
 /**
- *
+ * @description
+ * Defines the `name` option, which sets the HTML element tag (e.g. "div", "span").
  */
 export default class NameOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a NameOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("name", "string", [], "div", true);
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * Inherits the tag name from a referenced hierarchy when mode is "override".
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param name The name to inherit.
+   * @param name The tag name to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, name: any): void {
+  public inherit(hierarchy: Hierarchy, name: unknown): void {
     if (name != null) {
       if (hierarchy.from.mode === "override") {
-        hierarchy.name = name;
+        hierarchy.name = name as string;
       }
     }
   }
 
 
   /**
-   * Gets the nothing from a given HTML element.
+   * @description
+   * Not applicable for the name option — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }

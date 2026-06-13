@@ -6,13 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../models/Option"));
 class IdOption extends Option_1.default {
     constructor() {
-        super('id', 'string', [], '', true);
+        super("id", "string", [], "", true);
         this.getKeyFromElement = (element) => element.id;
     }
     inherit(hierarchy, id) {
-        if (id !== '') {
-            if (hierarchy.from.mode === 'append') {
-                if (hierarchy.id === '') {
+        if (id !== "") {
+            if (hierarchy.from.mode === "append") {
+                if (hierarchy.id === "") {
                     hierarchy.id = id;
                 }
             }
@@ -22,7 +22,7 @@ class IdOption extends Option_1.default {
         }
     }
     parse(element, hierarchy) {
-        if (hierarchy.id != "") {
+        if (hierarchy.id !== "") {
             element.id = hierarchy.id;
         }
     }

@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../../models/Option"));
 class ChildrenAllowSubOption extends Option_1.default {
     constructor() {
-        super('allow', 'boolean', [], false);
-        this.getKeyFromElement = (element) => null;
+        super("allow", "boolean", [], false);
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, value) { }
+    inherit(_hierarchy, _value) { }
 }
 exports.default = ChildrenAllowSubOption;

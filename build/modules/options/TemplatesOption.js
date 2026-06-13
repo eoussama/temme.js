@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../models/Option"));
 class TemplatesOption extends Option_1.default {
     constructor() {
-        super('templates', 'array', [], []);
-        this.getKeyFromElement = (element) => null;
+        super("templates", "array", [], []);
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, templates) { }
+    inherit(_hierarchy, _templates) { }
 }
 exports.default = TemplatesOption;

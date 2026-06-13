@@ -6,36 +6,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../models/Option"));
 class AttributesOption extends Option_1.default {
     constructor() {
-        super('attributes', 'object', [], {}, true);
+        super("attributes", "object", [], {}, true);
     }
     inherit(hierarchy, attributes) {
-        const attr = { ...attributes };
-        if (hierarchy.from.mode === 'append') {
+        const incoming = attributes;
+        const merged = { ...incoming };
+        if (hierarchy.from.mode === "append") {
             for (const attrKey in hierarchy.attributes) {
-                attr[attrKey] = hierarchy.attributes[attrKey];
+                merged[attrKey] = hierarchy.attributes[attrKey];
             }
         }
         else {
             for (const attrKey in hierarchy.attributes) {
-                if (!(attrKey in attr)) {
-                    attr[attrKey] = hierarchy.attributes[attrKey];
+                if (!(attrKey in merged)) {
+                    merged[attrKey] = hierarchy.attributes[attrKey];
                 }
             }
         }
-        hierarchy.attributes = attr;
+        hierarchy.attributes = merged;
     }
     getKeyFromElement(element) {
-        let attributes = {};
+        const attrs = {};
         for (const attrKey in element.attributes) {
-            if (!isNaN(parseInt(attrKey)) && ['id', 'class'].indexOf(element.attributes[attrKey].nodeName) === -1 && element.attributes[attrKey].nodeName.substring(0, 5) !== 'data-') {
-                attributes[element.attributes[attrKey].nodeName] = element.attributes[attrKey].nodeValue;
+            const attr = element.attributes[attrKey];
+            if (!Number.isNaN(Number.parseInt(attrKey))
+                && !["id", "class"].includes(attr.nodeName)
+                && !attr.nodeName.startsWith("data-")) {
+                attrs[attr.nodeName] = attr.nodeValue ?? "";
             }
         }
-        return attributes;
+        return attrs;
     }
     parse(element, hierarchy) {
-        for (const dataKey in hierarchy.attributes) {
-            element.setAttribute(dataKey, hierarchy.attributes[dataKey]);
+        for (const attrKey in hierarchy.attributes) {
+            element.setAttribute(attrKey, hierarchy.attributes[attrKey]);
         }
     }
 }

@@ -12,8 +12,9 @@
  */
 
 
-import type TemmyError from "./modules/models/TemmyError";
+import type { Hierarchy } from "./modules/models/Hierarchy";
 
+import type TemmyError from "./modules/models/TemmyError";
 import { isPromise } from "@eoussama/core";
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
@@ -26,54 +27,46 @@ import * as Validator from "./modules/validator";
 
 
 /**
- * The entry point of Temme, it's what initiates everything
- * from sanitizing, to parsing, like a boss.
+ * @description
+ * The entry point of Temme — sanitizes, validates, id-fies and parses a
+ * hierarchy object into a live HTML tree.
  *
  * @param hierarchy The hierarchy object that maps the HTML skeleton.
  * @param target The HTML element that will host the parsed skeleton.
- * @param endCallback The function that executes when the skeleton has been parsed.
- *                    May be async — any returned promise is awaited and rejection
- *                    is forwarded as a console warning so sync callers are not affected.
- * @param nodeCallback The function that executes whenever an element has been parsed.
- * @throws InvalidTargetError, InvalidHierarchyError
+ * @param endCallback The function that executes when the skeleton has been fully parsed.
+ *   May be async — any returned promise has its rejection forwarded as a `console.warn`
+ *   so synchronous callers are never affected.
+ * @param nodeCallback The function that executes whenever an individual element is parsed.
+ * @returns {object} The (mutated) hierarchy object after parsing.
+ * @throws {InvalidTargetError} When `target` is not a valid HTML element.
+ * @throws {InvalidHierarchyError} When `hierarchy` is not a valid plain object.
  */
 export function parse(
   hierarchy: object,
   target: HTMLElement,
-  endCallback: (resultedHierarchy: any) => void | Promise<void> = () => {},
-  nodeCallback: (temmeId: string, currentHierarchy: any) => void = () => {},
+  endCallback: (resultedHierarchy: Hierarchy) => void | Promise<void> = () => {},
+  nodeCallback: (temmeId: string, currentHierarchy: Hierarchy) => void = () => {},
 ): object {
   try {
-    // Checking if the target is a valid HTML element and throwing
-    // an error if it's not.
     if (!Validator.isValidHTMLElement(target)) {
       throw new InvalidTargetError("");
     }
 
-    // Checking if the hierarchy object is valid and throwing
-    // an error if it's not.
     if (!Validator.isValidHierarchy(hierarchy)) {
       throw new InvalidHierarchyError("");
     }
 
-    // Checking if the hierarchy object contains valid options.
-    Validator.validateOptions(hierarchy);
+    // From this point `hierarchy` satisfies the Hierarchy contract
+    // (remaining required fields are populated by the sanitizer).
+    const h = hierarchy as Hierarchy;
 
-    // Sanitizing the hierarchy.
-    Sanitizer.sanitize(hierarchy);
+    Validator.validateOptions(h);
+    Sanitizer.sanitize(h);
+    Idfier.idfy(h);
+    Referencer.process(h);
+    Parser.parse(h, target, nodeCallback, true);
 
-    // Assigning temmeIds to the hierarchy object.
-    Idfier.idfy(hierarchy);
-
-    // Processing all of the references.
-    Referencer.process(hierarchy);
-
-    // Parsing the hierarchy into an HTML tree.
-    Parser.parse(hierarchy, target, nodeCallback, true);
-
-    // Executing the end callback. If it returns a promise (async callback),
-    // attach a rejection handler so unhandled-rejection warnings are avoided.
-    const cbResult = endCallback(hierarchy);
+    const cbResult = endCallback(h);
 
     if (isPromise(cbResult)) {
       (cbResult as Promise<void>).catch((e: unknown) => {
@@ -81,44 +74,31 @@ export function parse(
       });
     }
 
-    // Returning the resulted hierarchy object.
-
-    return hierarchy;
+    return h;
   }
   catch (e) {
-    // Appending a tag in front of the error's message.
     (<TemmyError>e).message = `[Temme]: ${(e as Error).message}.`;
-
-    // Throwing the error.
     throw e;
   }
 }
 
 
 /**
- * Validates the hierarchy object.
+ * @description
+ * Validates a hierarchy object without parsing it.
+ * Returns a result object instead of throwing.
  *
- * @param hierarchy The hierarchy object that maps the HTML skeleton.
- * @throws InvalidHierarchyError
+ * @param hierarchy The hierarchy object to validate.
+ * @returns {{ valid: boolean; error: unknown }} Validation result — `valid` is `true` when
+ *   the hierarchy is well-formed, `false` otherwise with the caught error in `error`.
  */
-export function validate(hierarchy: object): object {
+export function validate(hierarchy: object): { valid: boolean; error: unknown } {
   try {
-    // Validate options.
-    Validator.validateOptions(hierarchy);
+    Validator.validateOptions(hierarchy as Hierarchy);
 
-    // Returns a valid object.
-
-    return {
-      valid: true,
-      error: null,
-    };
+    return { valid: true, error: null };
   }
   catch (err) {
-    // Returns an invalid object.
-
-    return {
-      valid: false,
-      error: err,
-    };
+    return { valid: false, error: err };
   }
 }

@@ -6,22 +6,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../models/Option"));
 class ChildNodesOption extends Option_1.default {
     constructor() {
-        super('childNodes', 'array', [], [], true);
+        super("childNodes", "array", [], [], true);
         this.getKeyFromElement = (element) => element.innerHTML;
     }
     inherit(hierarchy, childNodes) {
+        const incoming = childNodes;
         let children = [...hierarchy.childNodes];
         if (hierarchy.from.children.allow === true) {
-            if (hierarchy.from.mode === 'append') {
-                if (hierarchy.from.children.placement === 'before') {
-                    children.unshift(...childNodes);
+            if (hierarchy.from.mode === "append") {
+                if (hierarchy.from.children.placement === "before") {
+                    children.unshift(...incoming);
                 }
                 else {
-                    children.push(...childNodes);
+                    children.push(...incoming);
                 }
             }
             else {
-                children = childNodes;
+                children = incoming;
             }
         }
         hierarchy.childNodes = children;

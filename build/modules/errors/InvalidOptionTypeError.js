@@ -9,7 +9,7 @@ class InvalidOptionTypeError extends TemmyError_1.default {
         super("");
         this.name = "InvalidOptionTypeError";
         this.message = "An option doesn't have a valid value type";
-        const message = `The “${option}” option doesn't accept values of type “${type}”`;
+        const message = `The "${option}" option doesn't accept values of type "${type}"`;
         this.message = option.length > 0 ? message : this.message;
     }
 }

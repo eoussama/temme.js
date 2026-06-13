@@ -1,36 +1,60 @@
 /**
- * The include sub-option.
+ * @description
+ * The "include" sub-option model for the `from` option.
  */
 
 
+import type { Hierarchy } from "../../models/Hierarchy";
 import Option from "../../models/Option";
 
 
 
+/** The option labels that can participate in inheritance. */
+const INHERITABLE: Array<string> = [
+  "name",
+  "id",
+  "classes",
+  "attributes",
+  "dataset",
+  "content",
+  "childNodes",
+];
+
+
 /**
- *
+ * @description
+ * Specifies which option keys should be included during inheritance.
+ * Defaults to all inheritable options when the user does not specify an explicit list.
  */
 export default class IncludeSubOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs an IncludeSubOption with the full list of inheritable options as default.
+   *
+   * @returns {void}
    */
   constructor() {
-    super("include", "array", ["name", "id", "classes", "attributes", "dataset", "content", "childNodes"], ["name", "id", "classes", "attributes", "dataset", "content", "childNodes"]);
+    super("include", "array", INHERITABLE, [...INHERITABLE]);
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * No-op — the include list is not directly inherited.
    *
-   * @param hierarchy The hierarchy object that inherits.
-   * @param value The value to inherit.
+   * @param _hierarchy The hierarchy object that inherits.
+   * @param _value The value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, value: any): void { }
+  public inherit(_hierarchy: Hierarchy, _value: unknown): void {}
 
 
   /**
-   * Gets nothing from a given HTML element.
+   * @description
+   * Not applicable — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }

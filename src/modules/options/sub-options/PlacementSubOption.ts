@@ -1,36 +1,47 @@
 /**
- * The placement sub option model.
+ * @description
+ * The "placement" sub-option model for the `children` sub-option of `from`.
  */
 
 
+import type { Hierarchy } from "../../models/Hierarchy";
 import Option from "../../models/Option";
 
 
 
 /**
- *
+ * @description
+ * Defines where inherited child nodes are placed ("before" | "after").
  */
 export default class PlacementSubOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a PlacementSubOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
-    super("placement", "string", ["after", "before"], "after");
+    super("placement", "string", ["before", "after"], "after");
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * No-op — the placement value is not directly inherited.
    *
-   * @param hierarchy The hierarchy object that inherits.
-   * @param value The value to inherit.
+   * @param _hierarchy The hierarchy object that inherits.
+   * @param _value The value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, value: any): void { }
+  public inherit(_hierarchy: Hierarchy, _value: unknown): void {}
 
 
   /**
-   * Gets nothing from a given HTML element.
+   * @description
+   * Not applicable — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }

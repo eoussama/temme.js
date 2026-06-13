@@ -1,9 +1,10 @@
 /**
- * The from option model.
+ * @description
+ * The "from" option model — defines the referencing and inheritance configuration.
  */
 
 
-
+import type { Hierarchy } from "../models/Hierarchy";
 import type { IKeys } from "../models/Option";
 import Option from "../models/Option";
 import RefOption from "./RefOption";
@@ -15,11 +16,14 @@ import ModeSubOption from "./sub-options/ModeSubOption";
 
 
 /**
- *
+ * @description
+ * Defines the `from` option, which controls how a hierarchy element inherits
+ * properties from another referenced element.
  */
 export default class FromOption extends Option implements IKeys {
   /**
-   * The keys of the `from` option.
+   * @description
+   * The sub-options of the `from` option.
    */
   public keys: FromKeys = {
     ref: new RefOption(),
@@ -29,8 +33,12 @@ export default class FromOption extends Option implements IKeys {
     exclude: new ExcludeSubOption(),
   };
 
+
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a FromOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("from", "object", [], {
@@ -42,53 +50,47 @@ export default class FromOption extends Option implements IKeys {
     });
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * No-op — the `from` configuration is not inherited from other elements.
    *
-   * @param hierarchy The hierarchy object that inherits.
-   * @param from The from to inherit.
+   * @param _hierarchy The hierarchy object that inherits.
+   * @param _from The from value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, from: any): void { }
+  public inherit(_hierarchy: Hierarchy, _from: unknown): void {}
 
 
   /**
-   * Gets nothing from a given HTML element.
+   * @description
+   * Not applicable — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }
 
 
 /**
- * The FromKeys type.
+ * @description
+ * The key shape for the `from` option.
  */
 type FromKeys = {
 
-  /**
-   * The reference sub option.
-   */
+  /** The reference key sub-option. */
   ref: RefOption;
 
-  /**
-   * The inheritance mode.
-   */
+  /** The inheritance mode sub-option. */
   mode: ModeSubOption;
 
-  /**
-   * The inheritance mode.
-   */
+  /** The children inheritance sub-option. */
   children: ChildrenSubOption;
 
-
-  /**
-   * What options to inherite.
-   */
+  /** The include list sub-option. */
   include: IncludeSubOption;
 
-
-  /**
-   * What options not to inherit.
-   */
+  /** The exclude list sub-option. */
   exclude: ExcludeSubOption;
 };

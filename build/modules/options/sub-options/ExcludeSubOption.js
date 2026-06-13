@@ -4,11 +4,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../../models/Option"));
+const INHERITABLE = [
+    "name",
+    "id",
+    "classes",
+    "attributes",
+    "dataset",
+    "content",
+    "childNodes",
+];
 class ExcludeSubOption extends Option_1.default {
     constructor() {
-        super('exclude', 'array', ['name', 'id', 'classes', 'attributes', 'dataset', 'content', 'childNodes'], []);
-        this.getKeyFromElement = (element) => null;
+        super("exclude", "array", INHERITABLE, []);
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, value) { }
+    inherit(_hierarchy, _value) { }
 }
 exports.default = ExcludeSubOption;

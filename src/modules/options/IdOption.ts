@@ -1,5 +1,6 @@
 /**
- * The ID option model.
+ * @description
+ * The "id" option model — manages the HTML element id attribute.
  */
 
 
@@ -10,11 +11,15 @@ import Option from "../models/Option";
 
 
 /**
- *
+ * @description
+ * Defines the `id` option, which sets or inherits the HTML element's id attribute.
  */
 export default class IdOption extends Option implements IParser {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs an IdOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("id", "string", [], "", true);
@@ -22,41 +27,48 @@ export default class IdOption extends Option implements IParser {
 
 
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * Inherits the id from a referenced hierarchy.
+   * In "append" mode the id is only applied when the current element has none.
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param id The id to inherit.
+   * @param id The id value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, id: any): void {
+  public inherit(hierarchy: Hierarchy, id: unknown): void {
     if (id !== "") {
       if (hierarchy.from.mode === "append") {
         if (hierarchy.id === "") {
-          hierarchy.id = id;
+          hierarchy.id = id as string;
         }
       }
       else {
-        hierarchy.id = id;
+        hierarchy.id = id as string;
       }
     }
   }
 
 
   /**
-   * Gets the id from a given HTML element.
+   * @description
+   * Extracts the id from an existing HTML element.
    *
-   * @param element The HTML element to target.
+   * @param element The HTML element to read the id from.
+   * @returns {string} The element's id attribute value.
    */
-  public getKeyFromElement = (element: HTMLElement): any => element.id;
+  public getKeyFromElement = (element: HTMLElement): unknown => element.id;
 
 
   /**
-   * Sets the id for an HTML element.
+   * @description
+   * Applies the id to the target HTML element.
    *
-   * @param element The HTML element to set the id for
-   * @param hierarchy
+   * @param element The HTML element to set the id on.
+   * @param hierarchy The hierarchy object supplying the id value.
+   * @returns {void}
    */
-  public parse(element: HTMLElement, hierarchy: Hierarchy) {
-    if (hierarchy.id != "") {
+  public parse(element: HTMLElement, hierarchy: Hierarchy): void {
+    if (hierarchy.id !== "") {
       element.id = hierarchy.id;
     }
   }

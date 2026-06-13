@@ -1,36 +1,47 @@
 /**
- * The templates option model.
+ * @description
+ * The "templates" option model — holds the template hierarchy objects for a hierarchy element.
  */
 
 
+import type { Hierarchy } from "../models/Hierarchy";
 import Option from "../models/Option";
 
 
 
 /**
- *
+ * @description
+ * Defines the `templates` option, which stores template sub-hierarchies used for inheritance.
  */
 export default class TemplatesOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a TemplatesOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("templates", "array", [], []);
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * No-op — templates are not inherited between elements.
    *
-   * @param hierarchy The hierarchy object that inherits.
-   * @param templates The templates to inherit.
+   * @param _hierarchy The hierarchy object that inherits.
+   * @param _templates The templates value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, templates: any): void { }
+  public inherit(_hierarchy: Hierarchy, _templates: unknown): void {}
 
 
   /**
-   * Gets nothing from a given HTML element.
+   * @description
+   * Not applicable — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }

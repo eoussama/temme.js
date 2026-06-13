@@ -3,76 +3,63 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sanitize = sanitize;
 const options_1 = require("./options");
 function sanitize(hierarchy) {
-    try {
-        options_1.options.forEach((opt) => {
-            if (!(opt.label in hierarchy)) {
-                hierarchy[opt.label] = opt.default;
-            }
-            else {
-                if ('keys' in opt) {
-                    for (const key in opt.keys) {
-                        const subOption = opt.keys[key];
-                        sanitizeOption(hierarchy[opt.label], subOption);
-                    }
+    options_1.options.forEach((opt) => {
+        if (!(opt.label in hierarchy)) {
+            hierarchy[opt.label] = opt.default;
+        }
+        else {
+            if ("keys" in opt) {
+                for (const key in opt.keys) {
+                    const subOption = opt.keys[key];
+                    sanitizeOption(hierarchy[opt.label], subOption);
                 }
             }
+        }
+    });
+    hierarchy.classes = hierarchy.classes.filter((cls, index) => hierarchy.classes.indexOf(cls) === index);
+    hierarchy.classes.sort();
+    if ("childNodes" in hierarchy && hierarchy.childNodes.length > 0) {
+        hierarchy.childNodes.forEach((child) => {
+            sanitize(child);
         });
-        hierarchy.classes = hierarchy.classes.filter((cls, index) => hierarchy.classes.indexOf(cls) === index);
-        hierarchy.classes.sort();
-        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
-            hierarchy.childNodes.forEach((child) => {
-                sanitize(child);
-            });
-        }
-        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
-            hierarchy.templates.forEach((template) => {
-                sanitizeTemplate(template);
-            });
-        }
     }
-    catch (e) {
-        throw e;
+    if ("templates" in hierarchy && hierarchy.templates.length > 0) {
+        hierarchy.templates.forEach((template) => {
+            sanitizeTemplate(template);
+        });
     }
 }
 function sanitizeOption(hierarchy, option) {
-    try {
-        if (!(option.label in hierarchy)) {
-            hierarchy[option.label] = option.default;
-        }
-        else if (option.label === 'include' || option.label === 'exclude') {
-            hierarchy[option.label] = hierarchy[option.label].filter((opt, index) => hierarchy[option.label].indexOf(opt) === index);
-            hierarchy[option.label].sort();
-        }
-        if ('keys' in option) {
-            for (const key in option.keys) {
-                const subHierarchy = hierarchy[option.label], subOption = option.keys[key];
-                sanitizeOption(subHierarchy, subOption);
-            }
-        }
+    if (!(option.label in hierarchy)) {
+        hierarchy[option.label] = option.default;
     }
-    catch (e) {
-        throw e;
+    else if (option.label === "include" || option.label === "exclude") {
+        const arr = hierarchy[option.label];
+        hierarchy[option.label] = arr.filter((opt, index) => arr.indexOf(opt) === index);
+        hierarchy[option.label].sort();
+    }
+    if ("keys" in option) {
+        for (const key in option.keys) {
+            const subHierarchy = hierarchy[option.label];
+            const subOption = option.keys[key];
+            sanitizeOption(subHierarchy, subOption);
+        }
     }
 }
 function sanitizeTemplate(template) {
-    try {
-        options_1.options
-            .filter((opt) => options_1.forbiddenOptions.indexOf(opt.label) === -1)
-            .forEach((opt) => {
-            if (!(opt.label in template)) {
-                template[opt.label] = opt.default;
-            }
-            else {
-                if ('keys' in opt) {
-                    for (const key in opt.keys) {
-                        const subOption = opt.keys[key];
-                        sanitizeOption(template[opt.label], subOption);
-                    }
+    options_1.options
+        .filter((opt) => !options_1.forbiddenOptions.includes(opt.label))
+        .forEach((opt) => {
+        if (!(opt.label in template)) {
+            template[opt.label] = opt.default;
+        }
+        else {
+            if ("keys" in opt) {
+                for (const key in opt.keys) {
+                    const subOption = opt.keys[key];
+                    sanitizeOption(template[opt.label], subOption);
                 }
             }
-        });
-    }
-    catch (e) {
-        throw e;
-    }
+        }
+    });
 }

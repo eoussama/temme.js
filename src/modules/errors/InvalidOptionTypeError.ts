@@ -1,6 +1,6 @@
 /**
- * The error thrown when an option
- * is not of a valid data type.
+ * @description
+ * The error thrown when an option value has an unexpected data type.
  */
 
 
@@ -9,34 +9,30 @@ import TemmyError from "../models/TemmyError";
 
 
 /**
- *
+ * @description
+ * Signals that a hierarchy option was supplied with a value of the wrong type.
  */
 export default class InvalidOptionTypeError extends TemmyError {
-  /**
-   * The name of the error.
-   */
+  /** The name of this error class. */
   public name: string = "InvalidOptionTypeError";
 
-  /**
-   * The message of the error.
-   */
+  /** The default human-readable message. */
   public message: string = "An option doesn't have a valid value type";
 
+
   /**
-   * Constructor with parameters.
+   * @description
+   * Constructs an InvalidOptionTypeError for the given option and detected type.
    *
-   * @param option The invalid option's name.
-   * @param value The invalid option's value.
-   * @param type
+   * @param option The name of the invalid option.
+   * @param type The detected (invalid) type string.
+   * @returns {void}
    */
   constructor(option: string, type: string) {
-    // Calling the parent class `TemmyError`.
     super("");
 
-    // Constructing the error message.
-    const message: string = `The “${option}” option doesn't accept values of type “${type}”`;
+    const message: string = `The "${option}" option doesn't accept values of type "${type}"`;
 
-    // Updating the error's message.
     this.message = option.length > 0 ? message : this.message;
   }
 }

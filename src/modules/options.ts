@@ -1,5 +1,6 @@
 /**
- * The list of supported options.
+ * @description
+ * The registry of all supported hierarchy options.
  */
 
 
@@ -20,7 +21,8 @@ import TemplatesOption from "./options/TemplatesOption";
 
 
 /**
- * All the global options.
+ * @description
+ * The global ordered list of all recognised hierarchy options.
  */
 export const options: Array<Option> = [
   new RefOption(),
@@ -38,82 +40,79 @@ export const options: Array<Option> = [
 
 
 /**
- * The of the options available (including sub-options).
+ * @description
+ * The flat list of all options and their sub-options combined.
  */
 export const allOptions = getAllOptions();
 
 
 /**
- * The options that are not allowed for templates.
+ * @description
+ * The option labels that are not permitted inside template hierarchies.
  */
 export const forbiddenOptions: Array<string> = ["name", "childNodes", "templates"];
 
 
 /**
- * Gets all the sub-options of an option.
+ * @description
+ * Returns all direct sub-options of the option identified by the given label.
  *
- * @param option The parent option's name.
+ * @param option The parent option's label.
+ * @returns {Array<Option>} The list of matching sub-option instances.
  */
 export function getSubOptions(option: string): Array<Option> {
-  const subOptions: Array<any> = [];
+  const subOptions: Array<Option> = [];
 
-  // Looping through all of the options.
   allOptions.forEach((opt: Option) => {
-    if ("keys" in opt && (<Option>opt).label === option) {
-      for (const key in (<IKeys>opt).keys) {
-        // Getting the sub-option.
-        const subOption = (<IKeys>opt).keys[key];
-
-        // Pushing the sub-option.
-        subOptions.push(subOption);
+    if ("keys" in opt && opt.label === option) {
+      for (const key in (opt as unknown as IKeys).keys) {
+        subOptions.push((opt as unknown as IKeys).keys[key]);
       }
     }
   });
 
-  // Returning the found sub-options.
   return subOptions;
 }
 
 
 /**
- * Gets all of the options and sub-options.
+ * @description
+ * Builds a flat array of every option and all of its nested sub-options.
+ *
+ * @returns {Array<Option>} All options and sub-options in registration order.
  */
 function getAllOptions(): Array<Option> {
-  let allOptions: Array<Option> = [];
+  let all: Array<Option> = [];
 
   options.forEach((opt: Option) => {
-    allOptions.push(opt);
+    all.push(opt);
 
     if ("keys" in opt) {
-      // Getting all of the sub-options.
-      const subOptions: Array<Option> = getAllSubOptions(opt);
-
-      allOptions = allOptions.concat(subOptions);
+      all = all.concat(getAllSubOptions(opt));
     }
   });
 
-  return allOptions;
+  return all;
 }
 
 
 /**
- * Gets all the sub-options of an option.
+ * @description
+ * Recursively collects all sub-options (and their own sub-options) of a given option.
  *
- * @param opt The option to get the sub-options of.
- * @param option
+ * @param option The option to collect sub-options from.
+ * @returns {Array<Option>} All nested sub-option instances.
  */
 function getAllSubOptions(option: Option): Array<Option> {
   let allSubOptions: Array<Option> = [];
 
-  for (const key in (<any>option).keys) {
-    const subOption: Option = (<any>option).keys[key];
+  for (const key in (option as unknown as IKeys).keys) {
+    const subOption: Option = (option as unknown as IKeys).keys[key];
 
     allSubOptions.push(subOption);
 
     if ("keys" in subOption) {
-      const opts: Array<Option> = getAllSubOptions(subOption);
-
-      allSubOptions = allSubOptions.concat(opts);
+      allSubOptions = allSubOptions.concat(getAllSubOptions(subOption));
     }
   }
 

@@ -1,43 +1,54 @@
 /**
- * The children option model.
+ * @description
+ * The "childNodes" option model — manages the child hierarchy list of an element.
  */
 
 
+import type { Hierarchy } from "../models/Hierarchy";
 import Option from "../models/Option";
 
 
 
 /**
- *
+ * @description
+ * Defines the `childNodes` option, which sets or inherits the element's child hierarchy list.
  */
 export default class ChildNodesOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs a ChildNodesOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("childNodes", "array", [], [], true);
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * Inherits child nodes from a referenced hierarchy.
+   * Respects the `allow`, `mode`, and `placement` sub-options from `from.children`.
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param childNodes The childNodes to inherit.
+   * @param childNodes The child node list to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, childNodes: any): void {
-    let children: any = [...hierarchy.childNodes];
+  public inherit(hierarchy: Hierarchy, childNodes: unknown): void {
+    const incoming = childNodes as Array<Hierarchy>;
+    let children: Array<Hierarchy> = [...hierarchy.childNodes];
 
     if (hierarchy.from.children.allow === true) {
       if (hierarchy.from.mode === "append") {
         if (hierarchy.from.children.placement === "before") {
-          children.unshift(...childNodes);
+          children.unshift(...incoming);
         }
         else {
-          children.push(...childNodes);
+          children.push(...incoming);
         }
       }
       else {
-        children = childNodes;
+        children = incoming;
       }
     }
 
@@ -46,9 +57,11 @@ export default class ChildNodesOption extends Option {
 
 
   /**
-   * Gets children from a given HTML element.
+   * @description
+   * Not applicable — returns the innerHTML of the element rather than a proper child list.
    *
-   * @param element The HTML element to target.
+   * @param element The HTML element to read from.
+   * @returns {string} The element's innerHTML.
    */
-  public getKeyFromElement = (element: HTMLElement): any => element.innerHTML;
+  public getKeyFromElement = (element: HTMLElement): unknown => element.innerHTML;
 }

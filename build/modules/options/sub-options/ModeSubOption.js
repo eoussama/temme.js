@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../../models/Option"));
 class ModeSubOption extends Option_1.default {
     constructor() {
-        super('mode', 'string', ['append', 'override'], 'append');
-        this.getKeyFromElement = (element) => null;
+        super("mode", "string", ["append", "override"], "append");
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, value) { }
+    inherit(_hierarchy, _value) { }
 }
 exports.default = ModeSubOption;

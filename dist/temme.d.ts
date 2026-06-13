@@ -1,4 +1,36 @@
-declare function parse(hierarchy: Object, target: HTMLElement, endCallback?: (resultedHierarchy: any) => void | Promise<void>, nodeCallback?: (temmeId: string, currentHierarchy: any) => void): Object;
-declare function validate(hierarchy: Object): Object;
+type From = {
+    ref: string;
+    mode: string;
+    include: Array<string>;
+    exclude: Array<string>;
+    children: {
+        allow: boolean;
+        placement: string;
+    };
+};
+type Content = {
+    type: string;
+    value: string;
+};
+type Hierarchy = {
+    ref: string;
+    name: string;
+    id: string;
+    temmeIds: Array<string>;
+    classes: Array<string>;
+    templates: Array<Hierarchy>;
+    childNodes: Array<Hierarchy>;
+    content: Content;
+    from: From;
+    attributes: Record<string, string>;
+    dataset: Record<string, string>;
+    [key: string]: unknown;
+};
+
+declare function parse(hierarchy: object, target: HTMLElement, endCallback?: (resultedHierarchy: Hierarchy) => void | Promise<void>, nodeCallback?: (temmeId: string, currentHierarchy: Hierarchy) => void): object;
+declare function validate(hierarchy: object): {
+    valid: boolean;
+    error: unknown;
+};
 
 export { parse, validate };

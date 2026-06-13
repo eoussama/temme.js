@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../models/Option"));
 class NameOption extends Option_1.default {
     constructor() {
-        super('name', 'string', [], 'div', true);
-        this.getKeyFromElement = (element) => null;
+        super("name", "string", [], "div", true);
+        this.getKeyFromElement = (_element) => null;
     }
     inherit(hierarchy, name) {
         if (name != null) {
-            if (hierarchy.from.mode === 'override') {
+            if (hierarchy.from.mode === "override") {
                 hierarchy.name = name;
             }
         }

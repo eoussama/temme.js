@@ -1,5 +1,6 @@
 /**
- * The attributes option model.
+ * @description
+ * The "attributes" option model — manages the HTML attribute map of a hierarchy element.
  */
 
 
@@ -10,11 +11,15 @@ import Option from "../models/Option";
 
 
 /**
- *
+ * @description
+ * Defines the `attributes` option, which sets or inherits an element's HTML attributes.
  */
 export default class AttributesOption extends Option implements IParser {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs an AttributesOption with its default metadata.
+   *
+   * @returns {void}
    */
   constructor() {
     super("attributes", "object", [], {}, true);
@@ -22,58 +27,73 @@ export default class AttributesOption extends Option implements IParser {
 
 
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * Inherits attributes from a referenced hierarchy.
+   * In "append" mode existing attributes take precedence; otherwise the incoming ones do.
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param attributes The attributes to inherit.
+   * @param attributes The attribute map to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, attributes: any): void {
-    const attr: any = { ...attributes };
+  public inherit(hierarchy: Hierarchy, attributes: unknown): void {
+    const incoming = attributes as Record<string, string>;
+    const merged: Record<string, string> = { ...incoming };
 
     if (hierarchy.from.mode === "append") {
       for (const attrKey in hierarchy.attributes) {
-        attr[attrKey] = hierarchy.attributes[attrKey];
+        merged[attrKey] = hierarchy.attributes[attrKey];
       }
     }
     else {
       for (const attrKey in hierarchy.attributes) {
-        if (!(attrKey in attr)) {
-          attr[attrKey] = hierarchy.attributes[attrKey];
+        if (!(attrKey in merged)) {
+          merged[attrKey] = hierarchy.attributes[attrKey];
         }
       }
     }
 
-    hierarchy.attributes = attr;
+    hierarchy.attributes = merged;
   }
 
 
   /**
-   * Gets attributes from a given HTML element.
+   * @description
+   * Extracts the attribute map from an existing HTML element.
+   * Excludes `id`, `class`, and `data-*` attributes.
    *
-   * @param element The HTML element to target.
+   * @param element The HTML element to read attributes from.
+   * @returns {Record<string, string>} A map of attribute names to values.
    */
-  public getKeyFromElement(element: HTMLElement): any {
-    const attributes: any = {};
+  public getKeyFromElement(element: HTMLElement): unknown {
+    const attrs: Record<string, string> = {};
 
     for (const attrKey in element.attributes) {
-      if (!isNaN(Number.parseInt(attrKey)) && !["id", "class"].includes(element.attributes[attrKey].nodeName) && element.attributes[attrKey].nodeName.substring(0, 5) !== "data-") {
-        attributes[element.attributes[attrKey].nodeName] = element.attributes[attrKey].nodeValue;
+      const attr = element.attributes[attrKey as unknown as number];
+
+      if (
+        !Number.isNaN(Number.parseInt(attrKey))
+        && !["id", "class"].includes(attr.nodeName)
+        && !attr.nodeName.startsWith("data-")
+      ) {
+        attrs[attr.nodeName] = attr.nodeValue ?? "";
       }
     }
 
-    return attributes;
+    return attrs;
   }
 
 
   /**
-   * Sets the attributes for an HTML element.
+   * @description
+   * Applies the attribute map to the target HTML element.
    *
-   * @param element The HTML element to set the attributes for
-   * @param hierarchy
+   * @param element The HTML element to set attributes on.
+   * @param hierarchy The hierarchy object supplying the attributes.
+   * @returns {void}
    */
-  public parse(element: HTMLElement, hierarchy: Hierarchy) {
-    for (const dataKey in hierarchy.attributes) {
-      element.setAttribute(dataKey, (<any>hierarchy).attributes[dataKey]);
+  public parse(element: HTMLElement, hierarchy: Hierarchy): void {
+    for (const attrKey in hierarchy.attributes) {
+      element.setAttribute(attrKey, hierarchy.attributes[attrKey]);
     }
   }
 }

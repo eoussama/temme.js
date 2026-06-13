@@ -1,6 +1,6 @@
 /**
- * The hierarchy's option model.
- * What defines a valid option.
+ * @description
+ * The hierarchy's option model — defines what a valid option looks like.
  */
 
 
@@ -9,65 +9,73 @@ import type { Hierarchy } from "./Hierarchy";
 
 
 /**
- * The interface that indicates
- * sub-options.
+ * @description
+ * The interface that marks options which carry sub-option keys.
  */
 export interface IKeys {
 
-  keys: any;
+  /** Map of sub-option label → sub-option instance. */
+  keys: Record<string, Option>;
 }
 
 
 /**
- * The interface for options that have to parse their
- * respective values into a specific HTML element.
+ * @description
+ * The interface for options that parse their values into an HTML element.
  */
 export interface IParser {
 
+  /**
+   * @description
+   * Applies this option's value to the target HTML element.
+   *
+   * @param element The HTML element to apply values to.
+   * @param hierarchy The hierarchy object supplying the values.
+   * @returns {void}
+   */
   parse: (element: HTMLElement, hierarchy: Hierarchy) => void;
 }
 
 
 /**
- * The option's class.
+ * @description
+ * Abstract base class that represents a single hierarchy option.
  */
 export default abstract class Option {
-  /**
-   * The name of the option.
-   */
+  /** The name / label of the option. */
   public label: string;
 
-  /**
-   * The data type of the option.
-   */
+  /** The expected data type of the option's value. */
   public type: string;
 
-  /**
-   * The possible values of the option.
-   */
-  public values: Array<any>;
+  /** The set of allowed values for the option (empty means unrestricted). */
+  public values: Array<unknown>;
 
-  /**
-   * The default value of the option.
-   */
-  public default: any;
+  /** The default value for the option. */
+  public default: unknown;
 
-  /**
-   * Whether or not an option is inherited.
-   */
+  /** Whether this option participates in inheritance. */
   public inherited: boolean;
 
 
   /**
-   * Constructor with parameters.
+   * @description
+   * Constructs an Option with the given metadata.
    *
    * @param label The name of the option.
-   * @param type The data type of the option.
-   * @param defaultValue The default value of the option.
-   * @param values The possible values of the option.
-   * @param inherited
+   * @param type The expected data type.
+   * @param values The set of allowed values.
+   * @param defaultValue The default value.
+   * @param inherited Whether the option is inherited.
+   * @returns {void}
    */
-  constructor(label: string, type: string, values: Array<any>, defaultValue: any, inherited: boolean = false) {
+  constructor(
+    label: string,
+    type: string,
+    values: Array<unknown>,
+    defaultValue: unknown,
+    inherited: boolean = false,
+  ) {
     this.label = label;
     this.type = type;
     this.values = values;
@@ -77,35 +85,50 @@ export default abstract class Option {
 
 
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * Performs the inheritance process for this option on a hierarchy.
+   *
+   * @param hierarchy The hierarchy object that is inheriting.
+   * @param value The value to inherit.
+   * @returns {void}
    */
-  public abstract inherit(hierarchy: any, value: any): void;
+  public abstract inherit(hierarchy: Hierarchy, value: unknown): void;
 
 
   /**
-   * Get an option value from an existing HTML element.
+   * @description
+   * Extracts this option's value from an existing HTML element.
+   *
+   * @param element The HTML element to read from.
+   * @returns {unknown} The extracted value, or `null` if not applicable.
    */
-  public abstract getKeyFromElement(element: HTMLElement): any;
+  public abstract getKeyFromElement(element: HTMLElement): unknown;
 
 
   /**
-   * Validates the option's name.
+   * @description
+   * Checks whether a matching option object was found by name.
    *
    * @param matchingOption The option object with the matching name.
+   * @returns {boolean} `true` when the option exists.
    */
   public static validateOptionName = (matchingOption: Option): boolean => matchingOption != null;
 
 
   /**
-   * Validates the data type of the option.
+   * @description
+   * Validates that the option's value has the expected data type.
    *
-   * @param value The value of the option.
+   * @param value The option value to check.
    * @param matchingOption The option object with the matching name.
+   * @returns {{ valid: boolean; type: string }} Validation result and the detected type string.
    */
-  public static validateOptionType(value: any, matchingOption: Option): { valid: boolean; type: string } {
-    let optionType: string = "";
+  public static validateOptionType(
+    value: unknown,
+    matchingOption: Option,
+  ): { valid: boolean; type: string } {
+    let optionType: string;
 
-    // Getting the appropriate data type.
     if (Array.isArray(value)) {
       optionType = "array";
     }
@@ -121,23 +144,23 @@ export default abstract class Option {
 
 
   /**
-   * Validates the option's value.
+   * @description
+   * Validates that the option's value is one of the allowed values.
    *
    * @param value The value to check.
    * @param matchingOption The option object with the matching name.
+   * @returns {boolean} `true` when the value is valid.
    */
-  public static validateOptionValue(value: any, matchingOption: Option): boolean {
-    // Checking if the matching object is valid.
+  public static validateOptionValue(value: unknown, matchingOption: Option): boolean {
     if (matchingOption != null && matchingOption.values.length > 0) {
       if (matchingOption.label === "include" || matchingOption.label === "exclude") {
-        for (const val of value) {
+        for (const val of (value as Array<unknown>)) {
           if (!matchingOption.values.includes(val)) {
             return false;
           }
         }
       }
       else {
-        // Checking if the value is not a valid one.
         return matchingOption.values.includes(value);
       }
     }

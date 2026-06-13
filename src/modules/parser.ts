@@ -1,5 +1,6 @@
 /**
- * What parses the hierarchy to an HTML tree.
+ * @description
+ * Responsible for parsing hierarchy objects into live HTML trees.
  */
 
 
@@ -12,62 +13,64 @@ import { options } from "./options";
 
 
 /**
- * Parses the hierarchy object into an HTML element.
+ * @description
+ * Recursively parses a hierarchy object into HTML elements and appends
+ * each one to its parent element.
  *
  * @param hierarchy The hierarchy object to parse.
- * @param parent The HTML element to host the parsed element.
- * @param nodeCallback The callback that executes whenever an HTML element has been created.
- * @param topParent Whether or not we're parsing the top parent.
+ * @param parent The HTML element that will host the parsed element.
+ * @param nodeCallback A callback invoked after each element is created,
+ *   receiving the element's temmeId and its hierarchy descriptor.
+ * @param topParent When `true` the hierarchy maps to `parent` directly
+ *   (no new element is created at the root level).
+ * @returns {void}
  */
-export function parse(hierarchy: any, parent: HTMLElement, nodeCallback: (temmeId: string, currentHierarchy: any) => void, topParent: boolean = false): void {
-  try {
-    // Parsing the element.
-    const element: HTMLElement = parseElement(hierarchy, parent, topParent);
+export function parse(
+  hierarchy: Hierarchy,
+  parent: HTMLElement,
+  nodeCallback: (temmeId: string, currentHierarchy: Hierarchy) => void,
+  topParent: boolean = false,
+): void {
+  const element: HTMLElement = parseElement(hierarchy, parent, topParent);
 
-    // Executing the node callback.
-    nodeCallback(getTemmeId(hierarchy), hierarchy);
+  nodeCallback(getTemmeId(hierarchy), hierarchy);
 
-    // Checking if the hierarchy object has any children.
-    if ("childNodes" in hierarchy && hierarchy.childNodes.length > 0) {
-      hierarchy.childNodes.forEach((child: Hierarchy) => {
-        parse(child, element, nodeCallback);
-      });
-    }
-  }
-  catch (e) {
-    throw e;
+  if ("childNodes" in hierarchy && hierarchy.childNodes.length > 0) {
+    hierarchy.childNodes.forEach((child: Hierarchy) => {
+      parse(child, element, nodeCallback);
+    });
   }
 }
 
 
 /**
- * Converts a hierarchy into an HTML element.
+ * @description
+ * Converts a single hierarchy descriptor into an HTML element,
+ * applies all option parsers, and appends it to the parent.
  *
- * @param hierarchy The hierarchy to parse.
- * @param parent The HTML element to host the parsed hierarchy.
- * @param topParent Whether or not the parsed element is the top parent.
+ * @param hierarchy The hierarchy descriptor to convert.
+ * @param parent The HTML element to append the new element to.
+ * @param topParent When `true` the hierarchy maps to `parent` itself — no element is created.
+ * @returns {HTMLElement} The created (or reused) HTML element.
  */
-function parseElement(hierarchy: Hierarchy, parent: HTMLElement, topParent: boolean = false): HTMLElement {
-  try {
-    // Creating an HTML tag out of the hierarchy.
-    const element: HTMLElement = (topParent === true) ? parent : document.createElement(hierarchy.name);
+function parseElement(
+  hierarchy: Hierarchy,
+  parent: HTMLElement,
+  topParent: boolean = false,
+): HTMLElement {
+  const element: HTMLElement = topParent === true
+    ? parent
+    : document.createElement(hierarchy.name);
 
-    // Appending the appropriate values.
-    options.forEach((opt: Option | IParser) => {
-      if (typeof (<IParser>opt).parse === "function") {
-        (<IParser>opt).parse(element, hierarchy);
-      }
-    });
-
-    // Appending the created element.
-    if (topParent === false) {
-      parent.appendChild(element);
+  options.forEach((opt: Option | IParser) => {
+    if (typeof (opt as IParser).parse === "function") {
+      (opt as IParser).parse(element, hierarchy);
     }
+  });
 
-    // Returning the parsed element.
-    return element;
+  if (topParent === false) {
+    parent.appendChild(element);
   }
-  catch (e) {
-    throw e;
-  }
+
+  return element;
 }

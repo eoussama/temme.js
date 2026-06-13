@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Option_1 = __importDefault(require("../../models/Option"));
 class PlacementSubOption extends Option_1.default {
     constructor() {
-        super('placement', 'string', ['after', 'before'], 'after');
-        this.getKeyFromElement = (element) => null;
+        super("placement", "string", ["before", "after"], "after");
+        this.getKeyFromElement = (_element) => null;
     }
-    inherit(hierarchy, value) { }
+    inherit(_hierarchy, _value) { }
 }
 exports.default = PlacementSubOption;

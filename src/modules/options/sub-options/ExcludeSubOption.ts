@@ -1,36 +1,60 @@
 /**
- * The exclude sub-option.
+ * @description
+ * The "exclude" sub-option model for the `from` option.
  */
 
 
+import type { Hierarchy } from "../../models/Hierarchy";
 import Option from "../../models/Option";
 
 
 
+/** The option labels that can participate in inheritance. */
+const INHERITABLE: Array<string> = [
+  "name",
+  "id",
+  "classes",
+  "attributes",
+  "dataset",
+  "content",
+  "childNodes",
+];
+
+
 /**
- *
+ * @description
+ * Specifies which option keys should be excluded from inheritance.
+ * Defaults to an empty list (nothing excluded) when the user does not specify an explicit list.
  */
 export default class ExcludeSubOption extends Option {
   /**
-   * Parameterless constructor.
+   * @description
+   * Constructs an ExcludeSubOption with an empty default (exclude nothing by default).
+   *
+   * @returns {void}
    */
   constructor() {
-    super("exclude", "array", ["name", "id", "classes", "attributes", "dataset", "content", "childNodes"], []);
+    super("exclude", "array", INHERITABLE, []);
   }
 
+
   /**
-   * Performs inheritance process on an option.
+   * @description
+   * No-op — the exclude list is not directly inherited.
    *
-   * @param hierarchy The hierarchy object that inherits.
-   * @param value The value to inherit.
+   * @param _hierarchy The hierarchy object that inherits.
+   * @param _value The value to inherit.
+   * @returns {void}
    */
-  public inherit(hierarchy: any, value: any): void { }
+  public inherit(_hierarchy: Hierarchy, _value: unknown): void {}
 
 
   /**
-   * Gets nothing from a given HTML element.
+   * @description
+   * Not applicable — returns `null` for any element.
    *
-   * @param element The HTML element to target.
+   * @param _element The HTML element to target.
+   * @returns {null} Always `null`.
    */
-  public getKeyFromElement = (element: HTMLElement): any => null;
+  public getKeyFromElement = (_element: HTMLElement): unknown => null;
 }
