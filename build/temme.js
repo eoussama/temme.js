@@ -74,11 +74,15 @@ function parse(hierarchy, target, endCallback = () => { }, nodeCallback = () => 
     }
 }
 function validate(hierarchy) {
-    try {
-        Validator.validateOptions(hierarchy);
-        return { valid: true, error: null };
-    }
-    catch (err) {
-        return { valid: false, error: err };
-    }
+    const result = (() => {
+        try {
+            Validator.validateOptions(hierarchy);
+            return [null, true];
+        }
+        catch (err) {
+            return [err, null];
+        }
+    })();
+    const [error, valid] = result;
+    return { valid: valid === true, error };
 }

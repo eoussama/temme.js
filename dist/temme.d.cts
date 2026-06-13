@@ -27,7 +27,9 @@ type Hierarchy = {
     [key: string]: unknown;
 };
 
-declare function parse(hierarchy: object, target: HTMLElement, endCallback?: (resultedHierarchy: Hierarchy) => void | Promise<void>, nodeCallback?: (temmeId: string, currentHierarchy: Hierarchy) => void): object;
+type TParseEndCallback = (resultedHierarchy: Hierarchy) => void | Promise<void>;
+type TParseNodeCallback = (temmeId: string, currentHierarchy: Hierarchy) => void;
+declare function parse(hierarchy: object, target: HTMLElement, endCallback?: TParseEndCallback, nodeCallback?: TParseNodeCallback): object;
 declare function validate(hierarchy: object): {
     valid: boolean;
     error: unknown;

@@ -12,10 +12,13 @@
  */
 
 
+import type { TResult } from "@eoussama/core";
 import type { Hierarchy } from "./modules/models/Hierarchy";
-
 import type TemmyError from "./modules/models/TemmyError";
 import { isPromise } from "@eoussama/core";
+
+
+
 import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
 import InvalidTargetError from "./modules/errors/InvalidTargetError";
 import * as Idfier from "./modules/idfier";
@@ -24,6 +27,11 @@ import * as Referencer from "./modules/referencer";
 import * as Sanitizer from "./modules/sanitizer";
 import * as Validator from "./modules/validator";
 
+
+
+type TParseEndCallback = (resultedHierarchy: Hierarchy) => void | Promise<void>;
+type TParseNodeCallback = (temmeId: string, currentHierarchy: Hierarchy) => void;
+type TValidateResult = TResult<Error, true>;
 
 
 /**
@@ -44,8 +52,8 @@ import * as Validator from "./modules/validator";
 export function parse(
   hierarchy: object,
   target: HTMLElement,
-  endCallback: (resultedHierarchy: Hierarchy) => void | Promise<void> = () => {},
-  nodeCallback: (temmeId: string, currentHierarchy: Hierarchy) => void = () => {},
+  endCallback: TParseEndCallback = () => {},
+  nodeCallback: TParseNodeCallback = () => {},
 ): object {
   try {
     if (!Validator.isValidHTMLElement(target)) {
@@ -93,12 +101,18 @@ export function parse(
  *   the hierarchy is well-formed, `false` otherwise with the caught error in `error`.
  */
 export function validate(hierarchy: object): { valid: boolean; error: unknown } {
-  try {
-    Validator.validateOptions(hierarchy as Hierarchy);
+  const result: TValidateResult = (() => {
+    try {
+      Validator.validateOptions(hierarchy as Hierarchy);
 
-    return { valid: true, error: null };
-  }
-  catch (err) {
-    return { valid: false, error: err };
-  }
+      return [null, true];
+    }
+    catch (err) {
+      return [err as Error, null];
+    }
+  })();
+
+  const [error, valid] = result;
+
+  return { valid: valid === true, error };
 }
