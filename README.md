@@ -158,17 +158,18 @@ As for the usages, it remains just as in the browser.
 
 ```js
 // The host element.
-var target = document.createEelement("div");
+const target = document.createEelement("div");
 
 // The hierarchy.
-var hierarchy = {
+const hierarchy = {
   classes: ["red"]
 };
 
 // Telling Temme to do its thing.
 try {
   Temme.parse(hierarchy, target);
-} catch (e) {
+}
+catch (e) {
   console.error(e.name, e.message);
 }
 ```

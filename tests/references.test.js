@@ -5,234 +5,209 @@
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
- * 
+ *
  * Everything that has to do with validation, from
  * data checks to value matching goes in here.
- *
  */
 
 
-const Temme = require('../build/temme');
+const Temme = require("../build/temme");
 
 
-describe('Validating references.', () => {
 
-    test('“ref” options whose values start with an “@” symbol should throw the error “InvalidReferenceOptionValueError”.', () => {
+describe("validating references.", () => {
+  it("“ref” options whose values start with an “@” symbol should throw the error “InvalidReferenceOptionValueError”.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const hierarchy = {
+      ref: "@invalid-ref",
+    };
 
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = {
-                ref: '@invalid-ref'
-            };
+    let errorName = "";
 
-        let errorName = "";
+    // Act.
+    try {
+      Temme.parse(hierarchy, target);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-        // Act.
-        try {
+    // Assert.
+    expect(errorName).toBe("InvalidReferenceOptionValueError");
+  });
 
-            Temme.parse(hierarchy, target);
-        }
-        catch (e) {
+  it("“InvalidReferenceOptionValueError” error should be thrown if an object is referencing an invalid outer element.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const hierarchy = {
+      from: {
+        ref: "@#some-id",
+      },
+    };
 
-            errorName = e.name;
-        }
+    let errorName = "";
 
-        // Assert.
-        expect(errorName).toBe("InvalidReferenceOptionValueError");
-    });
+    // Act.
+    try {
+      Temme.parse(hierarchy, target);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-    test("“InvalidReferenceOptionValueError” error should be thrown if an object is referencing an invalid outer element.", () => {
+    // Assert.
+    expect(errorName).toBe("InvalidReferenceOptionValueError");
+  });
 
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = {
-                from: {
-                    ref: '@#some-id'
-                }
-            };
+  it("“InvalidReferenceError” error should be thrown if an object is referencing an invalid element.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const hierarchy = {
+      from: {
+        ref: "some-invalid-id",
+      },
+    };
 
-        let errorName = "";
+    let errorName = "";
 
-        // Act.
-        try {
+    // Act.
+    try {
+      Temme.parse(hierarchy, target);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-            Temme.parse(hierarchy, target);
-        }
-        catch (e) {
+    // Assert.
+    expect(errorName).toBe("InvalidReferenceError");
+  });
 
-            errorName = e.name;
-        }
+  it("“InvalidTemplateReferencingError” error should be thrown if a template is referencing a non-template hierarchy.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const hierarchy = {
+      ref: "some-ref",
+      childNodes: [
+        {
+          templates: [
+            {
+              ref: "temp",
+              from: {
+                ref: "some-ref",
+              },
+            },
+          ],
+        },
+      ],
+    };
 
-        // Assert.
-        expect(errorName).toBe("InvalidReferenceOptionValueError");
-    });
+    let errorName = "";
 
-    test("“InvalidReferenceError” error should be thrown if an object is referencing an invalid element.", () => {
+    // Act.
+    try {
+      Temme.parse(hierarchy, target);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = {
-                from: {
-                    ref: 'some-invalid-id'
-                }
-            };
+    // Assert.
+    expect(errorName).toBe("InvalidTemplateReferencingError");
+  });
 
-        let errorName = "";
+  it("“ReferenceOutOfScopeError” error should be thrown if an object is referencing an element out of its scope.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const hierarchy = {
+      from: {
+        ref: "out-of-scope",
+      },
+      childNodes: [
+        {
+          ref: "out-of-scope",
+        },
+      ],
+    };
 
-        // Act.
-        try {
+    let errorName = "";
 
-            Temme.parse(hierarchy, target);
-        }
-        catch (e) {
+    // Act.
+    try {
+      Temme.parse(hierarchy, target);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-            errorName = e.name;
-        }
-
-        // Assert.
-        expect(errorName).toBe("InvalidReferenceError");
-    });
-
-    test("“InvalidTemplateReferencingError” error should be thrown if a template is referencing a non-template hierarchy.", () => {
-
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = {
-                ref: 'some-ref',
-                childNodes: [
-                    {
-                        templates: [
-                            {
-                                ref: 'temp',
-                                from: {
-                                    ref: "some-ref"
-                                }
-                            }
-                        ]
-                    }
-                ]
-            };
-
-        let errorName = "";
-
-        // Act.
-        try {
-
-            Temme.parse(hierarchy, target);
-        }
-        catch (e) {
-
-            errorName = e.name;
-        }
-
-        // Assert.
-        expect(errorName).toBe("InvalidTemplateReferencingError");
-    });
-
-    test("“ReferenceOutOfScopeError” error should be thrown if an object is referencing an element out of its scope.", () => {
-
-        // Arrange.
-        const
-            target = document.createElement('div'),
-            hierarchy = {
-                from: {
-                    ref: "out-of-scope"
-                },
-                childNodes: [
-                    {
-                        ref: 'out-of-scope'
-                    }
-                ]
-            };
-
-        let errorName = "";
-
-        // Act.
-        try {
-
-            Temme.parse(hierarchy, target);
-        }
-        catch (e) {
-
-            errorName = e.name;
-        }
-
-        // Assert.
-        expect(errorName).toBe("ReferenceOutOfScopeError");
-    });
+    // Assert.
+    expect(errorName).toBe("ReferenceOutOfScopeError");
+  });
 });
 
 
-describe('References.', () => {
+describe("references.", () => {
+  it("referencing a template and inheriting its classes.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const hierarchy = {
+      templates: [
+        {
+          ref: "temp",
+          classes: ["red", "bold"],
+        },
+      ],
+      childNodes: [
+        {
+          from: {
+            ref: "temp",
+          },
+        },
+      ],
+    };
 
-    test("Referencing a template and inheriting its classes.", () => {
+    // Act.
+    try {
+      Temme.parse(hierarchy, target, (h) => {
+        // Assert
+        expect(h.childNodes[0].classes).toEqual(["bold", "red"]);
+      });
+    }
+    catch (e) {
+      console.error(e.name, e.message);
+    }
+  });
 
-        // Arrange.
-        const 
-            target = document.createElement('div'),
-            hierarchy = {
-                templates: [
-                    {
-                        ref: 'temp',
-                        classes: ['red', 'bold']
-                    }
-                ],
-                childNodes: [
-                    {
-                        from: {
-                            ref: 'temp'
-                        }
-                    }
-                ]
-            };
+  it("referencing an outer element.", () => {
+    // Arrange.
+    const
+      target = document.createElement("div");
+    const outer = document.createElement("div");
+    const hierarchy = {
+      from: {
+        ref: "@#outer-element",
+      },
+    };
 
-        // Act.
-        try {
+    outer.id = "outer-element";
+    outer.classList.add("bold", "red", "yellow");
+    document.body.appendChild(outer);
 
-            Temme.parse(hierarchy, target, (h) => {
-
-                // Assert
-                expect(h.childNodes[0].classes).toEqual(['bold', 'red']);
-            });
-        }
-        catch(e) {
-
-            console.error(e.name, e.message);
-        }
-    });
-
-    test("Referencing an outer element.", () => {
-
-        // Arrange.
-        const 
-            target = document.createElement('div'),
-            outer = document.createElement('div'),
-            hierarchy = {
-                from: {
-                    ref: '@#outer-element'
-                }
-            };
-        
-        outer.id = "outer-element";
-        outer.classList.add('bold', 'red', 'yellow');
-        document.body.appendChild(outer);
-
-        // Act.
-        try {
-
-            Temme.parse(hierarchy, target, (h) => {
-
-                // Assert
-                expect(h.classes).toEqual(['bold', 'red', 'yellow']);
-            });
-        }
-        catch(e) {
-
-            console.error(e.name, e.message);
-        }
-    });
+    // Act.
+    try {
+      Temme.parse(hierarchy, target, (h) => {
+        // Assert
+        expect(h.classes).toEqual(["bold", "red", "yellow"]);
+      });
+    }
+    catch (e) {
+      console.error(e.name, e.message);
+    }
+  });
 });

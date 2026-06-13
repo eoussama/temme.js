@@ -3,14 +3,14 @@
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "typeRoots": ["./node_modules/@types"],
     "strict": true,
     "noImplicitAny": true,
-    "esModuleInterop": true,
     "declaration": true,
-    "sourceMap": true,
     "removeComments": true,
-    "skipLibCheck": true,
-    "typeRoots": ["./node_modules/@types"]
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "tsup.config.ts"],
   "exclude": ["node_modules", "dist", "build"]

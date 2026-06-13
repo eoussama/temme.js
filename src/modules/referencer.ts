@@ -3,56 +3,54 @@
  */
 
 
-import { Hierarchy } from "./models/Hierarchy";
-import { Template } from "./models/Template";
-import { validateReferences, validateTemplateReference, validateParentToChildReference } from "./validator";
+import type { Hierarchy } from "./models/Hierarchy";
+import type Option from "./models/Option";
+import type { Template } from "./models/Template";
 import { getTemmeId } from "./idfier";
 import { options } from "./options";
-import Option from "./models/Option";
+import { validateParentToChildReference, validateReferences, validateTemplateReference } from "./validator";
+
 
 
 /**
  * The reference type.
  */
-export type ReferenceType = { depth: number, hierarchy: any };
+export type ReferenceType = { depth: number; hierarchy: any };
 
 
 /**
  * Takes care of all the inheritance and references stuff.
- * 
+ *
  * @param hierarchy The hierarchy to process the references for.
  */
 export function process(hierarchy: any): void {
+  try {
+    const references: Array<ReferenceType> = getReferences(hierarchy);
 
-    try {
+    // Validating all of the refereces.
+    validateReferences(hierarchy, references);
 
-        const references: Array<ReferenceType> = getReferences(hierarchy);
+    // Checking if templates are inheriting hierarchy objects.
+    validateTemplateReference(hierarchy, references);
 
-        // Validating all of the refereces.
-        validateReferences(hierarchy, references);
+    // Checking if a parent is trying to reference their childern.
+    validateParentToChildReference(hierarchy, references);
 
-        // Checking if templates are inheriting hierarchy objects.
-        validateTemplateReference(hierarchy, references);
+    // Processing template references.
+    processTemplates(hierarchy, references.filter((ref: ReferenceType) => isTemplate(ref.hierarchy)));
 
-        // Checking if a parent is trying to reference their childern.
-        validateParentToChildReference(hierarchy, references);
-
-        // Processing template references.
-        processTemplates(hierarchy, references.filter((ref: ReferenceType) => isTemplate(ref.hierarchy)));
-
-        // Processing hierarchies (non-template) references.
-        processHierarchies(hierarchy, references);
-    }
-    catch (e) {
-
-        throw e;
-    }
+    // Processing hierarchies (non-template) references.
+    processHierarchies(hierarchy, references);
+  }
+  catch (e) {
+    throw e;
+  }
 }
 
 
 /**
  * Checks if a hierarchy is a template or not.
- * 
+ *
  * @param hierarchy The hierarchy to check.
  */
 export const isTemplate = (hierarchy: any): boolean => getTemmeId(hierarchy).length === 4;
@@ -60,158 +58,134 @@ export const isTemplate = (hierarchy: any): boolean => getTemmeId(hierarchy).len
 
 /**
  * Processes all of the references for template hierarchies.
- * 
+ *
  * @param hierarchy The hierarchy that contain templates to reference.
  * @param references The valid references.
  */
 function processTemplates(hierarchy: any, references: Array<ReferenceType>): void {
+  try {
+    // Checking if the hierarchy object has any templates.
+    if ("templates" in hierarchy && hierarchy.templates.length > 0) {
+      hierarchy.templates.forEach((template: any) => {
+        if (template.from.ref !== "") {
+          for (const key in template) {
+            // Getting the proper option.
+            const
+              option: any = options.filter((opt: Option) => opt.label === key)[0];
+            const referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === template.from.ref)[0];
 
-    try {
-
-        // Checking if the hierarchy object has any templates.
-        if ('templates' in hierarchy && hierarchy.templates.length > 0) {
-
-            hierarchy.templates.forEach((template: any) => {
-
-                if (template.from.ref !== "") {
-
-                    for (const key in template) {
-
-                        // Getting the proper option.
-                        const
-                            option: any = options.filter((opt: Option) => opt.label === key)[0],
-                            referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === template.from.ref)[0];
-
-                        // Inheriting the value.
-                        option.inherit(template, referencedHierarchy.hierarchy[key]);
-                    }
-                }
-            });
+            // Inheriting the value.
+            option.inherit(template, referencedHierarchy.hierarchy[key]);
+          }
         }
-
-        // Checking if the hierarchy object has any children.
-        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
-
-            hierarchy.childNodes.forEach((child: Hierarchy) => {
-
-                processTemplates(child, references);
-            });
-        }
+      });
     }
-    catch (e) {
 
-        throw e;
+    // Checking if the hierarchy object has any children.
+    if ("childNodes" in hierarchy && hierarchy.childNodes.length > 0) {
+      hierarchy.childNodes.forEach((child: Hierarchy) => {
+        processTemplates(child, references);
+      });
     }
+  }
+  catch (e) {
+    throw e;
+  }
 }
 
 
 /**
  * Processes all of the references for hierarchy objects (non-templates).
- * 
+ *
  * @param hierarchy The hierarchies to reference.
  * @param reference The valid references.
+ * @param references
  */
 function processHierarchies(hierarchy: any, references: Array<ReferenceType>): void {
-
-    try {
-
-        // Checking if the hierarchy object has any children.
-        if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
-
-            hierarchy.childNodes.forEach((child: Hierarchy) => {
-
-                processHierarchies(child, references);
-            });
-        }
-
-        if (hierarchy.from.ref !== "") {
-
-            // If an outer element is referenced.
-            if (hierarchy.from.ref[0] === "@") {
-
-                const
-                    selector = hierarchy.from.ref.substring(1),
-                    element = document.querySelector(selector);
-
-                for (const key in hierarchy) {
-
-                    // Getting the proper option.
-                    const
-                        option: any = options.filter((opt: Option) => opt.label === key)[0],
-                        value = option.getKeyFromElement(element);
-
-                    if (value != null) {
-
-                        // Inheriting the value.
-                        option.inherit(hierarchy, value);
-                    }
-                }
-            } else {
-
-                const
-                    referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0],
-                    toInherit: Array<string> = hierarchy.from.include.filter((opt: string) => hierarchy.from.exclude.indexOf(opt) === -1);
-
-                toInherit.forEach((optName: string) => {
-
-                    // Getting the proper option.
-                    const option: Option = options.filter((opt: Option) => opt.label === optName)[0];
-
-                    // Inheriting the value.
-                    option.inherit(hierarchy, referencedHierarchy.hierarchy[optName]);
-                });
-            }
-        }
+  try {
+    // Checking if the hierarchy object has any children.
+    if ("childNodes" in hierarchy && hierarchy.childNodes.length > 0) {
+      hierarchy.childNodes.forEach((child: Hierarchy) => {
+        processHierarchies(child, references);
+      });
     }
-    catch (e) {
 
-        throw e;
+    if (hierarchy.from.ref !== "") {
+      // If an outer element is referenced.
+      if (hierarchy.from.ref[0] === "@") {
+        const
+          selector = hierarchy.from.ref.substring(1);
+        const element = document.querySelector(selector);
+
+        for (const key in hierarchy) {
+          // Getting the proper option.
+          const
+            option: any = options.filter((opt: Option) => opt.label === key)[0];
+          const value = option.getKeyFromElement(element);
+
+          if (value != null) {
+            // Inheriting the value.
+            option.inherit(hierarchy, value);
+          }
+        }
+      }
+      else {
+        const
+          referencedHierarchy: ReferenceType = references.filter((ref: ReferenceType) => ref.hierarchy.ref === hierarchy.from.ref)[0];
+        const toInherit: Array<string> = hierarchy.from.include.filter((opt: string) => !hierarchy.from.exclude.includes(opt));
+
+        toInherit.forEach((optName: string) => {
+          // Getting the proper option.
+          const option: Option = options.filter((opt: Option) => opt.label === optName)[0];
+
+          // Inheriting the value.
+          option.inherit(hierarchy, referencedHierarchy.hierarchy[optName]);
+        });
+      }
     }
+  }
+  catch (e) {
+    throw e;
+  }
 }
 
 
 /**
  * Getting all the references in a said hierarchy.
- * 
+ *
  * @param hierarchy The hierarchy object to get the references from.
  * @param depth The current depth in the said hierarchy object.
  */
 function getReferences(hierarchy: any, depth: number = 0): Array<ReferenceType> {
+  const references: Array<ReferenceType> = [];
 
-    const references: Array<ReferenceType> = [];
+  // Incrementing the depth.
+  depth++;
 
-    // Incrementing the depth.
-    depth++;
+  // Checking if the reference is valid.
+  if (hierarchy.ref !== "") {
+    references.push({
+      depth,
+      hierarchy,
+    });
+  }
 
-    // Checking if the reference is valid.
-    if (hierarchy.ref !== "") {
+  // Checking if the hierarchy object has any children.
+  if ("childNodes" in hierarchy && hierarchy.childNodes.length > 0) {
+    hierarchy.childNodes.forEach((child: Hierarchy) => {
+      references.push(...getReferences(child, depth));
+    });
+  }
 
-        references.push({
-            depth: depth,
-            hierarchy: hierarchy
-        });
-    }
+  // Checking if the hierarchy object has any templates.
+  if ("templates" in hierarchy && hierarchy.templates.length > 0) {
+    hierarchy.templates.forEach((template: Template) => {
+      // Substracting 1 to make templates on the same depth level
+      // as their hierarchy parent.
+      references.push(...getReferences(template, depth - 1));
+    });
+  }
 
-    // Checking if the hierarchy object has any children.
-    if ('childNodes' in hierarchy && hierarchy.childNodes.length > 0) {
-
-        hierarchy.childNodes.forEach((child: Hierarchy) => {
-
-            references.push(...getReferences(child, depth));
-        });
-    }
-
-    // Checking if the hierarchy object has any templates.
-    if ('templates' in hierarchy && hierarchy.templates.length > 0) {
-
-        hierarchy.templates.forEach((template: Template) => {
-
-            // Substracting 1 to make templates on the same depth level
-            // as their hierarchy parent.
-            references.push(...getReferences(template, depth - 1));
-        });
-    }
-
-    // Returning all found references.
-    return references;
+  // Returning all found references.
+  return references;
 }

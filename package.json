@@ -1,11 +1,26 @@
 {
   "name": "@eoussama/temmejs",
-  "version": "1.0.6",
-  "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
   "type": "module",
-  "main": "./dist/temme.cjs",
-  "module": "./dist/temme.js",
-  "types": "./dist/temme.d.ts",
+  "version": "1.0.6",
+  "packageManager": "pnpm@11.4.0",
+  "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
+  "author": "EOussama",
+  "license": "MIT",
+  "homepage": "https://github.com/EOussama/temmejs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EOussama/temmejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EOussama/temmejs/issues"
+  },
+  "keywords": [
+    "typescript",
+    "javascript",
+    "javascript-library",
+    "dom",
+    "emmet"
+  ],
   "exports": {
     ".": {
       "types": "./dist/temme.d.ts",
@@ -13,6 +28,9 @@
       "require": "./dist/temme.cjs"
     }
   },
+  "main": "./dist/temme.cjs",
+  "module": "./dist/temme.js",
+  "types": "./dist/temme.d.ts",
   "files": [
     "dist"
   ],
@@ -28,31 +46,14 @@
     "pretest": "tsc --project tsconfig.test.json",
     "test": "jest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "pnpm dx lint",
+    "lint:fix": "pnpm dx lint --fix",
     "build:docs": "rm -rf docs/assets/js/lib && mkdir docs/assets/js/lib && cp ./dist/temme.js ./docs/assets/js/lib/",
     "prod": "pnpm clean && pnpm build && pnpm build:docs"
   },
   "jest": {
     "testEnvironment": "jsdom"
   },
-  "packageManager": "pnpm@11.4.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EOussama/temmejs.git"
-  },
-  "keywords": [
-    "typescript",
-    "javascript",
-    "javascript-library",
-    "dom",
-    "emmet"
-  ],
-  "author": "EOussama",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/EOussama/temmejs/issues"
-  },
-  "homepage": "https://github.com/EOussama/temmejs#readme",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },

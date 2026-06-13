@@ -1,5 +1,5 @@
 /**
- * The error thrown when a 
+ * The error thrown when a
  * from option is not valid
  */
 
@@ -7,29 +7,31 @@
 import TemmyError from "../models/TemmyError";
 
 
+
+/**
+ *
+ */
 export default class InvalidReferencingOptionError extends TemmyError {
+  /**
+   * The name of the error.
+   */
+  public name: string = "InvalidReferencingOptionError";
 
-    /**
-     * The name of the error.
-     */
-    public name: string = "InvalidReferencingOptionError";
+  /**
+   * The message of the error.
+   */
+  public message: string = "A referencing option is not valid";
 
-    /**
-     * The message of the error.
-     */
-    public message: string = "A referencing option is not valid";
+  /**
+   * Constructor with parameters.
+   *
+   * @param message The error's message.
+   */
+  constructor(message: string) {
+    // Calling the parent class `TemmyError`.
+    super("");
 
-    /**
-     * Constructor with parameters.
-     * 
-     * @param message The error's message.
-     */
-    constructor(message: string) {
-
-        // Calling the parent class `TemmyError`.
-        super("");
-
-        // Updating the error's message.
-        this.message = message.length > 0 ? message : this.message;
-    }
+    // Updating the error's message.
+    this.message = message.length > 0 ? message : this.message;
+  }
 }

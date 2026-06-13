@@ -3,8 +3,8 @@
   "compilerOptions": {
     "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "./build",
     "declaration": false,
+    "outDir": "./build",
     "sourceMap": false
   },
   "include": ["src/**/*"]

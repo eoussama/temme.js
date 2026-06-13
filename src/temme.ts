@@ -9,20 +9,20 @@
  * Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS,
  * with no doubts, Emmet saved us from the headache of working with HTML and CSS,
  * and now, Temme is doing Javascript the same favour too.
- *
  */
 
 
-import { isPromise } from "@eoussama/core";
+import type TemmyError from "./modules/models/TemmyError";
 
+import { isPromise } from "@eoussama/core";
+import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
+import InvalidTargetError from "./modules/errors/InvalidTargetError";
 import * as Idfier from "./modules/idfier";
 import * as Parser from "./modules/parser";
 import * as Referencer from "./modules/referencer";
 import * as Sanitizer from "./modules/sanitizer";
 import * as Validator from "./modules/validator";
-import TemmyError from "./modules/models/TemmyError";
-import InvalidHierarchyError from "./modules/errors/InvalidHierarchyError";
-import InvalidTargetError from "./modules/errors/InvalidTargetError";
+
 
 
 /**
@@ -35,15 +35,14 @@ import InvalidTargetError from "./modules/errors/InvalidTargetError";
  *                    May be async — any returned promise is awaited and rejection
  *                    is forwarded as a console warning so sync callers are not affected.
  * @param nodeCallback The function that executes whenever an element has been parsed.
- *
  * @throws InvalidTargetError, InvalidHierarchyError
  */
 export function parse(
-  hierarchy: Object,
+  hierarchy: object,
   target: HTMLElement,
   endCallback: (resultedHierarchy: any) => void | Promise<void> = () => {},
   nodeCallback: (temmeId: string, currentHierarchy: any) => void = () => {},
-): Object {
+): object {
   try {
     // Checking if the target is a valid HTML element and throwing
     // an error if it's not.
@@ -102,7 +101,7 @@ export function parse(
  * @param hierarchy The hierarchy object that maps the HTML skeleton.
  * @throws InvalidHierarchyError
  */
-export function validate(hierarchy: Object): Object {
+export function validate(hierarchy: object): object {
   try {
     // Validate options.
     Validator.validateOptions(hierarchy);

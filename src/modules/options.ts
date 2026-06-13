@@ -3,35 +3,37 @@
  */
 
 
-import Option, { IKeys } from "./models/Option";
-import RefOption from "./options/RefOption";
-import NameOption from "./options/NameOption";
-import IdOption from "./options/IdOption";
-import ContentOption from "./options/ContentOption";
-import TemmeIdsOption from "./options/TemmeIdsOption";
-import TemplatesOption from "./options/TemplatesOption";
-import ClassesOption from "./options/ClassesOption";
-import ChildNodesOption from "./options/ChildrenNodesOption";
+import type { IKeys } from "./models/Option";
+import type Option from "./models/Option";
 import AttributesOption from "./options/AttributesOption";
+import ChildNodesOption from "./options/ChildrenNodesOption";
+import ClassesOption from "./options/ClassesOption";
+import ContentOption from "./options/ContentOption";
 import DatasetOption from "./options/DatasetOption";
 import FromOption from "./options/FromOption";
+import IdOption from "./options/IdOption";
+import NameOption from "./options/NameOption";
+import RefOption from "./options/RefOption";
+import TemmeIdsOption from "./options/TemmeIdsOption";
+import TemplatesOption from "./options/TemplatesOption";
+
 
 
 /**
  * All the global options.
  */
 export const options: Array<Option> = [
-    new RefOption(),
-    new NameOption(),
-    new IdOption(),
-    new ContentOption(),
-    new TemmeIdsOption(),
-    new TemplatesOption(),
-    new ClassesOption(),
-    new ChildNodesOption(),
-    new AttributesOption(),
-    new DatasetOption(),
-    new FromOption()
+  new RefOption(),
+  new NameOption(),
+  new IdOption(),
+  new ContentOption(),
+  new TemmeIdsOption(),
+  new TemplatesOption(),
+  new ClassesOption(),
+  new ChildNodesOption(),
+  new AttributesOption(),
+  new DatasetOption(),
+  new FromOption(),
 ];
 
 
@@ -44,36 +46,32 @@ export const allOptions = getAllOptions();
 /**
  * The options that are not allowed for templates.
  */
-export const forbiddenOptions: Array<string> = ['name', 'childNodes', 'templates'];
+export const forbiddenOptions: Array<string> = ["name", "childNodes", "templates"];
 
 
 /**
  * Gets all the sub-options of an option.
- * 
+ *
  * @param option The parent option's name.
  */
 export function getSubOptions(option: string): Array<Option> {
+  const subOptions: Array<any> = [];
 
-    const subOptions: Array<any> = [];
+  // Looping through all of the options.
+  allOptions.forEach((opt: Option) => {
+    if ("keys" in opt && (<Option>opt).label === option) {
+      for (const key in (<IKeys>opt).keys) {
+        // Getting the sub-option.
+        const subOption = (<IKeys>opt).keys[key];
 
-    // Looping through all of the options.
-    allOptions.forEach((opt: Option) => {
+        // Pushing the sub-option.
+        subOptions.push(subOption);
+      }
+    }
+  });
 
-        if ('keys' in opt && (<Option>opt).label === option) {
-
-            for (const key in (<IKeys>opt).keys) {
-
-                // Getting the sub-option.
-                const subOption = (<IKeys>opt).keys[key];
-
-                // Pushing the sub-option.
-                subOptions.push(subOption);
-            }
-        }
-    });
-
-    // Returning the found sub-options.
-    return subOptions;
+  // Returning the found sub-options.
+  return subOptions;
 }
 
 
@@ -81,48 +79,43 @@ export function getSubOptions(option: string): Array<Option> {
  * Gets all of the options and sub-options.
  */
 function getAllOptions(): Array<Option> {
+  let allOptions: Array<Option> = [];
 
-    let allOptions: Array<Option> = [];
+  options.forEach((opt: Option) => {
+    allOptions.push(opt);
 
-    options.forEach((opt: Option) => {
+    if ("keys" in opt) {
+      // Getting all of the sub-options.
+      const subOptions: Array<Option> = getAllSubOptions(opt);
 
-        allOptions.push(opt);
+      allOptions = allOptions.concat(subOptions);
+    }
+  });
 
-        if ('keys' in opt) {
-
-            // Getting all of the sub-options.
-            const subOptions: Array<Option> = getAllSubOptions(opt);
-
-            allOptions = allOptions.concat(subOptions);
-        }
-    });
-
-    return allOptions;
+  return allOptions;
 }
 
 
 /**
  * Gets all the sub-options of an option.
- * 
+ *
  * @param opt The option to get the sub-options of.
+ * @param option
  */
 function getAllSubOptions(option: Option): Array<Option> {
+  let allSubOptions: Array<Option> = [];
 
-    let allSubOptions: Array<Option> = [];
+  for (const key in (<any>option).keys) {
+    const subOption: Option = (<any>option).keys[key];
 
-    for (const key in (<any>option).keys) {
+    allSubOptions.push(subOption);
 
-        const subOption: Option = (<any>option).keys[key];
+    if ("keys" in subOption) {
+      const opts: Array<Option> = getAllSubOptions(subOption);
 
-        allSubOptions.push(subOption);
-
-        if ('keys' in subOption) {
-
-            const opts: Array<Option> = getAllSubOptions(subOption);
-
-            allSubOptions = allSubOptions.concat(opts);
-        }
+      allSubOptions = allSubOptions.concat(opts);
     }
+  }
 
-    return allSubOptions;
+  return allSubOptions;
 }

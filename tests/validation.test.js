@@ -5,326 +5,278 @@
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
- * 
+ *
  * Everything that has to do with validation, from
  * data checks to value matching goes in here.
- *
  */
 
 
-const 
-    validator = require('../build/modules/validator'),
-    options = require('../build/modules/options').options;
+const
+  validator = require("../build/modules/validator");
+const options = require("../build/modules/options").options;
 
 
-describe('Target checks.', () => {
 
-    describe('Invalid target.', () => {
-
-        test('Checking if invalid target (undefined) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement(undefined)).toBe(false);
-        });
-
-        test('Checking if invalid target (null) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement(null)).toBe(false);
-        });
-
-        test('Checking if invalid target (boolean) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement(false)).toBe(false);
-        });
-
-        test('Checking if invalid target (number) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement(1634)).toBe(false);
-        });
-
-        test('Checking if invalid target (string) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement('fls')).toBe(false);
-        });
-
-        test('Checking if invalid target (array) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement([])).toBe(false);
-        });
-
-        test('Checking if invalid target (object) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHTMLElement({})).toBe(false);
-        });
+describe("target checks.", () => {
+  describe("invalid target.", () => {
+    it("checking if invalid target (undefined) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement(undefined)).toBe(false);
     });
 
-    describe('Valid target.', () => {
-
-        test("Checking if valid target (HTML element) doesn't throw any error.", () => {
-
-            // Arrange.
-            const target = document.createElement('div');
-
-            // Assert.
-            expect(validator.isValidHTMLElement(target)).toBe(true);
-        });
+    it("checking if invalid target (null) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement(null)).toBe(false);
     });
+
+    it("checking if invalid target (boolean) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement(false)).toBe(false);
+    });
+
+    it("checking if invalid target (number) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement(1634)).toBe(false);
+    });
+
+    it("checking if invalid target (string) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement("fls")).toBe(false);
+    });
+
+    it("checking if invalid target (array) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement([])).toBe(false);
+    });
+
+    it("checking if invalid target (object) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHTMLElement({})).toBe(false);
+    });
+  });
+
+  describe("valid target.", () => {
+    it("checking if valid target (HTML element) doesn't throw any error.", () => {
+      // Arrange.
+      const target = document.createElement("div");
+
+      // Assert.
+      expect(validator.isValidHTMLElement(target)).toBe(true);
+    });
+  });
 });
 
 
-describe('Hierarchy checks.', () => {
-
-    describe('Invalid hierarchy.', () => {
-
-        test('Checking if invalid hierarchy (undefined) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHierarchy(undefined)).toBe(false);
-        });
-
-        test('Checking if invalid hierarchy (null) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHierarchy(null)).toBe(false);
-        });
-
-        test('Checking if invalid hierarchy (boolean) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHierarchy(false)).toBe(false);
-        });
-
-        test('Checking if invalid hierarchy (number) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHierarchy(1634)).toBe(false);
-        });
-
-        test('Checking if invalid hierarchy (string) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHierarchy('fls')).toBe(false);
-        });
-
-        test('Checking if invalid hierarchy (array) throws an error.', () => {
-
-            // Assert.
-            expect(validator.isValidHierarchy([])).toBe(false);
-        });
+describe("hierarchy checks.", () => {
+  describe("invalid hierarchy.", () => {
+    it("checking if invalid hierarchy (undefined) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHierarchy(undefined)).toBe(false);
     });
 
-    describe('Valid hierarchy.', () => {
-        
-        test("Checking if invalid hierarchy (object) doesn't throw any error.", () => {
-
-            // Arrange.
-            const hierarchy = {};
-
-            // Assert.
-            expect(validator.isValidHierarchy(hierarchy)).toBe(true);
-        });
+    it("checking if invalid hierarchy (null) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHierarchy(null)).toBe(false);
     });
+
+    it("checking if invalid hierarchy (boolean) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHierarchy(false)).toBe(false);
+    });
+
+    it("checking if invalid hierarchy (number) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHierarchy(1634)).toBe(false);
+    });
+
+    it("checking if invalid hierarchy (string) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHierarchy("fls")).toBe(false);
+    });
+
+    it("checking if invalid hierarchy (array) throws an error.", () => {
+      // Assert.
+      expect(validator.isValidHierarchy([])).toBe(false);
+    });
+  });
+
+  describe("valid hierarchy.", () => {
+    it("checking if invalid hierarchy (object) doesn't throw any error.", () => {
+      // Arrange.
+      const hierarchy = {};
+
+      // Assert.
+      expect(validator.isValidHierarchy(hierarchy)).toBe(true);
+    });
+  });
 });
 
 
-describe('Option checks.', () => {
+describe("option checks.", () => {
+  it("checking if all options are loaded.", () => {
+    // Assert.
+    expect(options.length).toBe(11);
+  });
 
-    test('Checking if all options are loaded.', () => {
+  it("“InvalidOptionNameError” should be thrown if the hierarchy object has an invalid option name.", () => {
+    // Arrange.
+    const hierarchy = { invalidOption: "some value" };
+    let errorName = "";
 
-        // Assert.
-        expect(options.length).toBe(11);
-    });
+    // Act.
+    try {
+      validator.validateOptions(hierarchy);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-    test('“InvalidOptionNameError” should be thrown if the hierarchy object has an invalid option name.', () => {
-        
-        // Arrange.
-        const hierarchy = { invalidOption: "some value" };
-        let errorName = "";
+    // Assert.
+    expect(errorName).toBe("InvalidOptionNameError");
+  });
 
-        // Act.
-        try {
+  it("“InvalidOptionTypeError” should be thrown if an option in the hierarchy object is of an incorrect type.", () => {
+    // Arrange.
+    const hierarchy = { name: [] };
+    let errorName = "";
 
-            validator.validateOptions(hierarchy);
-        }
-        catch(e) {
+    // Act.
+    try {
+      validator.validateOptions(hierarchy);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-            errorName = e.name;
-        }
-        
-        // Assert.
-        expect(errorName).toBe("InvalidOptionNameError");
-    });
+    // Assert.
+    expect(errorName).toBe("InvalidOptionTypeError");
+  });
 
-    test('“InvalidOptionTypeError” should be thrown if an option in the hierarchy object is of an incorrect type.', () => {
-        
-        // Arrange.
-        const hierarchy = { name: [] };
-        let errorName = "";
+  it("“InvalidSubOptionValueError” should be thrown if a sub-option in the hierarchy object is of an incorrect value.", () => {
+    // Arrange.
+    const hierarchy = { content: { type: "invalid-content-type" } };
+    let errorName = "";
 
-        // Act.
-        try {
+    // Act.
+    try {
+      validator.validateOptions(hierarchy);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-            validator.validateOptions(hierarchy);
-        }
-        catch(e) {
+    // Assert.
+    expect(errorName).toBe("InvalidSubOptionValueError");
+  });
 
-            errorName = e.name;
-        }
+  it("“InvalidSubOptionNameError” should be thrown if a sub-option in the hierarchy is invalid.", () => {
+    // Arrange.
+    const hierarchy = {
+      templates: [
+        {
+          ref: "temp-1",
+          classes: ["red"],
+        },
+      ],
+      childNodes: [
+        {
+          from: {
+            ref: "temp-1",
+            children: {
+              "invalid-sub-option": false,
+            },
+          },
+        },
+      ],
+    };
+    let errorName = "";
 
-        // Assert.
-        expect(errorName).toBe("InvalidOptionTypeError");
-    });
+    // Act.
+    try {
+      validator.validateOptions(hierarchy);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-    test('“InvalidSubOptionValueError” should be thrown if a sub-option in the hierarchy object is of an incorrect value.', () => {
-        
-        // Arrange.
-        const hierarchy = { content: { type: 'invalid-content-type' } };
-        let errorName = "";
+    // Assert.
+    expect(errorName).toBe("InvalidSubOptionNameError");
+  });
 
-        // Act.
-        try {
+  it("“InvalidReferencingOptionError” should be thrown if the hierarchy object's “from” option doesn't have a “ref” sub-opotion.", () => {
+    // Arrange.
+    const hierarchy = { from: {} };
+    let errorName = "";
 
-            validator.validateOptions(hierarchy);
-        }
-        catch(e) {
+    // Act.
+    try {
+      validator.validateOptions(hierarchy);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-            errorName = e.name;
-        }
+    // Assert.
+    expect(errorName).toBe("InvalidReferencingOptionError");
+  });
 
-        // Assert.
-        expect(errorName).toBe("InvalidSubOptionValueError");
-    });
+  it("“InvalidReferencingOptionError” should be thrown if both the “include” and “exclude” sub-options are used at the same time.", () => {
+    // Arrange.
+    const hierarchy = {
+      from: {
+        ref: "some-ref",
+        include: [],
+        exclude: [],
+      },
+    };
+    let errorName = "";
 
-    test('“InvalidSubOptionNameError” should be thrown if a sub-option in the hierarchy is invalid.', () => {
-        
-        // Arrange.
-        const hierarchy = { 
-            templates: [
-                {
-                    ref: 'temp-1',
-                    classes: ['red']
-                }
-            ],
-            childNodes: [
-                {
-                    from: {
-                        ref: 'temp-1',
-                        children: {
-                            'invalid-sub-option': false
-                        }
-                    },
-                }
-            ]
-        };
-        let errorName = "";
+    // Act.
+    try {
+      validator.validateOptions(hierarchy);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-        // Act.
-        try {
-
-            validator.validateOptions(hierarchy);
-        }
-        catch(e) {
-
-            errorName = e.name;
-        }
-
-        // Assert.
-        expect(errorName).toBe("InvalidSubOptionNameError");
-    });
-
-    test("“InvalidReferencingOptionError” should be thrown if the hierarchy object's “from” option doesn't have a “ref” sub-opotion.", () => {
-        
-        // Arrange.
-        const hierarchy = { from: {} };
-        let errorName = "";
-
-        // Act.
-        try {
-
-            validator.validateOptions(hierarchy);
-        }
-        catch(e) {
-
-            errorName = e.name;
-        }
-        
-        // Assert.
-        expect(errorName).toBe("InvalidReferencingOptionError");
-    });
-
-    test("“InvalidReferencingOptionError” should be thrown if both the “include” and “exclude” sub-options are used at the same time.", () => {
-        
-        // Arrange.
-        const hierarchy = { 
-            from: {
-                ref: 'some-ref',
-                include: [],
-                exclude: []
-            } 
-        };
-        let errorName = "";
-
-        // Act.
-        try {
-
-            validator.validateOptions(hierarchy);
-        }
-        catch(e) {
-
-            errorName = e.name;
-        }
-        
-        // Assert.
-        expect(errorName).toBe("InvalidReferencingOptionError");
-    });
+    // Assert.
+    expect(errorName).toBe("InvalidReferencingOptionError");
+  });
 });
 
 
-describe('Template checks.', () => {
+describe("template checks.", () => {
+  it("“InvalidTemplateError” should be thrown if a template doesn't have a “ref” option.", () => {
+    // Arrange.
+    const template = { classes: ["red", "bold"] };
+    let errorName = "";
 
-    test("“InvalidTemplateError” should be thrown if a template doesn't have a “ref” option.", () => {
-        
-        // Arrange.
-        const template = { classes: ['red', 'bold'] };
-        let errorName = "";
+    // Act.
+    try {
+      validator.validateTemplates(template);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-        // Act.
-        try {
+    // Assert.
+    expect(errorName).toBe("InvalidTemplateError");
+  });
 
-            validator.validateTemplates(template);
-        }
-        catch(e) {
+  it("“InvalidTemplateOptionError” should be thrown if a template has a forbidden option.", () => {
+    // Arrange.
+    const template = { classes: ["red", "bold"], name: "h1", ref: "temp-1" };
+    let errorName = "";
 
-            errorName = e.name;
-        }
-        
-        // Assert.
-        expect(errorName).toBe("InvalidTemplateError");
-    });
+    // Act.
+    try {
+      validator.validateTemplates(template);
+    }
+    catch (e) {
+      errorName = e.name;
+    }
 
-    test('“InvalidTemplateOptionError” should be thrown if a template has a forbidden option.', () => {
-        
-        // Arrange.
-        const template = { classes: ['red', 'bold'], name: 'h1', ref: 'temp-1' };
-        let errorName = "";
-
-        // Act.
-        try {
-
-            validator.validateTemplates(template);
-        }
-        catch(e) {
-
-            errorName = e.name;
-        }
-        
-        // Assert.
-        expect(errorName).toBe("InvalidTemplateOptionError");
-    });
+    // Assert.
+    expect(errorName).toBe("InvalidTemplateOptionError");
+  });
 });
