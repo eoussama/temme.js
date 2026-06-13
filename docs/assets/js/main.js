@@ -131,7 +131,8 @@ window.addEventListener("load", async () => {
                 {
                   name: "p",
                   content: {
-                    value: "With javascript objects as the blueprint and you as the engineer, you can produce skyscrapers even, you only need to provide a concise hierarchy for your HTML wonder and let Temme take care of the rest. In fact, this whole web page is completely generated using Temme.",
+                    type: "html",
+                    value: "With javascript objects as the blueprint and you as the engineer, you can produce skyscrapers even, you only need to provide a concise hierarchy for your HTML wonder and let Temme take care of the rest. In fact, <u>this whole web page is completely generated using Temme</u>.",
                   },
                 },
               ],

@@ -48,7 +48,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "pnpm dx lint",
     "lint:fix": "pnpm dx lint --fix",
-    "build:docs": "rm -rf docs/assets/js/lib && mkdir docs/assets/js/lib && cp ./dist/temme.js ./docs/assets/js/lib/",
+    "build:docs": "rm -rf docs/assets/js/lib && mkdir -p docs/assets/js/lib && esbuild src/temme.ts --bundle --format=esm --minify --sourcemap --outfile=docs/assets/js/lib/temme.js --platform=browser --target=es2020",
     "prod": "pnpm clean && pnpm build && pnpm build:docs"
   },
   "jest": {
