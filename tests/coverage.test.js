@@ -4,7 +4,7 @@ const idfier = require("../build/modules/idfier");
 const parser = require("../build/modules/parser");
 const sanitizer = require("../build/modules/sanitizer");
 const validator = require("../build/modules/validator");
-const Temme = require("../build/temme");
+const { parse, validate } = require("../build/temme");
 
 
 
@@ -18,7 +18,7 @@ describe("parse callback behavior.", () => {
     const hierarchy = {};
     let received = null;
 
-    Temme.parse(hierarchy, target, (result) => {
+    parse(hierarchy, target, (result) => {
       received = result;
     });
 
@@ -32,7 +32,7 @@ describe("parse callback behavior.", () => {
     };
     const calls = [];
 
-    Temme.parse(hierarchy, target, () => {}, (temmeId, currentHierarchy) => {
+    parse(hierarchy, target, () => {}, (temmeId, currentHierarchy) => {
       calls.push({ temmeId, currentHierarchy });
     });
 
@@ -57,7 +57,7 @@ describe("parse callback behavior.", () => {
     };
     const calls = [];
 
-    Temme.parse(hierarchy, target, () => {}, (temmeId) => {
+    parse(hierarchy, target, () => {}, (temmeId) => {
       calls.push(temmeId);
     });
 
@@ -70,7 +70,7 @@ describe("parse callback behavior.", () => {
     const hierarchy = {};
     let resolved = false;
 
-    Temme.parse(hierarchy, target, async () => {
+    parse(hierarchy, target, async () => {
       resolved = true;
     });
 
@@ -83,7 +83,7 @@ describe("parse callback behavior.", () => {
     const hierarchy = {};
     const warnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
-    Temme.parse(hierarchy, target, async () => {
+    parse(hierarchy, target, async () => {
       throw new Error("boom");
     });
 
@@ -99,11 +99,11 @@ describe("parse callback behavior.", () => {
   });
 
   it("validate returns a success object for a valid hierarchy.", () => {
-    expect(Temme.validate({})).toEqual({ valid: true, error: null });
+    expect(validate({})).toEqual({ valid: true, error: null });
   });
 
   it("validate returns an error object for an invalid hierarchy.", () => {
-    const result = Temme.validate({ name: [] });
+    const result = validate({ name: [] });
 
     expect(result.valid).toBe(false);
     expect(result.error).toBeTruthy();
@@ -125,7 +125,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.textContent).toBe("hello");
   });
@@ -143,7 +143,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.innerHTML).toBe("<span>hello</span>");
   });
@@ -158,7 +158,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.id).toBe("main-title");
   });
@@ -176,7 +176,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.dataset.count).toBe("12");
     expect(target.firstChild.dataset.enabled).toBe("true");
@@ -194,7 +194,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.getAttribute("hidden")).toBe("true");
   });
@@ -209,7 +209,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.tagName).toBe("SECTION");
   });
@@ -224,7 +224,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(Array.from(target.firstChild.classList)).toEqual(["a", "b", "z"]);
   });
@@ -243,7 +243,7 @@ describe("parsing content and element details.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.firstChild.firstChild.tagName).toBe("SPAN");
   });
@@ -270,7 +270,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.children[1].tagName).toBe("H1");
   });
@@ -294,7 +294,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.children[1].tagName).toBe("SECTION");
   });
@@ -318,7 +318,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(Array.from(target.children[1].classList)).toEqual(["bold", "green", "red"]);
   });
@@ -342,7 +342,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(Array.from(target.children[1].classList)).toEqual(["bold", "red"]);
   });
@@ -367,7 +367,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(Array.from(target.children[0].classList)).toEqual([]);
     expect(target.children[0].dataset.id).toBe("1");
@@ -393,7 +393,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(Array.from(target.children[0].classList)).toEqual(["red"]);
     expect(target.children[0].dataset.id).toBeUndefined();
@@ -422,7 +422,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.children[1].children).toHaveLength(1);
     expect(target.children[1].firstChild.tagName).toBe("SPAN");
@@ -451,7 +451,7 @@ describe("inheritance mode and range behavior.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.children[1].children).toHaveLength(0);
   });
@@ -604,7 +604,7 @@ describe("validator behavior through public APIs.", () => {
       ],
     };
 
-    expect(() => Temme.parse(hierarchy, createTarget())).not.toThrow();
+    expect(() => parse(hierarchy, createTarget())).not.toThrow();
   });
 
   it("throws no error for a valid previous-sibling reference.", () => {
@@ -621,7 +621,7 @@ describe("validator behavior through public APIs.", () => {
       ],
     };
 
-    expect(() => Temme.parse(hierarchy, createTarget())).not.toThrow();
+    expect(() => parse(hierarchy, createTarget())).not.toThrow();
   });
 
   it("validateOptions throws InvalidReferencingOptionError when ref is missing.", () => {
@@ -689,7 +689,7 @@ describe("parser helpers.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.children[1].children[0].id).toBe("local");
     expect(target.children[1].children[1].id).toBe("inherited");
@@ -726,7 +726,7 @@ describe("parser helpers.", () => {
       ],
     };
 
-    Temme.parse(hierarchy, target);
+    parse(hierarchy, target);
 
     expect(target.children[1].children[0].id).toBe("inherited");
     expect(target.children[1].children[1].id).toBe("local");
@@ -745,7 +745,7 @@ describe("outer element references.", () => {
     document.body.appendChild(outer);
 
 
-    Temme.parse({
+    parse({
       from: {
         ref: "@#outer-classes",
       },
@@ -766,7 +766,7 @@ describe("outer element references.", () => {
     document.body.appendChild(outer);
 
 
-    Temme.parse({
+    parse({
       from: {
         ref: "@#outer-dataset",
         include: ["dataset"],
@@ -788,7 +788,7 @@ describe("outer element references.", () => {
     document.body.appendChild(outer);
 
 
-    Temme.parse({
+    parse({
       from: {
         ref: "@#outer-attrs",
         include: ["attributes"],

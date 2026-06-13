@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    1.0.6
+ * @version:    1.0.7
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -9,7 +9,7 @@
  * The main javascript file of the docs.
  */
 
-"use strict";
+import { parse } from "./lib/temme.js";
 
 window.addEventListener("load", async () => {
   const
@@ -32,7 +32,7 @@ window.addEventListener("load", async () => {
 
   // Creating the DOM tree.
   try {
-    Temme.parse({
+    parse({
       childNodes: [
         {
           name: "header",
@@ -352,3 +352,7 @@ window.addEventListener("load", async () => {
     hljs.highlightBlock(block);
   });
 });
+
+// Expose Temme functions for code snippets displayed on the docs page.
+// (Snippets are shown as plain JS, not ESM, so we keep them concise and runnable.)
+globalThis.parse = parse;

@@ -34,4 +34,4 @@ const
     };
 
 // Temme, go for it.
-Temme.parse(hierarchy, target);
+parse(hierarchy, target);

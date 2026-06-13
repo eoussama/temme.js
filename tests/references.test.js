@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    1.0.6
+ * @version:    1.0.7
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -11,7 +11,7 @@
  */
 
 
-const Temme = require("../build/temme");
+const { parse } = require("../build/temme");
 
 
 
@@ -28,7 +28,7 @@ describe("validating references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       errorName = e.name;
@@ -52,7 +52,7 @@ describe("validating references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       errorName = e.name;
@@ -76,7 +76,7 @@ describe("validating references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       errorName = e.name;
@@ -110,7 +110,7 @@ describe("validating references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       errorName = e.name;
@@ -139,7 +139,7 @@ describe("validating references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       errorName = e.name;
@@ -174,7 +174,7 @@ describe("references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target, (h) => {
+      parse(hierarchy, target, (h) => {
         // Assert
         expect(h.childNodes[0].classes).toEqual(["bold", "red"]);
       });
@@ -201,7 +201,7 @@ describe("references.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target, (h) => {
+      parse(hierarchy, target, (h) => {
         // Assert
         expect(h.classes).toEqual(["bold", "red", "yellow"]);
       });

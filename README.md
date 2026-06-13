@@ -46,13 +46,13 @@ In order for Temme to do its magic, it requires a hierarchy blueprint as a javas
 
 ## Syntax
 
-```js
-Temme.parse(
-  (hierarchy: Object),
-  (target: HTMLElement),
-  (endCallback: (hierarchy: Hierarchy) => void),
-  (nodeCallback: (temmeId: string, hierarchy: Hierarchy) => void)
-);
+```ts
+parse(
+  hierarchy: object,
+  target: HTMLElement,
+  endCallback?: (hierarchy: Hierarchy) => void | Promise<void>,
+  nodeCallback?: (temmeId: string, hierarchy: Hierarchy) => void
+): object;
 ```
 
 ## Example for the browser
@@ -70,7 +70,7 @@ Given the following code snippet:
 <script>
   const target = document.getElementById("target");
 
-  Temme.parse(
+  parse(
     {
       classes: ["card", "card-dark"],
       childNodes: [
@@ -147,11 +147,11 @@ Simply that, giving Temme a target element and a skeleton object, it will render
 As simple and straightforward as we saw on the browser's side of things, the only difference is how we access Temme, and that's by requiring it.
 
 ```js
-// es5
-var Temme = require("path/to/temme");
+// CommonJS
+const { parse } = require("temmejs");
 
-// es6
-import Temme from "path/to/temme";
+// ESM
+import { parse } from "temmejs";
 ```
 
 As for the usages, it remains just as in the browser.
@@ -167,7 +167,7 @@ const hierarchy = {
 
 // Telling Temme to do its thing.
 try {
-  Temme.parse(hierarchy, target);
+  parse(hierarchy, target);
 }
 catch (e) {
   console.error(e.name, e.message);

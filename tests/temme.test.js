@@ -1,7 +1,7 @@
 /**
  *
  * @name:       temmejs
- * @version:    1.0.6
+ * @version:    1.0.7
  * @author:     EOussama
  * @license     MIT
  * @source:     https://github.com/EOussama/temmejs
@@ -10,7 +10,7 @@
  */
 
 
-const Temme = require("../build/temme");
+const { parse } = require("../build/temme");
 
 
 
@@ -35,7 +35,7 @@ describe("parsing simple hierarchies.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -77,7 +77,7 @@ describe("parsing simple hierarchies.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -123,7 +123,7 @@ describe("element to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -172,7 +172,7 @@ describe("element to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -261,7 +261,7 @@ describe("element to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -294,7 +294,7 @@ describe("element to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -327,7 +327,7 @@ describe("element to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -368,7 +368,7 @@ describe("template to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
@@ -425,7 +425,7 @@ describe("template to element reference.", () => {
 
     // Act.
     try {
-      Temme.parse(hierarchy, target);
+      parse(hierarchy, target);
     }
     catch (e) {
       console.log(e.name, e.message);
