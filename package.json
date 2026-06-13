@@ -13,8 +13,11 @@
 		"build": "tsc --outDir build --module commonjs",
 		"bundle": "webpack",
 		"docs": "rm -rf \"docs/assets/js/lib\" && mkdir \"docs/assets/js/lib\" && cp \"./dist/temme.js\" \"./docs/assets/js/lib/\"",
-		"prod": "pnpm clean && pnpm build && pnpm bundle && pnpm run docs",
+		"prod": "pnpm clean && pnpm build && pnpm bundle && pnpm docs",
 		"test": "jest"
+	},
+	"jest": {
+		"testEnvironment": "jsdom"
 	},
 	"packageManager": "pnpm@11.4.0",
 	"repository": {
@@ -38,6 +41,7 @@
 	"devDependencies": {
 		"@types/node": "^14.11.8",
 		"jest": "^30.4.2",
+		"jest-environment-jsdom": "^30.4.1",
 		"ts-loader": "^9.5.1",
 		"typescript": "^3.2.2",
 		"webpack": "^5.104.1",
