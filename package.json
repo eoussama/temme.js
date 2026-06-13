@@ -10,12 +10,13 @@
 	},
 	"scripts": {
 		"clean": "rm -rf dist && rm -rf build",
-		"build": "npx tsc --outDir build --module commonjs",
-		"bundle": "npx webpack",
+		"build": "tsc --outDir build --module commonjs",
+		"bundle": "webpack",
 		"docs": "rm -rf \"docs/assets/js/lib\" && mkdir \"docs/assets/js/lib\" && cp \"./dist/temme.js\" \"./docs/assets/js/lib/\"",
-		"prod": "npm run clean && npm run build && npm run bundle && npm run docs",
-		"test": "npx jest"
+		"prod": "pnpm clean && pnpm build && pnpm bundle && pnpm docs",
+		"test": "jest"
 	},
+	"packageManager": "pnpm@11.4.0",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/EOussama/temmejs.git"
@@ -36,10 +37,10 @@
 	"publishConfig": { "registry": "https://npm.pkg.github.com/" },
 	"devDependencies": {
 		"@types/node": "^14.11.8",
-		"jest": "^29.7.0",
-		"ts-loader": "^5.3.1",
+		"jest": "^30.4.2",
+		"ts-loader": "^9.5.1",
 		"typescript": "^3.2.2",
-		"webpack": "^5.94.0",
-		"webpack-cli": "^3.1.2"
+		"webpack": "^5.104.1",
+		"webpack-cli": "^5.1.4"
 	}
 }
