@@ -22,12 +22,15 @@
     "test": "tests"
   },
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist build",
     "build": "tsup",
     "dev": "tsup --watch",
+    "pretest": "tsc --project tsconfig.test.json",
+    "test": "jest",
     "typecheck": "tsc --noEmit",
-    "lint": "pnpm dx lint",
-    "test": "jest"
+    "lint": "eslint .",
+    "build:docs": "rm -rf docs/assets/js/lib && mkdir docs/assets/js/lib && cp ./dist/temme.js ./docs/assets/js/lib/",
+    "prod": "pnpm clean && pnpm build && pnpm build:docs"
   },
   "jest": {
     "testEnvironment": "jsdom"

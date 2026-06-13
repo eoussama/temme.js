@@ -1,2 +1,27 @@
-# Ignoring Node modules.
+# Dependencies
 node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment & local config
+.env
+.env.*
+!.env.example
+
+# Editor & OS artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Coverage
+coverage/
