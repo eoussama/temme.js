@@ -13,7 +13,7 @@
 		"build": "tsc --outDir build --module commonjs",
 		"bundle": "webpack",
 		"docs": "rm -rf \"docs/assets/js/lib\" && mkdir \"docs/assets/js/lib\" && cp \"./dist/temme.js\" \"./docs/assets/js/lib/\"",
-		"prod": "pnpm clean && pnpm build && pnpm bundle && pnpm docs",
+		"prod": "pnpm clean && pnpm build && pnpm bundle && pnpm run docs",
 		"test": "jest"
 	},
 	"packageManager": "pnpm@11.4.0",
