@@ -1,7 +1,7 @@
 {
   "name": "temmejs",
   "type": "module",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "packageManager": "pnpm@12.15.0",
   "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
   "author": "EOussama",
