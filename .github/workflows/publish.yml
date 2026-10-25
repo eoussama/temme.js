@@ -42,10 +42,11 @@ jobs:
     - name: Pack
       run: pnpm pack --pack-destination "$RUNNER_TEMP/npm"
 
-    # GitHub Packages only accepts packages scoped to the repository owner.
+    # GitHub Packages only accepts packages scoped to the repository owner, and doesn't
+    # support provenance, so the npm-specific publishConfig is dropped.
     - name: Pack for GitHub Packages
       run: |
-        node -e "const fs = require('node:fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.name = '@eoussama/temmejs'; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
+        node -e "const fs = require('node:fs'); const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')); pkg.name = '@eoussama/temmejs'; delete pkg.publishConfig; fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));"
         pnpm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/github"
 
     - name: Upload Tarballs
@@ -108,6 +109,6 @@ jobs:
         name: tarballs
 
     - name: Publish Package
-      run: npm publish ./github/*.tgz
+      run: npm publish ./github/*.tgz --provenance=false
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
