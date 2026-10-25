@@ -85,7 +85,10 @@ describe("published formats.", () => {
 
   it("package exports resolve to the ESM and CommonJS builds.", async () => {
     expect(require.resolve("temmejs")).toMatch(/dist[/\\]temme\.cjs$/);
-    expect(await import("temmejs")).toBe(await import(new URL("temme.mjs", dist).href));
+    // A variable specifier: the package's own types only exist once it's built.
+    const self = "temmejs";
+
+    expect(await import(self)).toBe(await import(new URL("temme.mjs", dist).href));
   });
 
   it("browser ESM (dist/temme.browser.mjs) is self-contained.", async () => {
