@@ -9,7 +9,7 @@ const banner = `/*! ${pkg.name} v${pkg.version} | ${pkg.license} | ${pkg.homepag
 const shared: UserConfig = {
   entry: { temme: "src/temme.ts" },
   outDir: "dist",
-  target: "es2020",
+  target: "es2022",
   banner,
 };
 

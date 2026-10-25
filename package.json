@@ -1,5 +1,5 @@
 {
-  "name": "@eoussama/temmejs",
+  "name": "temmejs",
   "type": "module",
   "version": "1.0.8",
   "packageManager": "pnpm@12.15.0",
