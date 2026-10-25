@@ -1,6 +1,6 @@
 /**
- * The error thrown when a
- * ref option starts with the symbole “@”.
+ * @description
+ * The error thrown when a reference value is not valid.
  */
 
 
@@ -9,29 +9,22 @@ import TemmyError from "../models/TemmyError";
 
 
 /**
- *
+ * @description
+ * The error thrown when a reference value is not valid.
  */
 export default class InvalidReferenceOptionValueError extends TemmyError {
-  /**
-   * The name of the error.
-   */
-  public name: string = "InvalidReferenceOptionValueError";
+  /** The name of the error. */
+  public override readonly name: string = "InvalidReferenceOptionValueError";
+
 
   /**
-   * The message of the error.
-   */
-  public message: string = "“ref” options must not begin with the “@” symbol";
-
-  /**
-   * Constructor with parameters.
+   * @description
+   * Constructs the error.
    *
-   * @param message The error's message.
+   * @param message The message of the error; a generic one is used when empty.
+   * @param options The standard error options, e.g. the `cause`.
    */
-  constructor(message: string) {
-    // Calling the parent class `TemmyError`.
-    super("");
-
-    // Updating the error's message.
-    this.message = message.length > 0 ? message : this.message;
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, "“ref” options must not begin with the “@” symbol", options);
   }
 }

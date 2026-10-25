@@ -1,6 +1,6 @@
 /**
  * @description
- * The "childNodes" option model — manages the child hierarchy list of an element.
+ * The "childNodes" option model — holds the child hierarchies of a hierarchy element.
  */
 
 
@@ -11,57 +11,43 @@ import Option from "../models/Option";
 
 /**
  * @description
- * Defines the `childNodes` option, which sets or inherits the element's child hierarchy list.
+ * Defines the `childNodes` option, which lists (and can inherit) an element's children.
+ * Children are never read from outer elements, as DOM nodes do not map to hierarchies.
  */
 export default class ChildNodesOption extends Option {
   /**
    * @description
    * Constructs a ChildNodesOption with its default metadata.
-   *
-   * @returns {void}
    */
   constructor() {
-    super("childNodes", "array", [], [], true);
+    super("childNodes", "array", [], []);
   }
 
 
   /**
    * @description
-   * Inherits child nodes from a referenced hierarchy.
-   * Respects the `allow`, `mode`, and `placement` sub-options from `from.children`.
+   * Inherits child nodes when `from.children.allow` is set. In "append" mode they are placed
+   * before or after the existing children (`from.children.placement`); otherwise they replace them.
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param childNodes The child node list to inherit.
+   * @param childNodes The (already copied) child hierarchies to inherit.
    * @returns {void}
    */
-  public inherit(hierarchy: Hierarchy, childNodes: unknown): void {
+  public override inherit(hierarchy: Hierarchy, childNodes: unknown): void {
     const incoming = childNodes as Array<Hierarchy>;
-    let children: Array<Hierarchy> = [...hierarchy.childNodes];
+    const { allow, placement } = hierarchy.from.children;
 
-    if (hierarchy.from.children.allow === true) {
-      if (hierarchy.from.mode === "append") {
-        if (hierarchy.from.children.placement === "before") {
-          children.unshift(...incoming);
-        }
-        else {
-          children.push(...incoming);
-        }
-      }
-      else {
-        children = incoming;
-      }
+    if (!allow) {
+      return;
     }
 
-    hierarchy.childNodes = children;
+    if (hierarchy.from.mode === "override") {
+      hierarchy.childNodes = incoming;
+    }
+    else {
+      hierarchy.childNodes = placement === "before"
+        ? [...incoming, ...hierarchy.childNodes]
+        : [...hierarchy.childNodes, ...incoming];
+    }
   }
-
-
-  /**
-   * @description
-   * Not applicable — returns the innerHTML of the element rather than a proper child list.
-   *
-   * @param element The HTML element to read from.
-   * @returns {string} The element's innerHTML.
-   */
-  public getKeyFromElement = (element: HTMLElement): unknown => element.innerHTML;
 }

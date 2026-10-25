@@ -1,6 +1,6 @@
 /**
- * The error thrown when an option
- * is not of a valid value.
+ * @description
+ * The error thrown when an option's value is not allowed.
  */
 
 
@@ -9,33 +9,22 @@ import TemmyError from "../models/TemmyError";
 
 
 /**
- *
+ * @description
+ * The error thrown when an option's value is not allowed.
  */
 export default class InvalidOptionValueError extends TemmyError {
-  /**
-   * The name of the error.
-   */
-  public name: string = "InvalidOptionValueError";
+  /** The name of the error. */
+  public override readonly name: string = "InvalidOptionValueError";
+
 
   /**
-   * The message of the error.
-   */
-  public message: string = "An option doesn't have a valid value";
-
-  /**
-   * Constructor with parameters.
+   * @description
+   * Constructs the error.
    *
-   * @param option The invalid option's name.
-   * @param value The invalid option's value.
+   * @param option The offending option name.
+   * @param value The offending value.
    */
   constructor(option: string, value: string) {
-    // Calling the parent class `TemmyError`.
-    super("");
-
-    // Constructing the error message.
-    const message: string = `The “${option}” option doesn't accept “${value}” as a value`;
-
-    // Updating the error's message.
-    this.message = option.length > 0 ? message : this.message;
+    super(option.length > 0 ? `The “${option}” option doesn't accept “${value}” as a value` : "", "An option doesn't have a valid value");
   }
 }

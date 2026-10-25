@@ -548,7 +548,7 @@ describe("sanitizer behavior.", () => {
 
     sanitizer.sanitize(hierarchy);
 
-    expect(hierarchy.templates[0].classes).toEqual(["z", "a", "z"]);
+    expect(hierarchy.templates[0].classes).toEqual(["a", "z"]);
     expect(hierarchy.templates[0].from.mode).toBe("append");
     expect(hierarchy.templates[0].templates).toBeUndefined();
   });
@@ -631,12 +631,12 @@ describe("validator behavior through public APIs.", () => {
     );
   });
 
-  it("validateOptions throws InvalidReferencingOptionError when include and exclude coexist.", () => {
+  it("validateOptions throws InvalidReferencingOptionError when include and exclude both restrict.", () => {
     expect(() => validator.validateOptions({
       from: {
         ref: "x",
-        include: [],
-        exclude: [],
+        include: ["id"],
+        exclude: ["classes"],
       },
     })).toThrow();
   });

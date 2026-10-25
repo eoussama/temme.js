@@ -5,8 +5,8 @@
 
 
 import type { Hierarchy } from "../models/Hierarchy";
-import type { IParser } from "../models/Option";
 import Option from "../models/Option";
+import { uniqueSorted } from "../utils";
 
 
 
@@ -14,59 +14,42 @@ import Option from "../models/Option";
  * @description
  * Defines the `classes` option, which sets or inherits the element's CSS class list.
  */
-export default class ClassesOption extends Option implements IParser {
+export default class ClassesOption extends Option {
   /**
    * @description
    * Constructs a ClassesOption with its default metadata.
-   *
-   * @returns {void}
    */
   constructor() {
-    super("classes", "array", [], [], true);
+    super("classes", "array", [], []);
   }
 
 
   /**
    * @description
-   * Inherits CSS classes from a referenced hierarchy.
-   * In "append" mode the incoming classes are merged; otherwise they replace existing ones.
-   * Duplicates are removed and the list is sorted after merging.
+   * Inherits CSS classes. In "append" mode they are merged with the existing ones,
+   * otherwise they replace them. The result is de-duplicated and sorted.
    *
    * @param hierarchy The hierarchy object that inherits.
    * @param classes The class list to inherit.
    * @returns {void}
    */
-  public inherit(hierarchy: Hierarchy, classes: unknown): void {
-    const cls = classes as Array<string>;
+  public override inherit(hierarchy: Hierarchy, classes: unknown): void {
+    const incoming = classes as Array<string>;
+    const merged = hierarchy.from.mode === "append" ? [...hierarchy.classes, ...incoming] : incoming;
 
-    if (hierarchy.from.mode === "append") {
-      hierarchy.classes.push(...cls);
-    }
-    else {
-      hierarchy.classes = cls;
-    }
-
-    hierarchy.classes = hierarchy.classes.filter(
-      (c: string, index: number) => hierarchy.classes.indexOf(c) === index,
-    );
-
-    hierarchy.classes.sort();
+    hierarchy.classes = uniqueSorted(merged);
   }
 
 
   /**
    * @description
-   * Extracts the CSS class list from an existing HTML element.
+   * Reads the class list of an outer element.
    *
    * @param element The HTML element to read classes from.
-   * @returns {Array<string>} An array of class name strings.
+   * @returns {Array<string>} The element's class names.
    */
-  public getKeyFromElement(element: HTMLElement): unknown {
-    const classList: Array<string> = [];
-
-    element.classList.forEach((cls: string) => classList.push(cls));
-
-    return classList;
+  public override getKeyFromElement(element: Element): unknown {
+    return [...element.classList];
   }
 
 
@@ -78,7 +61,8 @@ export default class ClassesOption extends Option implements IParser {
    * @param hierarchy The hierarchy object supplying the class list.
    * @returns {void}
    */
-  public parse(element: HTMLElement, hierarchy: Hierarchy): void {
+  public override parse(element: HTMLElement, hierarchy: Hierarchy): void {
+    // Some DOM implementations create an empty `class` attribute when adding no class.
     if (hierarchy.classes.length > 0) {
       element.classList.add(...hierarchy.classes);
     }

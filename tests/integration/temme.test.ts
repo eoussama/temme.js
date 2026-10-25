@@ -229,12 +229,12 @@ describe("element to element reference.", () => {
     span2.textContent = "Hello, world!";
 
     div1.classList.add("bold", "red");
-    div1.dataset.id = 100;
-    div1.setAttribute("visible", true);
+    div1.dataset.id = "100";
+    div1.setAttribute("visible", "true");
 
     div2.classList.add("bold", "red");
-    div2.dataset.id = 100;
-    div2.setAttribute("visible", true);
+    div2.dataset.id = "100";
+    div2.setAttribute("visible", "true");
 
     div1.appendChild(span1);
     div2.appendChild(span2);
@@ -295,7 +295,7 @@ describe("element to element reference.", () => {
       },
     };
 
-    result.setAttribute("visible", true);
+    result.setAttribute("visible", "true");
 
     // Act.
     parse(hierarchy, target);
@@ -381,8 +381,8 @@ describe("template to element reference.", () => {
     };
 
     button.classList.add("bold", "red");
-    button.dataset.id = 100;
-    button.setAttribute("visible", true);
+    button.dataset.id = "100";
+    button.setAttribute("visible", "true");
     result.appendChild(button);
 
     // Act.

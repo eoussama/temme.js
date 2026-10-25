@@ -13,7 +13,7 @@
 import { describe, expect, it } from "vitest";
 
 
-import { options } from "../../src/modules/options";
+import { getOptions } from "../../src/modules/options";
 import * as validator from "../../src/modules/validator";
 
 
@@ -116,7 +116,7 @@ describe("hierarchy checks.", () => {
 describe("option checks.", () => {
   it("checking if all options are loaded.", () => {
     // Assert.
-    expect(options.length).toBe(11);
+    expect(getOptions().length).toBe(11);
   });
 
   it("“InvalidOptionNameError” should be thrown if the hierarchy object has an invalid option name.", () => {
@@ -226,8 +226,8 @@ describe("option checks.", () => {
     const hierarchy = {
       from: {
         ref: "some-ref",
-        include: [],
-        exclude: [],
+        include: ["id"],
+        exclude: ["classes"],
       },
     };
     let errorName = "";
