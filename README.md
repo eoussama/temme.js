@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="docs/assets/img/logo.svg" width="150" alt="Temme JS logo" />
+    <img src="https://raw.githubusercontent.com/eoussama/temmejs/master/docs/assets/img/logo.svg" width="150" alt="Temme JS logo" />
     <h1 align="center">Temme JS</h1>
     <p align="center">
         <a href="https://www.npmjs.com/package/temmejs"><img src="https://img.shields.io/npm/v/temmejs" alt="npm version" /></a>
