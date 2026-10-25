@@ -1,1 +1,1 @@
-parse(hierarchy: object, target: HTMLElement, endCallback?: (hierarchy: Hierarchy) => void | Promise<void>, nodeCallback?: (temmeId: string, hierarchy: Hierarchy) => void): object;
+parse(hierarchy: object, target: HTMLElement, endCallback?: (hierarchy: Hierarchy) => void | Promise<void>, nodeCallback?: (temmeId: string, hierarchy: Hierarchy) => void): Hierarchy;
