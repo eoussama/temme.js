@@ -1,13 +1,14 @@
 /**
  *
  * @name:       temmejs
- * @version:    1.0.7
  * @author:     EOussama
  * @license     MIT
- * @source:     https://github.com/EOussama/temmejs
+ * @source:     https://github.com/eoussama/temmejs
  *
  * The main javascript file of the docs.
  */
+
+/* global hljs */
 
 import { parse } from "./lib/temme.js";
 
@@ -69,17 +70,19 @@ window.addEventListener("load", async () => {
                     frameborder: 0,
                     height: "30px",
                     scrolling: 0,
-                    src: "https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=star&size=large",
+                    src: "https://ghbtns.com/github-btn.html?user=eoussama&repo=temmejs&type=star&size=large",
                     width: "80px",
                   },
                 },
                 {
+                  // Append mode keeps the own tag name, so the iframe has to be named here too.
+                  name: "iframe",
                   from: {
                     ref: "github-btn",
                     mode: "append",
                   },
                   attributes: {
-                    src: "https://ghbtns.com/github-btn.html?user=EOussama&repo=temmejs&type=fork&size=large",
+                    src: "https://ghbtns.com/github-btn.html?user=eoussama&repo=temmejs&type=fork&size=large",
                   },
                 },
               ],
@@ -108,7 +111,7 @@ window.addEventListener("load", async () => {
                   name: "p",
                   content: {
                     type: "html",
-                    value: "A more in-depth documentation can be found <a href=\"https://github.com/EOussama/temmejs/wiki\">at the wiki</a>.",
+                    value: "A more in-depth documentation can be found <a href=\"https://github.com/eoussama/temmejs/wiki\">at the wiki</a>.",
                   },
                 },
               ],
@@ -193,7 +196,7 @@ window.addEventListener("load", async () => {
                   name: "p",
                   content: {
                     type: "html",
-                    value: "After adding the <code>temme.js</code> or <code>temme.min.js</code> to your source files, simply visualize an HTML skeleton in your head and describe it as a javascript object.",
+                    value: "After installing it with <code>pnpm add temmejs</code> (or loading <code>temme.iife.js</code> from a CDN), simply visualize an HTML skeleton in your head and describe it as a javascript object.",
                   },
                 },
                 {
@@ -350,7 +353,7 @@ window.addEventListener("load", async () => {
 
   // Highlighting the code snippets.
   document.querySelectorAll("pre > code").forEach((block) => {
-    hljs.highlightBlock(block);
+    hljs.highlightElement(block);
   });
 });
 

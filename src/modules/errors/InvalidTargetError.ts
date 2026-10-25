@@ -1,36 +1,30 @@
 /**
- * The error thrown when a target is not a valid
- * HTML element.
+ * @description
+ * The error thrown when a target is not a valid HTML element.
  */
+
 
 import TemmyError from "../models/TemmyError";
 
 
 
 /**
- *
+ * @description
+ * The error thrown when a target is not a valid HTML element.
  */
 export default class InvalidTargetError extends TemmyError {
-  /**
-   * The name of the error.
-   */
-  public name: string = "InvalidTargetError";
+  /** The name of the error. */
+  public override readonly name: string = "InvalidTargetError";
+
 
   /**
-   * The message of the error.
-   */
-  public message: string = "The target is not a valid HTML element";
-
-  /**
-   * Constructor with parameters.
+   * @description
+   * Constructs the error.
    *
-   * @param message The message of the error.
+   * @param message The message of the error; a generic one is used when empty.
+   * @param options The standard error options, e.g. the `cause`.
    */
-  constructor(message: string) {
-    // Calling the parent class `TemmyError`.
-    super("");
-
-    // Updating the error's message.
-    this.message = message.length > 0 ? message : this.message;
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, "The target is not a valid HTML element", options);
   }
 }

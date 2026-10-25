@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "typeRoots": ["./node_modules/@types"],
+    "types": ["node"],
     "strict": true,
-    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
     "declaration": true,
-    "removeComments": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
+    "noEmit": true,
+    "isolatedDeclarations": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "tsup.config.ts"],
-  "exclude": ["node_modules", "dist", "build"]
+  "include": ["src", "tests", "scripts", "*.config.ts"],
+  "exclude": ["node_modules", "dist", "_site", "reports", "coverage", "tests/smoke/fixtures"]
 }

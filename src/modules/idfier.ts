@@ -5,36 +5,48 @@
 
 
 import type { Hierarchy } from "./models/Hierarchy";
-import type { Template } from "./models/Template";
 
+
+
+/** The length of a hierarchy's temmeId. */
+export const HIERARCHY_ID_LENGTH = 6;
+
+/** The length of a template's temmeId. */
+export const TEMPLATE_ID_LENGTH = 4;
+
+/** The characters temmeIds are made of. */
+const ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
 /**
  * @description
- * Assigns a unique temmeId trail to a hierarchy object and all of its descendants.
+ * Assigns a temmeId trail to a hierarchy object and all of its descendants and templates.
+ * Every temmeId is unique within the tree.
  *
  * @param hierarchy The hierarchy object to assign a temmeId to.
- * @param temmeIds The series of temmeIds leading up to the current hierarchy object.
- * @param mode When `false` (default) the generated id is 6 characters (hierarchy);
- *             when `true` it is 4 characters (template).
+ * @param temmeIds The trail of temmeIds leading up to the current hierarchy object.
+ * @param isTemplate Whether the object is a template (4-character id) or not (6-character id).
+ * @param used The temmeIds already handed out in this tree.
  * @returns {void}
  */
-export function idfy(hierarchy: Hierarchy, temmeIds: Array<string> = [], mode: boolean = false): void {
-  const temmeId: string = generateTemmeId(mode);
+export function idfy(
+  hierarchy: Hierarchy,
+  temmeIds: Array<string> = [],
+  isTemplate: boolean = false,
+  used: Set<string> = new Set(),
+): void {
+  const length = isTemplate ? TEMPLATE_ID_LENGTH : HIERARCHY_ID_LENGTH;
+  let temmeId = generateTemmeId(length);
 
+  while (used.has(temmeId)) {
+    temmeId = generateTemmeId(length);
+  }
+
+  used.add(temmeId);
   hierarchy.temmeIds = [...temmeIds, temmeId];
 
-  if ("childNodes" in hierarchy) {
-    (hierarchy.childNodes as Array<Hierarchy>).forEach((child: Hierarchy) => {
-      idfy(child, hierarchy.temmeIds);
-    });
-  }
-
-  if ("templates" in hierarchy) {
-    (hierarchy.templates as Array<Hierarchy>).forEach((template: Hierarchy) => {
-      idfy(template, hierarchy.temmeIds, true);
-    });
-  }
+  hierarchy.childNodes?.forEach((child: Hierarchy) => idfy(child, hierarchy.temmeIds, false, used));
+  hierarchy.templates?.forEach((template: Hierarchy) => idfy(template, hierarchy.temmeIds, true, used));
 }
 
 
@@ -43,32 +55,25 @@ export function idfy(hierarchy: Hierarchy, temmeIds: Array<string> = [], mode: b
  * Returns the last (innermost) temmeId of a hierarchy or template object.
  *
  * @param hierarchy The hierarchy or template to read the temmeId from.
- * @returns {string} The innermost temmeId string.
+ * @returns {string} The innermost temmeId.
  */
-export function getTemmeId(hierarchy: Hierarchy | Template): string {
-  return hierarchy.temmeIds[hierarchy.temmeIds.length - 1];
+export function getTemmeId(hierarchy: Hierarchy): string {
+  return hierarchy.temmeIds[hierarchy.temmeIds.length - 1] as string;
 }
 
 
 /**
  * @description
- * Generates a random temmeId string.
- * Hierarchy IDs are 6 characters; template IDs are 4 characters.
+ * Generates a random temmeId of the given length.
  *
- * @param mode `false` for a 6-character hierarchy id, `true` for a 4-character template id.
+ * @param length The number of characters.
  * @returns {string} The generated temmeId.
  */
-function generateTemmeId(mode: boolean = false): string {
-  const chars = "0123456789abcdefghijklmnopqrstuvwxyz";
-  const max = mode === false ? 6 : 4;
-
+export function generateTemmeId(length: number): string {
   let key = "";
 
-  for (let i = 0; i < max; i++) {
-    const index = Math.floor(Math.random() * chars.length);
-    const uppercase = Math.floor(Math.random() * 2);
-
-    key += uppercase === 1 ? chars[index].toUpperCase() : chars[index];
+  for (let i = 0; i < length; i++) {
+    key += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
   }
 
   return key;

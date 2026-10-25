@@ -4,8 +4,7 @@
  */
 
 
-import type { Hierarchy } from "../models/Hierarchy";
-import type { IParser } from "../models/Option";
+import type { AttributeValue, Hierarchy } from "../models/Hierarchy";
 import Option from "../models/Option";
 
 
@@ -14,72 +13,47 @@ import Option from "../models/Option";
  * @description
  * Defines the `attributes` option, which sets or inherits an element's HTML attributes.
  */
-export default class AttributesOption extends Option implements IParser {
+export default class AttributesOption extends Option {
   /**
    * @description
    * Constructs an AttributesOption with its default metadata.
-   *
-   * @returns {void}
    */
   constructor() {
-    super("attributes", "object", [], {}, true);
+    super("attributes", "object", [], {});
   }
 
 
   /**
    * @description
-   * Inherits attributes from a referenced hierarchy.
-   * In "append" mode existing attributes take precedence; otherwise the incoming ones do.
+   * Inherits attributes. In "append" mode existing attributes win; otherwise incoming ones do.
    *
    * @param hierarchy The hierarchy object that inherits.
    * @param attributes The attribute map to inherit.
    * @returns {void}
    */
-  public inherit(hierarchy: Hierarchy, attributes: unknown): void {
+  public override inherit(hierarchy: Hierarchy, attributes: unknown): void {
     const incoming = attributes as Record<string, string>;
-    const merged: Record<string, string> = { ...incoming };
 
-    if (hierarchy.from.mode === "append") {
-      for (const attrKey in hierarchy.attributes) {
-        merged[attrKey] = hierarchy.attributes[attrKey];
-      }
-    }
-    else {
-      for (const attrKey in hierarchy.attributes) {
-        if (!(attrKey in merged)) {
-          merged[attrKey] = hierarchy.attributes[attrKey];
-        }
-      }
-    }
-
-    hierarchy.attributes = merged;
+    hierarchy.attributes = hierarchy.from.mode === "append"
+      ? { ...incoming, ...hierarchy.attributes }
+      : { ...hierarchy.attributes, ...incoming };
   }
 
 
   /**
    * @description
-   * Extracts the attribute map from an existing HTML element.
-   * Excludes `id`, `class`, and `data-*` attributes.
+   * Reads the attributes of an outer element, excluding `id`, `class` and `data-*`
+   * (those are covered by their own options).
    *
    * @param element The HTML element to read attributes from.
    * @returns {Record<string, string>} A map of attribute names to values.
    */
-  public getKeyFromElement(element: HTMLElement): unknown {
-    const attrs: Record<string, string> = {};
-
-    for (const attrKey in element.attributes) {
-      const attr = element.attributes[attrKey as unknown as number];
-
-      if (
-        !Number.isNaN(Number.parseInt(attrKey))
-        && !["id", "class"].includes(attr.nodeName)
-        && !attr.nodeName.startsWith("data-")
-      ) {
-        attrs[attr.nodeName] = attr.nodeValue ?? "";
-      }
-    }
-
-    return attrs;
+  public override getKeyFromElement(element: Element): unknown {
+    return Object.fromEntries(
+      Array.from(element.attributes)
+        .filter((attr: Attr) => attr.name !== "id" && attr.name !== "class" && !attr.name.startsWith("data-"))
+        .map((attr: Attr) => [attr.name, attr.value]),
+    );
   }
 
 
@@ -91,9 +65,9 @@ export default class AttributesOption extends Option implements IParser {
    * @param hierarchy The hierarchy object supplying the attributes.
    * @returns {void}
    */
-  public parse(element: HTMLElement, hierarchy: Hierarchy): void {
-    for (const attrKey in hierarchy.attributes) {
-      element.setAttribute(attrKey, hierarchy.attributes[attrKey]);
+  public override parse(element: HTMLElement, hierarchy: Hierarchy): void {
+    for (const [name, value] of Object.entries(hierarchy.attributes as Record<string, AttributeValue>)) {
+      element.setAttribute(name, String(value));
     }
   }
 }
