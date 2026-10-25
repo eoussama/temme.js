@@ -4,6 +4,15 @@ node_modules/
 # Build outputs
 dist/
 build/
+_site/
+docs/assets/js/lib/
+
+# Test & report outputs
+coverage/
+reports/
+.stryker-tmp/
+test-results/
+playwright-report/
 
 # Environment & local config
 .env
@@ -22,6 +31,3 @@ Thumbs.db
 *.log
 npm-debug.log*
 pnpm-debug.log*
-
-# Coverage
-coverage/

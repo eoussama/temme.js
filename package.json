@@ -1,18 +1,19 @@
 {
   "name": "@eoussama/temmejs",
   "type": "module",
-  "version": "1.0.7",
-  "packageManager": "pnpm@11.4.0",
+  "version": "1.0.8",
+  "packageManager": "pnpm@12.15.0",
   "description": "Temme (or Emmet in reverse) is to javascript what Emmet is to HTML and CSS, with no doubts, Emmet saved us from the headache of working with HTML and CSS, and now, Temme is doing Javascript the same favour too.",
   "author": "EOussama",
   "license": "MIT",
-  "homepage": "https://github.com/EOussama/temmejs#readme",
+  "funding": "https://github.com/sponsors/eoussama",
+  "homepage": "https://github.com/eoussama/temme.js#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EOussama/temmejs.git"
+    "url": "git+https://github.com/eoussama/temme.js.git"
   },
   "bugs": {
-    "url": "https://github.com/EOussama/temmejs/issues"
+    "url": "https://github.com/eoussama/temme.js/issues"
   },
   "keywords": [
     "typescript",
@@ -21,51 +22,81 @@
     "dom",
     "emmet"
   ],
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/temme.d.ts",
-      "import": "./dist/temme.js",
-      "require": "./dist/temme.cjs"
-    }
+      "import": {
+        "types": "./dist/temme.d.mts",
+        "default": "./dist/temme.mjs"
+      },
+      "require": {
+        "types": "./dist/temme.d.cts",
+        "default": "./dist/temme.cjs"
+      }
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
   "main": "./dist/temme.cjs",
-  "module": "./dist/temme.js",
-  "types": "./dist/temme.d.ts",
+  "module": "./dist/temme.mjs",
+  "unpkg": "./dist/temme.umd.js",
+  "jsdelivr": "./dist/temme.umd.js",
+  "types": "./dist/temme.d.cts",
   "files": [
     "dist"
   ],
-  "directories": {
-    "doc": "docs",
-    "example": "examples",
-    "test": "tests"
+  "engines": {
+    "node": ">=24"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=24",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.15.0",
+      "onFail": "error"
+    }
   },
   "scripts": {
-    "clean": "rm -rf dist build",
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "pretest": "tsc --project tsconfig.test.json",
-    "test": "jest",
-    "typecheck": "tsc --noEmit",
-    "lint": "pnpm dx lint",
-    "lint:fix": "pnpm dx lint --fix",
-    "build:docs": "rm -rf docs/assets/js/lib && mkdir -p docs/assets/js/lib && esbuild src/temme.ts --bundle --format=esm --minify --sourcemap --outfile=docs/assets/js/lib/temme.js --platform=browser --target=es2020",
-    "prod": "pnpm clean && pnpm build && pnpm build:docs"
-  },
-  "jest": {
-    "testEnvironment": "jsdom"
+    "build": "tsdown",
+    "build:site": "node scripts/build-site.mjs",
+    "dev": "tsdown --watch",
+    "typecheck": "node node_modules/@typescript/native/bin/tsc --noEmit",
+    "lint": "dx lint",
+    "lint:fix": "dx fix",
+    "test": "vitest run --project unit --coverage",
+    "test:watch": "vitest --project unit",
+    "test:smoke": "vitest run --project smoke",
+    "test:e2e": "playwright test",
+    "test:mutation": "stryker run",
+    "check": "pnpm audit && pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:smoke && pnpm build:site && pnpm test:e2e && pnpm test:mutation",
+    "prepack": "pnpm typecheck && pnpm lint && pnpm test && pnpm build"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "access": "public",
+    "provenance": true
   },
   "dependencies": {
-    "@eoussama/core": "^0.0.4"
+    "@eoussama/core": "^0.1.2"
   },
   "devDependencies": {
-    "@eoussama/dx": "^0.0.4",
-    "@types/node": "^14.11.8",
-    "jest": "^30.4.2",
-    "jest-environment-jsdom": "^30.4.1",
-    "tsup": "^8.5.1",
-    "typescript": "^5.8.3"
+    "@arethetypeswrong/core": "^0.18.5",
+    "@eoussama/dx": "^0.1.3",
+    "@playwright/test": "^1.64.1",
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
+    "@types/node": "^24.19.2",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "happy-dom": "^21.0.4",
+    "publint": "^0.3.25",
+    "rolldown": "^1.2.15",
+    "tsdown": "^0.23.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   }
 }

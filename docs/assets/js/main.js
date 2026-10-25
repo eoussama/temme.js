@@ -9,6 +9,8 @@
  * The main javascript file of the docs.
  */
 
+/* global hljs */
+
 import { parse } from "./lib/temme.js";
 
 window.addEventListener("load", async () => {
