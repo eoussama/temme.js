@@ -72,7 +72,7 @@
     "test:smoke": "vitest run --project smoke",
     "test:e2e": "playwright test",
     "test:mutation": "stryker run",
-    "check": "pnpm audit && pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:smoke && pnpm build:site && pnpm test:e2e && pnpm test:mutation",
+    "check": "pnpm audit && pnpm typecheck && pnpm lint && pnpm test && pnpm build && pnpm test:smoke && pnpm build:site && playwright install chromium && pnpm test:e2e && pnpm test:mutation",
     "prepack": "pnpm typecheck && pnpm lint && pnpm test && pnpm build"
   },
   "publishConfig": {
