@@ -19,7 +19,8 @@ const config: PlaywrightTestConfig = defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   // Serves the repository root so the built site (`_site/`), `examples/` and `dist/` are all reachable.
   webServer: {
-    command: `pnpm exec vite --config tests/e2e/vite.config.ts --port ${port} --strictPort`,
+    command: `node tests/e2e/server.mjs`,
+    env: { PORT: String(port) },
     url: `http://localhost:${port}/_site/index.html`,
     reuseExistingServer: !process.env.CI,
   },

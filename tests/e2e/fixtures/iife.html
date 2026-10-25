@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IIFE fixture</title>
+</head>
+<body>
+  <div id="target"></div>
+  <script src="/dist/temme.iife.js"></script>
+  <script>
+    Temme.parse({ classes: ["iife"], childNodes: [{ name: "p", content: { value: "rendered" } }] }, document.getElementById("target"));
+  </script>
+</body>
+</html>

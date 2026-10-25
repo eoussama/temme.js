@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UMD fixture</title>
+</head>
+<body>
+  <div id="target"></div>
+  <script src="/dist/temme.umd.js"></script>
+  <script>
+    Temme.parse({ classes: ["umd"], childNodes: [{ name: "p", content: { value: "rendered" } }] }, document.getElementById("target"));
+  </script>
+</body>
+</html>

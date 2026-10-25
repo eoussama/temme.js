@@ -17,5 +17,5 @@
     "skipLibCheck": true
   },
   "include": ["src", "tests", "scripts", "*.config.ts"],
-  "exclude": ["node_modules", "dist", "_site", "reports", "coverage"]
+  "exclude": ["node_modules", "dist", "_site", "reports", "coverage", "tests/smoke/fixtures"]
 }

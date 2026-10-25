@@ -7,13 +7,13 @@
   "author": "EOussama",
   "license": "MIT",
   "funding": "https://github.com/sponsors/eoussama",
-  "homepage": "https://github.com/eoussama/temme.js#readme",
+  "homepage": "https://github.com/eoussama/temmejs#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eoussama/temme.js.git"
+    "url": "git+https://github.com/eoussama/temmejs.git"
   },
   "bugs": {
-    "url": "https://github.com/eoussama/temme.js/issues"
+    "url": "https://github.com/eoussama/temmejs/issues"
   },
   "keywords": [
     "typescript",
@@ -96,7 +96,6 @@
     "rolldown": "^1.2.15",
     "tsdown": "^0.23.2",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "vite": "^8.3.5",
     "vitest": "^5.0.5"
   }
 }
