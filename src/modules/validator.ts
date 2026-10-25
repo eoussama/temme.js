@@ -9,7 +9,6 @@ import { isObject } from "@eoussama/core";
 import InvalidHierarchyError from "./errors/InvalidHierarchyError";
 import InvalidOptionNameError from "./errors/InvalidOptionNameError";
 import InvalidOptionTypeError from "./errors/InvalidOptionTypeError";
-import InvalidOptionValueError from "./errors/InvalidOptionValueError";
 import InvalidReferenceOptionValueError from "./errors/InvalidReferenceOptionValueError";
 import InvalidReferencingOptionError from "./errors/InvalidReferencingOptionError";
 import InvalidSubOptionNameError from "./errors/InvalidSubOptionNameError";
@@ -65,7 +64,6 @@ export function isValidHTMLElement(target: unknown): target is HTMLElement {
  * @throws {InvalidOptionNameError} When an unrecognised option key is encountered.
  * @throws {InvalidTemplateOptionError} When a template contains a forbidden option.
  * @throws {InvalidOptionTypeError} When an option's value has the wrong type.
- * @throws {InvalidOptionValueError} When an option's value is not in the allowed set.
  * @throws {InvalidSubOptionNameError} When an unrecognised sub-option key is encountered.
  * @throws {InvalidSubOptionTypeError} When a sub-option's value has the wrong type.
  * @throws {InvalidSubOptionValueError} When a sub-option's value is not in the allowed set.
@@ -94,10 +92,7 @@ export function validateOptions(hierarchy: unknown, isTemplate: boolean = false)
       throw new InvalidOptionTypeError(label, type);
     }
 
-    if (!Option.validateOptionValue(value, option)) {
-      throw new InvalidOptionValueError(label, String(value));
-    }
-
+    // No top-level option restricts its values; only sub-options (e.g. `mode`) do.
     if (option.keys !== undefined) {
       validateSubOptions(label, value as Record<string, unknown>, option.keys);
     }

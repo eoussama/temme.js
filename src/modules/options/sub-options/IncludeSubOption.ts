@@ -34,6 +34,7 @@ export default class IncludeSubOption extends Option {
    * Constructs an IncludeSubOption with its default metadata.
    */
   constructor() {
-    super("include", "array", INHERITABLE, [...INHERITABLE]);
+    // The default is sorted like user-provided lists, so sanitizing stays idempotent.
+    super("include", "array", INHERITABLE, [...INHERITABLE].sort());
   }
 }

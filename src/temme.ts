@@ -3,8 +3,7 @@
  * with no doubts, Emmet saved us from the headache of working with HTML and CSS,
  * and now, Temme is doing Javascript the same favour too.
  *
- * @license MIT
- * @see https://github.com/eoussama/temme.js
+ * https://github.com/eoussama/temmejs
  */
 
 

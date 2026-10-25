@@ -11,7 +11,7 @@ import InvalidReferenceError from "./errors/InvalidReferenceError";
 import InvalidReferenceOptionValueError from "./errors/InvalidReferenceOptionValueError";
 import InvalidTemplateReferencingError from "./errors/InvalidTemplateReferencingError";
 import ReferenceOutOfScopeError from "./errors/ReferenceOutOfScopeError";
-import { findOption, forbiddenOptions } from "./options";
+import { findOption } from "./options";
 import { clone, isResolved, markResolved } from "./utils";
 
 
@@ -209,8 +209,7 @@ function validateScope(node: ReferenceNode, context: Context): void {
 
 /**
  * @description
- * Returns the option labels a node inherits: `include` minus `exclude`, without the
- * options templates can't hold.
+ * Returns the option labels a node inherits: `include` minus `exclude`.
  *
  * @param node The inheriting node.
  * @returns {Array<InheritableOption>} The labels to inherit.
@@ -218,9 +217,7 @@ function validateScope(node: ReferenceNode, context: Context): void {
 function getInheritedLabels(node: ReferenceNode): Array<InheritableOption> {
   const { include, exclude } = node.hierarchy.from;
 
-  return include.filter(
-    (label: InheritableOption) => !exclude.includes(label) && !(node.isTemplate && forbiddenOptions.includes(label)),
-  );
+  return include.filter((label: InheritableOption) => !exclude.includes(label));
 }
 
 
@@ -237,12 +234,12 @@ function resolve(node: ReferenceNode, context: Context): void {
   const { hierarchy } = node;
   const { ref } = hierarchy.from;
 
-  if (isResolved(hierarchy)) {
-    return;
-  }
-
   if (context.resolving.has(hierarchy)) {
     throw new CircularReferenceError(ref);
+  }
+
+  if (isResolved(hierarchy)) {
+    return;
   }
 
   context.resolving.add(hierarchy);
@@ -261,7 +258,8 @@ function resolve(node: ReferenceNode, context: Context): void {
 
 /**
  * @description
- * Applies inheritance from an outer element. Child nodes are never inherited from the DOM.
+ * Applies inheritance from an outer element. Options that can't be read from the DOM
+ * (the tag name and the child nodes) are skipped.
  *
  * @param node The inheriting node.
  * @param context The resolution context.
@@ -274,16 +272,14 @@ function inheritFromElement(node: ReferenceNode, context: Context): void {
 
   const element = queryOuterElement(context.dom, node.hierarchy.from.ref.substring(1)) as Element;
 
-  getInheritedLabels(node)
-    .filter((label: InheritableOption) => label !== "childNodes")
-    .forEach((label: InheritableOption) => {
-      const option = findOption(label) as Option;
-      const value = option.getKeyFromElement(element);
+  getInheritedLabels(node).forEach((label: InheritableOption) => {
+    const option = findOption(label) as Option;
+    const value = option.getKeyFromElement(element);
 
-      if (value !== null) {
-        option.inherit(node.hierarchy, value);
-      }
-    });
+    if (value !== null) {
+      option.inherit(node.hierarchy, value);
+    }
+  });
 }
 
 
@@ -291,6 +287,8 @@ function inheritFromElement(node: ReferenceNode, context: Context): void {
  * @description
  * Applies inheritance from another hierarchy of the tree, resolving it first.
  * Inherited values are copied, so the two hierarchies never share mutable state.
+ * Options the source doesn't hold (templates have no tag name and no children) are skipped,
+ * and so are child nodes unless `from.children.allow` is set.
  *
  * @param node The inheriting node.
  * @param source The referenced node.
@@ -302,9 +300,10 @@ function inheritFromHierarchy(node: ReferenceNode, source: ReferenceNode, contex
 
   getInheritedLabels(node)
     .filter((label: InheritableOption) => Object.hasOwn(source.hierarchy, label))
+    .filter((label: InheritableOption) => label !== "childNodes" || node.hierarchy.from.children.allow)
     .forEach((label: InheritableOption) => {
       const value = label === "childNodes"
-        ? inheritChildNodes(node, source, context)
+        ? inheritChildNodes(source, context)
         : clone(source.hierarchy[label]);
 
       (findOption(label) as Option).inherit(node.hierarchy, value);
@@ -317,18 +316,12 @@ function inheritFromHierarchy(node: ReferenceNode, source: ReferenceNode, contex
  * Builds the child nodes a node inherits: fully resolved copies of the source's children,
  * stripped of their `ref` so that they never shadow the originals.
  *
- * @param node The inheriting node.
- * @param source The referenced node.
+ * @param source The referenced (and already resolved) node.
  * @param context The resolution context.
- * @returns {Array<Hierarchy>} The copied children (empty when children aren't allowed).
+ * @returns {Array<Hierarchy>} The copied children.
  */
-function inheritChildNodes(node: ReferenceNode, source: ReferenceNode, context: Context): Array<Hierarchy> {
-  if (!node.hierarchy.from.children.allow) {
-    return [];
-  }
-
+function inheritChildNodes(source: ReferenceNode, context: Context): Array<Hierarchy> {
   collect(source.hierarchy, source.depth, source.isTemplate)
-    .slice(1)
     .forEach((descendant: ReferenceNode) => resolve(context.byHierarchy.get(descendant.hierarchy) as ReferenceNode, context));
 
   const copies = clone(source.hierarchy.childNodes);
