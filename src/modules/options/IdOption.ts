@@ -5,7 +5,6 @@
 
 
 import type { Hierarchy } from "../models/Hierarchy";
-import type { IParser } from "../models/Option";
 import Option from "../models/Option";
 
 
@@ -14,60 +13,52 @@ import Option from "../models/Option";
  * @description
  * Defines the `id` option, which sets or inherits the HTML element's id attribute.
  */
-export default class IdOption extends Option implements IParser {
+export default class IdOption extends Option {
   /**
    * @description
    * Constructs an IdOption with its default metadata.
-   *
-   * @returns {void}
    */
   constructor() {
-    super("id", "string", [], "", true);
+    super("id", "string", [], "");
   }
 
 
   /**
    * @description
-   * Inherits the id from a referenced hierarchy.
-   * In "append" mode the id is only applied when the current element has none.
+   * Inherits a non-empty id. In "append" mode an existing id is kept.
    *
    * @param hierarchy The hierarchy object that inherits.
-   * @param id The id value to inherit.
+   * @param id The id to inherit.
    * @returns {void}
    */
-  public inherit(hierarchy: Hierarchy, id: unknown): void {
-    if (id !== "") {
-      if (hierarchy.from.mode === "append") {
-        if (hierarchy.id === "") {
-          hierarchy.id = id as string;
-        }
-      }
-      else {
-        hierarchy.id = id as string;
-      }
+  public override inherit(hierarchy: Hierarchy, id: unknown): void {
+    if (id !== "" && (hierarchy.from.mode === "override" || hierarchy.id === "")) {
+      hierarchy.id = id as string;
     }
   }
 
 
   /**
    * @description
-   * Extracts the id from an existing HTML element.
+   * Reads the id of an outer element.
    *
-   * @param element The HTML element to read the id from.
-   * @returns {string} The element's id attribute value.
+   * @param element The HTML element to read from.
+   * @returns {string} The element's id.
    */
-  public getKeyFromElement = (element: HTMLElement): unknown => element.id;
+  public override getKeyFromElement(element: Element): unknown {
+    return element.id;
+  }
 
 
   /**
    * @description
-   * Applies the id to the target HTML element.
+   * Applies a non-empty id to the target HTML element.
    *
    * @param element The HTML element to set the id on.
-   * @param hierarchy The hierarchy object supplying the id value.
+   * @param hierarchy The hierarchy object supplying the id.
    * @returns {void}
    */
-  public parse(element: HTMLElement, hierarchy: Hierarchy): void {
+  public override parse(element: HTMLElement, hierarchy: Hierarchy): void {
     if (hierarchy.id !== "") {
       element.id = hierarchy.id;
     }

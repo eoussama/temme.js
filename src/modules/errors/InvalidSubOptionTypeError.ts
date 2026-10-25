@@ -1,6 +1,6 @@
 /**
  * @description
- * The error thrown when a sub-option value has an unexpected data type.
+ * The error thrown when a sub-option's value has the wrong type.
  */
 
 
@@ -10,29 +10,21 @@ import TemmyError from "../models/TemmyError";
 
 /**
  * @description
- * Signals that a hierarchy sub-option was supplied with a value of the wrong type.
+ * The error thrown when a sub-option's value has the wrong type.
  */
 export default class InvalidSubOptionTypeError extends TemmyError {
-  /** The name of this error class. */
-  public name: string = "InvalidSubOptionTypeError";
-
-  /** The default human-readable message. */
-  public message: string = "A sub-option doesn't have a valid value type";
+  /** The name of the error. */
+  public override readonly name: string = "InvalidSubOptionTypeError";
 
 
   /**
    * @description
-   * Constructs an InvalidSubOptionTypeError for the given sub-option and detected type.
+   * Constructs the error.
    *
-   * @param subOption The name of the invalid sub-option.
-   * @param type The detected (invalid) type string.
-   * @returns {void}
+   * @param subOption The offending sub-option name.
+   * @param type The offending value type.
    */
   constructor(subOption: string, type: string) {
-    super("");
-
-    const message: string = `The "${subOption}" sub-option doesn't accept values of type "${type}"`;
-
-    this.message = subOption.length > 0 || type.length > 0 ? message : this.message;
+    super(subOption.length > 0 || type.length > 0 ? `The "${subOption}" sub-option doesn't accept values of type "${type}"` : "", "A sub-option doesn't have a valid value type");
   }
 }

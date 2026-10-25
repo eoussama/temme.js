@@ -1,18 +1,12 @@
-allowBuilds:
-  esbuild: true
-  unrs-resolver: true
-
+minimumReleaseAgeExcludePrune: true
+trustPolicy: no-downgrade
+shellEmulator: true
+# Security fixes for transitive dependencies whose parents pin vulnerable
+# versions. Remove each entry once the parent releases a fixed range.
 overrides:
-  "@babel/helpers": ^7.26.10
-  ajv: ^6.14.0
-  brace-expansion: ^1.1.13
-  braces: ^3.0.3
-  cross-spawn: ^7.0.5
-  decode-uri-component: ^0.2.2
-  esbuild: ^0.28.1
-  json5: ^1.0.2
-  micromatch: ^4.0.8
-  minimatch: ^3.1.4
-  minimist: ^1.2.8
-  picomatch: ^2.3.2
-  serialize-javascript: ^7.0.5
+  # @eoussama/dx -> @eslint/markdown -> micromark-extension-math pins katex@^0.16 (GHSA-238p-pmpm-9mq7).
+  micromark-extension-math>katex: ^0.19.1
+  # @stryker-mutator/core -> typed-rest-client@~2.3 pins qs@6.15.1 (GHSA-4mjr-xmp4-gh2g and others).
+  typed-rest-client>qs: ^6.16.1
+
+allowBuilds: {}

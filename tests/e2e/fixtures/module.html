@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ES module fixture</title>
+</head>
+<body>
+  <nav id="outer" class="outer" title="outer title">outer</nav>
+  <div id="target"></div>
+  <iframe id="frame" srcdoc="<div id='inside'></div>"></iframe>
+  <script type="module">
+    import * as Temme from "/dist/temme.browser.mjs";
+
+    window.Temme = Temme;
+    window.ready = true;
+  </script>
+</body>
+</html>

@@ -5,113 +5,57 @@
 
 
 import type { Hierarchy } from "./models/Hierarchy";
-import type { IKeys } from "./models/Option";
 import type Option from "./models/Option";
-import { forbiddenOptions, options } from "./options";
+import { forbiddenOptions, getOptions } from "./options";
+import { uniqueSorted } from "./utils";
 
 
 
 /**
  * @description
- * Sanitizes a hierarchy object by populating missing option defaults
- * and normalising values (deduplication, sorting) recursively.
+ * Sanitizes a hierarchy object in place, recursively: missing options get a fresh default,
+ * and list values (classes, include, exclude) are de-duplicated and sorted.
+ * Sanitizing is idempotent.
  *
  * @param hierarchy The hierarchy object to sanitize.
+ * @param isTemplate Whether the object is a template (forbidden options are left out).
  * @returns {void}
  */
-export function sanitize(hierarchy: Hierarchy): void {
-  options.forEach((opt: Option) => {
-    if (!(opt.label in hierarchy)) {
-      hierarchy[opt.label] = opt.default;
-    }
-    else {
-      if ("keys" in opt) {
-        for (const key in (opt as IKeys).keys) {
-          const subOption: Option = (opt as IKeys).keys[key];
+export function sanitize(hierarchy: Hierarchy, isTemplate: boolean = false): void {
+  getOptions()
+    .filter((option: Option) => !isTemplate || !forbiddenOptions.includes(option.label))
+    .forEach((option: Option) => sanitizeOption(hierarchy, option));
 
-          sanitizeOption(hierarchy[opt.label] as Hierarchy, subOption);
-        }
-      }
-    }
-  });
+  hierarchy.classes = uniqueSorted(hierarchy.classes);
 
-  hierarchy.classes = (hierarchy.classes as Array<string>).filter(
-    (cls: string, index: number) => (hierarchy.classes as Array<string>).indexOf(cls) === index,
-  );
-
-  (hierarchy.classes as Array<string>).sort();
-
-  if ("childNodes" in hierarchy && (hierarchy.childNodes as Array<Hierarchy>).length > 0) {
-    (hierarchy.childNodes as Array<Hierarchy>).forEach((child: Hierarchy) => {
-      sanitize(child);
-    });
-  }
-
-  if ("templates" in hierarchy && (hierarchy.templates as Array<Hierarchy>).length > 0) {
-    (hierarchy.templates as Array<Hierarchy>).forEach((template: Hierarchy) => {
-      sanitizeTemplate(template);
-    });
-  }
+  hierarchy.childNodes?.forEach((child: Hierarchy) => sanitize(child));
+  hierarchy.templates?.forEach((template: Hierarchy) => sanitize(template, true));
 }
 
 
 /**
  * @description
- * Sanitizes a single option entry on a (sub-)hierarchy object by populating its default
- * when missing, or normalising array values when present.
+ * Sanitizes a single option entry on a (sub-)hierarchy object: populates a fresh default
+ * when it is missing, normalises restricted list values, and recurses into sub-options.
  *
- * @param hierarchy The hierarchy (or sub-hierarchy) object to sanitize the option on.
+ * @param target The object holding the option.
  * @param option The option descriptor to apply.
  * @returns {void}
  */
-function sanitizeOption(hierarchy: Hierarchy, option: Option): void {
-  if (!(option.label in hierarchy)) {
-    hierarchy[option.label] = option.default;
-  }
-  else if (option.label === "include" || option.label === "exclude") {
-    const arr = hierarchy[option.label] as Array<string>;
+function sanitizeOption(target: Record<string, unknown>, option: Option): void {
+  if (!Object.hasOwn(target, option.label)) {
+    target[option.label] = option.createDefault();
 
-    hierarchy[option.label] = arr.filter(
-      (opt: string, index: number) => arr.indexOf(opt) === index,
-    );
-
-    (hierarchy[option.label] as Array<string>).sort();
+    return;
   }
 
-  if ("keys" in option) {
-    for (const key in (option as IKeys).keys) {
-      const subHierarchy = hierarchy[option.label] as Hierarchy;
-      const subOption = (option as IKeys).keys[key];
-
-      sanitizeOption(subHierarchy, subOption);
-    }
+  if (option.type === "array" && option.values.length > 0) {
+    target[option.label] = uniqueSorted(target[option.label] as Array<unknown>);
   }
-}
 
+  if (option.keys !== undefined) {
+    const value = target[option.label] as Record<string, unknown>;
 
-/**
- * @description
- * Sanitizes a template hierarchy object by populating allowed option defaults.
- * Forbidden options (e.g. `childNodes`, `templates`, `name`) are skipped.
- *
- * @param template The template hierarchy to sanitize.
- * @returns {void}
- */
-function sanitizeTemplate(template: Hierarchy): void {
-  options
-    .filter((opt: Option) => !forbiddenOptions.includes(opt.label))
-    .forEach((opt: Option) => {
-      if (!(opt.label in template)) {
-        template[opt.label] = opt.default;
-      }
-      else {
-        if ("keys" in opt) {
-          for (const key in (opt as IKeys).keys) {
-            const subOption: Option = (opt as IKeys).keys[key];
-
-            sanitizeOption(template[opt.label] as Hierarchy, subOption);
-          }
-        }
-      }
-    });
+    Object.values(option.keys).forEach((subOption: Option) => sanitizeOption(value, subOption));
+  }
 }

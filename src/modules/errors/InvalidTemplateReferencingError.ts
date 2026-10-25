@@ -1,6 +1,6 @@
 /**
- * The error thrown when a template
- * has is referencing a non-template object.
+ * @description
+ * The error thrown when a template references a non-template object.
  */
 
 
@@ -9,33 +9,22 @@ import TemmyError from "../models/TemmyError";
 
 
 /**
- *
+ * @description
+ * The error thrown when a template references a non-template object.
  */
 export default class InvalidTemplateReferencingError extends TemmyError {
-  /**
-   * The name of the error.
-   */
-  public name: string = "InvalidTemplateReferencingError";
+  /** The name of the error. */
+  public override readonly name: string = "InvalidTemplateReferencingError";
+
 
   /**
-   * The message of the error.
-   */
-  public message: string = "Templates can only reference other templates.";
-
-  /**
-   * Constructor with parameters.
+   * @description
+   * Constructs the error.
    *
-   * @param ref The template's reference.
-   * @param target The reference target.
+   * @param ref The template reference.
+   * @param target The referenced key.
    */
   constructor(ref: string, target: string) {
-    // Calling the parent class `TemmyError`.
-    super("");
-
-    // Constructing the error message.
-    const message: string = `The template with the reference “${ref}” is trying to reference “${target}” a non-template object`;
-
-    // Updating the error's message.
-    this.message = ref.length > 0 ? message : this.message;
+    super(ref.length > 0 ? `The template with the reference “${ref}” is trying to reference “${target}” a non-template object` : "", "Templates can only reference other templates.");
   }
 }
